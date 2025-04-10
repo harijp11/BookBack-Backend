@@ -7,17 +7,16 @@ import { CustomError } from "../../../entities/utils/custom_error";
 export class updateDealTypeStatusUseCase implements IUpdateDealTypeStatusUseCase{
     constructor(
       @inject("IDealTypeRepository")
-       private dealTypeRepository:IDealTypeRepository
+       private _dealTypeRepository:IDealTypeRepository
     ){}
 
     async execute(_id: string): Promise<void> {
-        const dealtype = await this.dealTypeRepository.findById(_id)
+        const dealtype = await this._dealTypeRepository.findById(_id)
 
        if(!dealtype){
         throw new CustomError("deal type not found",404)
         }
         const status = dealtype?.isActive ? false : true
-        
-        await this.dealTypeRepository.findByIdAndUpdateStatus(_id,status)
+        await this._dealTypeRepository.findByIdAndUpdateStatus(_id,status)
     }
 }

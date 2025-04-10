@@ -19,9 +19,9 @@ import {
 export class AdminUserController implements IAdminUserController {
   constructor(
     @inject("IGetAllUsersUseCase")
-    private getAllUsersUseCase: IGetAllUsersUseCase,
+    private _getAllUsersUseCase: IGetAllUsersUseCase,
     @inject("IUpdateUserStatusUseCase")
-    private updateUserStatusUseCase: IUpdateUserStatusUseCase,
+    private _updateUserStatusUseCase: IUpdateUserStatusUseCase,
   ) {}
 
  
@@ -48,7 +48,7 @@ export class AdminUserController implements IAdminUserController {
             );
           }
 
-          const { user, total } = await this.getAllUsersUseCase.execute(
+          const { user, total } = await this._getAllUsersUseCase.execute(
             userTypeString,
             pageNumber,
             pageSize,
@@ -90,7 +90,7 @@ export class AdminUserController implements IAdminUserController {
         );
       }
 
-      await this.updateUserStatusUseCase.execute(
+      await this._updateUserStatusUseCase.execute(
         userType.toLowerCase(),
         userId
       );

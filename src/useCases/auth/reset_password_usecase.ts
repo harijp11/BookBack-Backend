@@ -12,11 +12,11 @@ import { IAdminRepository } from "../../entities/repositoryInterface/admin/admin
 @injectable()
 export class ResetPasswordUseCase implements IResetPasswordUseCase {
   constructor(
-    @inject("IClientRepository") private userRepository: IUserRepository,
-    @inject("IAdminRepository") private adminRepository: IAdminRepository,
-    @inject("ITokenService") private tokenService: ITokenService,
-    @inject("IRedisTokenRepository") private redisTokenRepository: IRedisTokenRepository,
-    @inject("IPasswordBcrypt") private passwordBcrypt: IBcrypt
+    @inject("IClientRepository") private _userRepository: IUserRepository,
+    @inject("IAdminRepository") private _adminRepository: IAdminRepository,
+    @inject("ITokenService") private _tokenService: ITokenService,
+    @inject("IRedisTokenRepository") private _redisTokenRepository: IRedisTokenRepository,
+    @inject("IPasswordBcrypt") private _passwordBcrypt: IBcrypt
   ) {}
 
   async execute({
@@ -32,7 +32,7 @@ export class ResetPasswordUseCase implements IResetPasswordUseCase {
     console.log(`Received Data -> Password: [HIDDEN], Role: ${role}, Token: ${token.substring(0, 10)}...`);
 
     // Verify the reset token
-    const payload = this.tokenService.verifyResetToken(token) as ResetTokenPayload & { role?: string };
+    const payload = this._tokenService.verifyResetToken(token) as ResetTokenPayload & { role?: string };
     console.log("Decoded Token Payload:", payload);
 
     if (!payload || !payload.email) {
@@ -48,9 +48,9 @@ export class ResetPasswordUseCase implements IResetPasswordUseCase {
     // Determine repository based on roleToUse
     let repository;
     if (roleToUse === "user") {
-      repository = this.userRepository;
+      repository = this._userRepository;
     }  else if (roleToUse === "admin") {
-      repository = this.adminRepository;
+      repository = this._adminRepository;
     } else {
       console.error(`❌ Invalid Role Provided: ${roleToUse}`);
       throw new CustomError(ERROR_MESSAGES.INVALID_ROLE, HTTP_STATUS.FORBIDDEN);
@@ -67,7 +67,7 @@ export class ResetPasswordUseCase implements IResetPasswordUseCase {
     }
 
     // Verify token validity from Redis
-    const tokenValid = await this.redisTokenRepository.verifyResetToken(user._id.toString() ?? "", token);
+    const tokenValid = await this._redisTokenRepository.verifyResetToken(user._id.toString() ?? "", token);
     console.log(`Token Valid in Redis: ${tokenValid}`);
 
     if (!tokenValid) {
@@ -76,7 +76,7 @@ export class ResetPasswordUseCase implements IResetPasswordUseCase {
     }
 
     // Compare new password with old one
-    const isSamePasswordAsOld = await this.passwordBcrypt.compare(password, user.password);
+    const isSamePasswordAsOld = await this._passwordBcrypt.compare(password, user.password);
     console.log(`Password Match with Old: ${isSamePasswordAsOld}`);
 
     if (isSamePasswordAsOld) {
@@ -85,7 +85,7 @@ export class ResetPasswordUseCase implements IResetPasswordUseCase {
     }
 
     // Hash the new password
-    const hashedPassword = await this.passwordBcrypt.hash(password);
+    const hashedPassword = await this._passwordBcrypt.hash(password);
     console.log(`New Password Hashed: ${hashedPassword.substring(0, 10)}...`);
 
     // Update the user password
@@ -93,7 +93,7 @@ export class ResetPasswordUseCase implements IResetPasswordUseCase {
     console.log("✅ Password successfully updated in the database");
 
     // Delete the reset token from Redis
-    await this.redisTokenRepository.deleteResetToken(user._id.toString() ?? "");
+    await this._redisTokenRepository.deleteResetToken(user._id.toString() ?? "");
     console.log("✅ Reset token deleted from Redis");
 
     console.log("======== Reset Password Use Case Completed ========");

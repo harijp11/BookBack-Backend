@@ -29,14 +29,12 @@ export class UserLoginStrategy implements ILoginStrategy {
     }
 
     if (User.password) {
-      console.log("password",User.password)
+  
       const isPasswordMatch = await this.passwordBcrypt.compare(
         User.password,
         user.password
       );
-      console.log("paSSWORDCHECK",isPasswordMatch
-        
-      )
+
       if (!isPasswordMatch) {
         throw new CustomError(
           ERROR_MESSAGES.INVALID_CREDENTIALS,

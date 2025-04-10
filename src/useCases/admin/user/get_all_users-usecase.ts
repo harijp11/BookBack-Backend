@@ -8,7 +8,7 @@ import { HTTP_STATUS } from "../../../shared/constants";
 @injectable()
 export class GetAllUsersUseCase implements IGetAllUsersUseCase {
   constructor(
-    @inject("IClientRepository") private userRepository: IUserRepository,
+    @inject("IClientRepository") private _userRepository: IUserRepository,
   ) {}
 
   async execute(
@@ -36,7 +36,7 @@ export class GetAllUsersUseCase implements IGetAllUsersUseCase {
     const limit = validPageSize;
 
     if (userType === "user") {
-      const { user, total } = await this.userRepository.find(filter, skip, limit);
+      const { user, total } = await this._userRepository.find(filter, skip, limit);
       return {
         user,
         total: Math.ceil(total / validPageSize),

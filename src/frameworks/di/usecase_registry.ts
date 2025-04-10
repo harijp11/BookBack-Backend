@@ -64,6 +64,8 @@ import { IGetAllPaginatedDealTypesUseCase } from "../../entities/useCaseInterfac
 import { GetAllPaginatedDealTypesUseCase } from "../../useCases/admin/dealType/get_all_paginated_deal_type-usecase";
 import { IUpdateUserProfileUseCase } from "../../entities/useCaseInterfaces/user/update_user_profile_usecase-interface";
 import { UpdateUserProfileUseCase } from "../../useCases/user/update_user_profile-usecase";
+import { IChangePasswordUseCase } from "../../entities/useCaseInterfaces/user/change_user_password_usecase-interface";
+import { changePasswordUseCase } from "../../useCases/user/change_user_password-usecase";
 
 
 export class UseCaseRegistry {
@@ -213,6 +215,10 @@ export class UseCaseRegistry {
 
     container.register<IUpdateUserProfileUseCase>("IUpdateUserProfileUseCase",{
       useClass:UpdateUserProfileUseCase
+    })
+
+    container.register<IChangePasswordUseCase>("IChangePasswordUseCase",{
+      useClass:changePasswordUseCase
     })
   }
 }

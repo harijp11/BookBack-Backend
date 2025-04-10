@@ -8,15 +8,15 @@ import { CustomError } from "../../../entities/utils/custom_error";
 export class CreateDealTypeUseCase implements ICreateDealTypeUseCase {
    constructor(
     @inject("IDealTypeRepository")
-    private dealtyperepository:IDealTypeRepository
+    private _dealtyperepository:IDealTypeRepository
    ){}
 
    async execute(name:string,description:string):Promise<void>{
-    const isDealTypeExists = await this.dealtyperepository.findByName(name)
+    const isDealTypeExists = await this._dealtyperepository.findByName(name)
 
     if(isDealTypeExists){
         throw new CustomError("Deal type already existing",400)
     }
-    await this.dealtyperepository.save(name,description)
+    await this._dealtyperepository.save(name,description)
    }
 }

@@ -60,5 +60,15 @@ export class UserRoutes extends BaseRoute {
 			  userController.updateUserProfile(req, res);
 			}
 		  );  
+
+		  router.patch(
+			"/user/change-password",
+			verifyAuth,
+			authorizeRole(["user"]),
+			blockStatusMiddleware.checkUserStatus as RequestHandler,
+			(req: Request, res: Response) => {
+			  userController.changePassword(req, res);
+			}
+		  )
 	}
 }

@@ -1,3 +1,3 @@
 export interface IUpdateCategoryStatus {
-  execute(_id:any):Promise<void>
+  execute(_id:string):Promise<void>
 }

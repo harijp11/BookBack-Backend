@@ -7,7 +7,7 @@ import { PaginatedCategories } from "../../../entities/models/paginated_category
 export class GetALLPaginatedCategories implements IGetAllPaginatedCategoryUseCase {
     constructor(
         @inject("ICategoryRepository")
-        private categoryRepository : ICategoryRepository
+        private _categoryRepository : ICategoryRepository
     ){}
 
     async execute(pageNumber: number,
@@ -25,7 +25,7 @@ export class GetALLPaginatedCategories implements IGetAllPaginatedCategoryUseCas
         const limit = validPageSize;
     
         const { categories, total, all } =
-          await this.categoryRepository.findPaginatedCategory(filter, skip, limit);
+          await this._categoryRepository.findPaginatedCategory(filter, skip, limit);
         const response: PaginatedCategories = {
           categories,
           total: Math.ceil(total / validPageSize),

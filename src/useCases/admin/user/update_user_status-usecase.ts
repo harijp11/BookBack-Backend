@@ -9,11 +9,11 @@ import { CustomError } from "../../../entities/utils/custom_error";
 export class UpdateUserStatusUseCase implements IUpdateUserStatusUseCase {
 	constructor(
 		@inject("IUserRepository")
-		private userRepository: IUserRepository
+		private _userRepository: IUserRepository
 	) {}
 	async execute(userType: string, userId: any): Promise<void> {
 		if (userType === "user") {
-			const user = await this.userRepository.findById(userId);
+			const user = await this._userRepository.findById(userId);
 
 			if (!user) {
 				throw new CustomError(
@@ -24,7 +24,7 @@ export class UpdateUserStatusUseCase implements IUpdateUserStatusUseCase {
 
 			const userActive = user.isActive ? false : true
 
-			await this.userRepository.findByIdAndUpdate(userId, {
+			await this._userRepository.findByIdAndUpdate(userId, {
 				isActive: userActive,
 			});
 		}

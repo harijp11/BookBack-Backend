@@ -14,8 +14,7 @@ export class CategoryRepository implements ICategoryRepository{
     }
 
     async save(name:string,description:string):Promise <ICategoryEntity>{
-      return await categoryModel.create({name,description})
-
+      return await categoryModel.create({name,description}) 
     }
     
     async findPaginatedCategory(
@@ -39,17 +38,21 @@ export class CategoryRepository implements ICategoryRepository{
       };
     }
 
-    async findById(_id:any):Promise<ICategoryEntity | null>{
+    async findById(_id:string):Promise<ICategoryEntity | null>{
      return await categoryModel.findOne({_id})
     }
 
-    async findByIdAndUpdateStatus(category:ICategoryModel): Promise<ICategoryEntity | null> {
-         return await category.save()
+    async findByIdAndUpdateStatus(_id:string,active:boolean): Promise<ICategoryEntity | null> {
+         return await categoryModel.findByIdAndUpdate(
+          _id,
+          {$set:{isActive:active}},
+          {new:true}
+         )
 }
 
-async updateCategory(_id:any,name: any, description: any):Promise<ICategoryEntity | void> {
+async updateCategory(_id:string,name: string, description: string):Promise<ICategoryEntity | void> {
    await categoryModel.findByIdAndUpdate(
-    {_id},
+    _id,
     { name, description },
     { new: true }
   );

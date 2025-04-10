@@ -5,15 +5,19 @@ import { IUsersEntity } from "../../../entities/models/users_entity";
 import { HTTP_STATUS, SUCCESS_MESSAGES } from "../../../shared/constants";
 import { IUpdateUserProfileUseCase } from "../../../entities/useCaseInterfaces/user/update_user_profile_usecase-interface";
 import { ICloudinarySignatureService } from "../../../entities/serviceInterfaces/cloudinary_service-interface";
+import { handleErrorResponse } from "../../../shared/utils/errorHandler";
+import { IChangePasswordUseCase } from "../../../entities/useCaseInterfaces/user/change_user_password_usecase-interface";
 
 
 @injectable()
 export class UserController implements IUserController{
   constructor(
     @inject("IUpdateUserProfileUseCase")
-    private updateUserProfileUseCase:IUpdateUserProfileUseCase,
+    private _updateUserProfileUseCase:IUpdateUserProfileUseCase,
     @inject("ICloudinarySignatureService")
-    private cloudinarySignatureService: ICloudinarySignatureService
+    private _cloudinarySignatureService: ICloudinarySignatureService,
+    @inject("IChangePasswordUseCase")
+    private _changePasswordUseCase:IChangePasswordUseCase
   ){}
 
   async generateUploadSignature(req: Request, res: Response): Promise<void> {
@@ -25,7 +29,7 @@ export class UserController implements IUserController{
         return;
       }
   
-      const signatureData = this.cloudinarySignatureService.generateSignature(folder);
+      const signatureData = this._cloudinarySignatureService.generateSignature(folder);
       console.log("signature",signatureData)
       res.status(200).json({
         success: true,
@@ -60,13 +64,28 @@ export class UserController implements IUserController{
     }
   }
 
-
-  await this.updateUserProfileUseCase.execute(userId,profileData)
+  const data =  await this._updateUserProfileUseCase.execute(userId,profileData)
 
   res.status(HTTP_STATUS.OK).json({
     success: true,
     message: SUCCESS_MESSAGES.UPDATE_SUCCESS,
+    data
   });
+  }
+
+  async changePassword(req: Request, res: Response): Promise<void> {
+    try{
+      const {_id} = req.query as {_id:string}
+      const {password,newPassword} = req.body as {password:string,newPassword:string}
+       
+      await this._changePasswordUseCase.execute(_id,password,newPassword)
+      res.status(HTTP_STATUS.OK).json({
+        success:true,
+        messasge:"password successfully updated"
+      })
+    }catch(err){
+      handleErrorResponse(res,err)
+    }
   }
 
 

@@ -9,17 +9,17 @@ import { CustomError } from "../../entities/utils/custom_error";
 export class UpdateUserProfileUseCase implements IUpdateUserProfileUseCase{
     constructor(
         @inject("IUserRepository")
-        private userRepository:IUserRepository,
+        private _userRepository:IUserRepository,
     ){}
 
-   async  execute(userId: string, profileData: Partial<IUsersEntity>): Promise<void> {
-        const userExist = await this.userRepository.findById(userId)
+   async  execute(userId: string, profileData: Partial<IUsersEntity>): Promise<IUsersEntity | null> {
+        const userExist = await this._userRepository.findById(userId)
         
 
         if(!userExist){
             throw new CustomError("user not found",404)
         }
 
-        await this.userRepository.findByIdAndUpdate(userId,profileData)
+       return await this._userRepository.findByIdAndUpdate(userId,profileData)
     }
 }

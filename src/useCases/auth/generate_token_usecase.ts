@@ -8,9 +8,9 @@ import { ObjectId } from "mongoose";
 @injectable()
 export class GenerateTokenUseCase implements IGenerateTokenUseCase {
   constructor(
-    @inject("ITokenService") private tokenService: ITokenService,
+    @inject("ITokenService") private _tokenService: ITokenService,
     @inject("IRefreshTokenRepository")
-    private refreshTokenRepository: IRefreshTokenRepository
+    private _refreshTokenRepository: IRefreshTokenRepository
   ) {}
 
   async execute(
@@ -21,8 +21,8 @@ export class GenerateTokenUseCase implements IGenerateTokenUseCase {
   ): Promise<{ accessToken: string; refreshToken: string }> {
     const payload = { _id, id, email, role };
 
-    const accessToken = this.tokenService.generateAccessToken(payload);
-    const refreshToken = this.tokenService.generateRefreshToken(payload);
+    const accessToken = this._tokenService.generateAccessToken(payload);
+    const refreshToken = this._tokenService.generateRefreshToken(payload);
 
 	console.log("About to save refresh token with data:", {
 		token: refreshToken,
@@ -30,7 +30,7 @@ export class GenerateTokenUseCase implements IGenerateTokenUseCase {
 		user: id, // Check if this is empty
 		expiresAt: Date.now() + 7 * 24 * 60 * 60 * 1000,
 	  });
-    await this.refreshTokenRepository.save({
+    await this._refreshTokenRepository.save({
       token: refreshToken,
       userType: role as TRole,
       user: id,

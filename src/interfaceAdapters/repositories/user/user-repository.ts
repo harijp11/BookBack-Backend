@@ -87,4 +87,13 @@ export class UserRepository implements IUserRepository {
             id: User._id.toString(),
         } as IUserEntity;
     }
+
+    async findByIdAndChangePassword(_id: any, newPassword: string): Promise<IUserEntity | void> {
+        const User = await UserModel.findByIdAndUpdate(
+            _id,
+            {$set:{password:newPassword}},
+            {new:true}
+        )
+        return User as IUserEntity
+    }
 }

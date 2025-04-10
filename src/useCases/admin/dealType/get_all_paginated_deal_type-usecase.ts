@@ -9,7 +9,7 @@ import { PaginatedDealTypes } from "../../../entities/models/paginated_deal_type
 export class GetAllPaginatedDealTypesUseCase implements IGetAllPaginatedDealTypesUseCase{
     constructor(
         @inject("IDealTypeRepository")
-        private dealTypeRepository:IDealTypeRepository
+        private _dealTypeRepository:IDealTypeRepository
     ){}
 
    async execute(pageNumber:number,pageSize:number,searchTerm:string):Promise<PaginatedDealTypes>{
@@ -25,7 +25,7 @@ export class GetAllPaginatedDealTypesUseCase implements IGetAllPaginatedDealType
         const limit = validPageSize
 
         const {dealTypes,total,all} = 
-        await this.dealTypeRepository.findPaginatedDealType(filter,skip,limit)
+        await this._dealTypeRepository.findPaginatedDealType(filter,skip,limit)
         const response: PaginatedDealTypes = {
             dealTypes,
             total: Math.ceil(total / validPageSize),

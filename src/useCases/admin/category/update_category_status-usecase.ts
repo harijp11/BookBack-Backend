@@ -10,17 +10,18 @@ import { IUpdateCategoryStatus } from "../../../entities/useCaseInterfaces/admin
 export class UpdateCategoryStatusUseCase implements IUpdateCategoryStatus{
   constructor(
     @inject("ICategoryRepository")
-    private categoryRepository: ICategoryRepository
+    private _categoryRepository: ICategoryRepository
   ){}
    
-  async execute(_id: any): Promise<void> {
+  async execute(_id: string): Promise<void> {
    
-   let cat =  await this.categoryRepository.findById(_id);
+   let cat =  await this._categoryRepository.findById(_id);
    if(!cat){
     throw new CustomError(ERROR_MESSAGES.CATEGORY_NOT_FOUND, HTTP_STATUS.NOT_FOUND);
    }
-   cat.isActive = !cat.isActive;
-   await this.categoryRepository.findByIdAndUpdateStatus(cat)
+   const active = !cat.isActive
+  //  if(active)
+   await this._categoryRepository.findByIdAndUpdateStatus(_id,active)
   }
 
 }

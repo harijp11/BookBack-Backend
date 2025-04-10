@@ -8,26 +8,26 @@ import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 
 @injectable()
 export class RegisterUserUseCase implements IRegisterUserUseCase {
-  private strategies: Record<string, IRegisterStrategy>;
+  private _strategies: Record<string, IRegisterStrategy>;
 
   constructor(
     @inject("UserRegisterStrategy")
-    private clientRegister: IRegisterStrategy,
+    private _clientRegister: IRegisterStrategy,
     // @inject("AdminRegisterStrategy")
     // private adminRegister: IRegisterStrategy,
   
   ) {
-    this.strategies = {
-      user: this.clientRegister,
+    this._strategies = {
+      user: this._clientRegister,
     //   admin: this.adminRegister,
     };
   }
 
   async execute(user: UserDTO): Promise<IUserEntity | null> {
     console.log("Received Role:", user.role);
-    console.log("Available Strategies:", Object.keys(this.strategies));
+    console.log("Available Strategies:", Object.keys(this._strategies));
 
-    const strategy = this.strategies[user.role];
+    const strategy = this._strategies[user.role];
     if (!strategy) {
       throw new CustomError(
         ERROR_MESSAGES.INVALID_ROLE,

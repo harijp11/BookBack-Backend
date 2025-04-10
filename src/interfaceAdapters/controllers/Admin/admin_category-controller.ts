@@ -13,20 +13,20 @@ import { IUpdateCategoryUseCase } from "../../../entities/useCaseInterfaces/admi
 export class AdminCategoryController implements IAdminCategoryController {
     constructor(
         @inject("ICreateCategoryUseCase")
-        private createNewCategoryUseCase:IcreateNewCategoryUseCase,
+        private _createNewCategoryUseCase:IcreateNewCategoryUseCase,
         @inject("IGetAllPaginatedCategoryUseCase")
-          private getAllPaginatedCategoryUseCase:IGetAllPaginatedCategoryUseCase,
+          private _getAllPaginatedCategoryUseCase:IGetAllPaginatedCategoryUseCase,
           @inject("IUpdateCategoryStatus")
-          private updateCategoryStatusUseCase:IUpdateCategoryStatus,
+          private _updateCategoryStatusUseCase:IUpdateCategoryStatus,
           @inject("IUpdateCategoryUseCase")
-          private updateCategoryUseCase:IUpdateCategoryUseCase
+          private _updateCategoryUseCase:IUpdateCategoryUseCase
        
     ){}
 
   async createNewCategory(req:Request,res:Response):Promise<void>{
     try{
         const { name, description } = req.body as { name: string; description?: string };
-         await this.createNewCategoryUseCase.execute( name, description );
+         await this._createNewCategoryUseCase.execute( name, description );
         res.status(HTTP_STATUS.CREATED).json({
             success: true,
             message: SUCCESS_MESSAGES.OPERATION_SUCCESS
@@ -52,7 +52,7 @@ async getAllPaginatedCategories(req: Request, res: Response): Promise<void> {
     const pageSize = Number(limit);
     const searchTermString = typeof search === "string" ? search : "";
  
-    const { categories, total, all } = await this.getAllPaginatedCategoryUseCase.execute(
+    const { categories, total, all } = await this._getAllPaginatedCategoryUseCase.execute(
       pageNumber,
       pageSize,
       searchTermString
@@ -72,8 +72,8 @@ async getAllPaginatedCategories(req: Request, res: Response): Promise<void> {
 
 async updateCategoryStatus(req: Request, res: Response): Promise<void> {
   try{
-      const {categoryId} = req.params
-        await this.updateCategoryStatusUseCase.execute({_id:categoryId})
+      const {categoryId} = req.params as {categoryId:string}
+        await this._updateCategoryStatusUseCase.execute(categoryId)
       res.status(HTTP_STATUS.OK).json({
         success:true,
         message: SUCCESS_MESSAGES.UPDATE_SUCCESS
@@ -88,7 +88,7 @@ async updateCategory(req: Request, res: Response): Promise<void> {
     const {categoryId} = req.params as {categoryId:string}
     const {name,description} = req.body as {name:string,description:string}
 
-     await this.updateCategoryUseCase.execute(categoryId,name,description)
+     await this._updateCategoryUseCase.execute(categoryId,name,description)
 
      res.status(HTTP_STATUS.OK).json({
       success:true,

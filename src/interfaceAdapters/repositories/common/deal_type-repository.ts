@@ -9,7 +9,7 @@ injectable()
 export class DealTypeRepository implements IDealTypeRepository{
 
     async findById(_id:string):Promise<IDealTypeEntity | null>{
-        return await DealTypeModel.findOne({_id:_id})
+        return await DealTypeModel.findOne({_id})
     }
 
    async findByName(name:string):Promise<IDealTypeEntity | null>{
@@ -57,4 +57,5 @@ export class DealTypeRepository implements IDealTypeRepository{
         {new:true}
      )
   }
+ 
 }

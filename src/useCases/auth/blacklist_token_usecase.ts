@@ -8,7 +8,7 @@ import { JwtPayload } from "jsonwebtoken";
 export class BlackListTokenUseCase implements IBlackListTokenUseCase {
 	constructor(
 		@inject("IRedisTokenRepository")
-		private redisTokenRepository: IRedisTokenRepository,
+		private _redisTokenRepository: IRedisTokenRepository,
 		@inject("ITokenService") private tokenService: ITokenService
 	) {}
 	async execute(token: string): Promise<void> {
@@ -20,7 +20,7 @@ export class BlackListTokenUseCase implements IBlackListTokenUseCase {
 
 		const expiresIn = decoded.exp - Math.floor(Date.now() / 1000);
 		if (expiresIn > 0) {
-			await this.redisTokenRepository.blackListToken(token, expiresIn);
+			await this._redisTokenRepository.blackListToken(token, expiresIn);
 		}
 	}
 }

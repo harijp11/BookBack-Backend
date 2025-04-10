@@ -13,20 +13,20 @@ export class AdminDealTypeController implements IAdminDealTypeController{
  
    constructor(
     @inject("ICreateDealTypeUseCase")
-          private createDealTypeUseCase:ICreateDealTypeUseCase,
+          private _createDealTypeUseCase:ICreateDealTypeUseCase,
     @inject("IGetAllDealTypesUseCase")
-      private getAllPaginatedDealTypesUseCase:IGetAllPaginatedDealTypesUseCase,
+      private _getAllPaginatedDealTypesUseCase:IGetAllPaginatedDealTypesUseCase,
     @inject("IUpdateDealTypeStatusUseCase")
-    private  updateDealTypeStatusUseCase:IUpdateDealTypeStatusUseCase,
+    private  _updateDealTypeStatusUseCase:IUpdateDealTypeStatusUseCase,
     @inject("IUpdateDealTypeUseCase")
-    private updateDealTypeUsecase:IUpdateDealTypeUseCase
+    private _updateDealTypeUsecase:IUpdateDealTypeUseCase
    ){}
      
    async createDealType(req: Request, res: Response): Promise<void> {
   try{
     const {name,description} = req.body as {name:string,description?:string}
     
-    await this.createDealTypeUseCase.execute(name,description)
+    await this._createDealTypeUseCase.execute(name,description)
     res.status(HTTP_STATUS.OK).json({
       success:true,
       message:SUCCESS_MESSAGES.CREATED
@@ -43,7 +43,7 @@ async getAllPaginatedDealTypes(req: Request, res: Response): Promise<void> {
     const pageNumber = Number(page);
     const pageSize = Number(limit);
     const searchTermString = typeof search === "string" ? search : "";
-    const { dealTypes, total, all } = await this.getAllPaginatedDealTypesUseCase.execute(pageNumber,pageSize,searchTermString)
+    const { dealTypes, total, all } = await this._getAllPaginatedDealTypesUseCase.execute(pageNumber,pageSize,searchTermString)
 
     res.status(HTTP_STATUS.OK).json({
       success:true,
@@ -62,7 +62,7 @@ async getAllPaginatedDealTypes(req: Request, res: Response): Promise<void> {
      try{
        const{_id} = req.params as {_id:string} 
 
-       await this.updateDealTypeStatusUseCase.execute(_id)
+       await this._updateDealTypeStatusUseCase.execute(_id)
        res.status(HTTP_STATUS.OK).json({
         success:true,
         message:"deal type updated successfully"
@@ -77,7 +77,7 @@ async getAllPaginatedDealTypes(req: Request, res: Response): Promise<void> {
       const{_id} = req.params as {_id:string}
       const {name,description} = req.body as{name:string,description:string}
 
-      await this.updateDealTypeUsecase.execute(_id,name,description)
+      await this._updateDealTypeUsecase.execute(_id,name,description)
        res.status(HTTP_STATUS.OK).json({
         success:true,
         message:"deal type updated successfully"
