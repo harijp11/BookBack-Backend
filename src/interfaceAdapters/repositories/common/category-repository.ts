@@ -1,6 +1,6 @@
 import { injectable } from "tsyringe";
  import { ICategoryEntity } from "../../../entities/models/category_entity";
-import { categoryModel, ICategoryModel } from "../../../frameworks/database/models/category_model";
+import { categoryModel } from "../../../frameworks/database/models/category_model";
 import { ICategoryRepository } from "../../../entities/repositoryInterface/common/category_repository-interface";
 import { PaginatedCategories } from "../../../entities/models/paginated_category_entity";
 
@@ -56,5 +56,9 @@ async updateCategory(_id:string,name: string, description: string):Promise<ICate
     { name, description },
     { new: true }
   );
+}
+
+async getAllCategories(): Promise<ICategoryEntity[] | []> {
+  return await categoryModel.find()
 }
 }

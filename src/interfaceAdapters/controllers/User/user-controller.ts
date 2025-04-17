@@ -3,10 +3,10 @@ import { IUserController } from "../../../entities/controllersInterfaces/user/us
 import { Request, Response } from "express"
 import { IUsersEntity } from "../../../entities/models/users_entity";
 import { HTTP_STATUS, SUCCESS_MESSAGES } from "../../../shared/constants";
-import { IUpdateUserProfileUseCase } from "../../../entities/useCaseInterfaces/user/update_user_profile_usecase-interface";
+import { IUpdateUserProfileUseCase } from "../../../entities/useCaseInterfaces/user/profile/update_user_profile_usecase-interface";
 import { ICloudinarySignatureService } from "../../../entities/serviceInterfaces/cloudinary_service-interface";
 import { handleErrorResponse } from "../../../shared/utils/errorHandler";
-import { IChangePasswordUseCase } from "../../../entities/useCaseInterfaces/user/change_user_password_usecase-interface";
+import { IChangePasswordUseCase } from "../../../entities/useCaseInterfaces/user/profile/change_user_password_usecase-interface";
 
 
 @injectable()

@@ -57,5 +57,8 @@ export class DealTypeRepository implements IDealTypeRepository{
         {new:true}
      )
   }
+  getAllDealTypes(): Promise<IDealTypeEntity[] | []> {
+    return DealTypeModel.find()
+  }
  
 }

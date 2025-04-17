@@ -1,5 +1,3 @@
-import { config } from "./config";
-
 
 export const ROLES = ["admin", "user"] as const;
 export type TRole = typeof ROLES[number];
@@ -8,6 +6,15 @@ export enum OtpPurpose {
 	LOGIN = "login",
 	SIGNUP = "signup",
 	PASSWORD_RESET = "password_reset",
+  }
+
+
+
+
+  export enum BookStatus {
+    AVAILABLE = 'Available',
+    SOLD_OUT = 'Sold Out',
+    BORROWED = 'Borrowed',
   }
 
   export interface CategoryUseCaseResponse {

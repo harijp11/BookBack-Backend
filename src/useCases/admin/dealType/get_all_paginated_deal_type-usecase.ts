@@ -1,4 +1,4 @@
-import { injectable,inject } from "tsyringe";
+ import { injectable,inject } from "tsyringe";
 import { IGetAllPaginatedDealTypesUseCase } from "../../../entities/useCaseInterfaces/admin/dealType/get_all_paginated_deal_type_usecase-interface";
 import { IDealTypeRepository } from "../../../entities/repositoryInterface/common/deal_type_repository-interface";
 

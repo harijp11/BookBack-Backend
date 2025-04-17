@@ -14,7 +14,7 @@ export class AdminDealTypeController implements IAdminDealTypeController{
    constructor(
     @inject("ICreateDealTypeUseCase")
           private _createDealTypeUseCase:ICreateDealTypeUseCase,
-    @inject("IGetAllDealTypesUseCase")
+    @inject("IGetAllPaginatedDealTypesUseCase")
       private _getAllPaginatedDealTypesUseCase:IGetAllPaginatedDealTypesUseCase,
     @inject("IUpdateDealTypeStatusUseCase")
     private  _updateDealTypeStatusUseCase:IUpdateDealTypeStatusUseCase,

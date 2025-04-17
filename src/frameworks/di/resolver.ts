@@ -7,7 +7,10 @@ import { AdminUserController } from "../../interfaceAdapters/controllers/Admin/a
 import { AdminCategoryController } from "../../interfaceAdapters/controllers/Admin/admin_category-controller";
 import { AdminDealTypeController } from "../../interfaceAdapters/controllers/Admin/admin_deal_type-controller";
 
-import { UserController } from "../../interfaceAdapters/controllers/User/user_controller";
+import { UserController } from "../../interfaceAdapters/controllers/User/user-controller";
+import { BookController } from "../../interfaceAdapters/controllers/User/book-controller";
+import { CategoryController } from "../../interfaceAdapters/controllers/User/category-controller";
+import { DealTypeController } from "../../interfaceAdapters/controllers/User/deal_type-controller";
 
 DependancyInjection.registerAll();
 
@@ -20,6 +23,12 @@ export const adminDealTypeController = container.resolve(AdminDealTypeController
 
 //user
 export const userController = container.resolve(UserController)
+export const categoryController = container.resolve(CategoryController)
+export const dealtypeController = container.resolve(DealTypeController)
+
+
+//book
+export const bookController = container.resolve(BookController)
 
 
 

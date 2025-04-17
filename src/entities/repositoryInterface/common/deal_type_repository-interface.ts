@@ -9,4 +9,5 @@ export interface IDealTypeRepository {
        findByIdAndUpdateStatus(_id:any,status:boolean):Promise<IDealTypeEntity | null>
        findById(_id:any):Promise<IDealTypeEntity | null>
        findByIdAndUpdateDealType(_id:string,name:string,description:string):Promise<IDealTypeEntity | null>
+       getAllDealTypes():Promise<IDealTypeEntity[] | []>
 }

@@ -24,4 +24,4 @@ export const UserSchema = new Schema<IUserModel>(
   }
 );
 
-UserSchema.index({ status: 1 });
+UserSchema.index({ isActive: 1 });

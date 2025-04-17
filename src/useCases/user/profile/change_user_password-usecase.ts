@@ -1,9 +1,9 @@
 import { inject, injectable } from "tsyringe";
-import { IChangePasswordUseCase } from "../../entities/useCaseInterfaces/user/change_user_password_usecase-interface";
-import { IUserRepository } from "../../entities/repositoryInterface/user/user_repository-interface";
-import { IUserEntity } from "../../entities/models/user_entity";
-import { IBcrypt } from "../../frameworks/security/bcrypt_interface";
-import { CustomError } from "../../entities/utils/custom_error";
+import { IChangePasswordUseCase } from "../../../entities/useCaseInterfaces/user/profile/change_user_password_usecase-interface";
+import { IUserRepository } from "../../../entities/repositoryInterface/user/user_repository-interface";
+import { IUserEntity } from "../../../entities/models/user_entity";
+import { IBcrypt } from "../../../frameworks/security/bcrypt_interface";
+import { CustomError } from "../../../entities/utils/custom_error";
 
 @injectable()
 export class changePasswordUseCase implements IChangePasswordUseCase{

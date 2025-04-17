@@ -46,7 +46,6 @@ import { GetAllUsersUseCase } from "../../useCases/admin/user/get_all_users-usec
 import { UpdateUserStatusUseCase } from "../../useCases/admin/user/update_user_status-usecase";
 import { IUpdateUserStatusUseCase } from "../../entities/useCaseInterfaces/admin/user/update_user_status_usecase-interface";
 
-
 import { IForgotPasswordUseCase } from "../../entities/useCaseInterfaces/auth/forgot_password_usecase-interface";
 import { ForgotPasswordUseCase } from "../../useCases/auth/forgot_password_usecase";
 import { IResetPasswordUseCase } from "../../entities/useCaseInterfaces/auth/reset_password_usecase-interface";
@@ -62,11 +61,24 @@ import { ICreateDealTypeUseCase } from "../../entities/useCaseInterfaces/admin/d
 import { CreateDealTypeUseCase } from "../../useCases/admin/dealType/create_deal_type-usecase";
 import { IGetAllPaginatedDealTypesUseCase } from "../../entities/useCaseInterfaces/admin/dealType/get_all_paginated_deal_type_usecase-interface";
 import { GetAllPaginatedDealTypesUseCase } from "../../useCases/admin/dealType/get_all_paginated_deal_type-usecase";
-import { IUpdateUserProfileUseCase } from "../../entities/useCaseInterfaces/user/update_user_profile_usecase-interface";
-import { UpdateUserProfileUseCase } from "../../useCases/user/update_user_profile-usecase";
-import { IChangePasswordUseCase } from "../../entities/useCaseInterfaces/user/change_user_password_usecase-interface";
-import { changePasswordUseCase } from "../../useCases/user/change_user_password-usecase";
-
+import { IUpdateUserProfileUseCase } from "../../entities/useCaseInterfaces/user/profile/update_user_profile_usecase-interface";
+import { UpdateUserProfileUseCase } from "../../useCases/user/profile/update_user_profile-usecase";
+import { IChangePasswordUseCase } from "../../entities/useCaseInterfaces/user/profile/change_user_password_usecase-interface";
+import { changePasswordUseCase } from "../../useCases/user/profile/change_user_password-usecase";
+import { IUpdateDealTypeStatusUseCase } from "../../entities/useCaseInterfaces/admin/dealType/update_deal_type_status_usecase-interface";
+import { updateDealTypeStatusUseCase } from "../../useCases/admin/dealType/update_deal_type_status-usecase";
+import { IUpdateDealTypeUseCase } from "../../entities/useCaseInterfaces/admin/dealType/update_deal_type_usecase-interface";
+import { UpdateDealTypeUseCase } from "../../useCases/admin/dealType/update_deal_type_usecase";
+import { ICreateNewBookUseCase } from "../../entities/useCaseInterfaces/user/book/create_new_book_usecase-interface";
+import { CreateNewBookUseCase } from "../../useCases/user/book/create_new_book-usecase";
+import { IGetAllDealTypesUseCase } from "../../entities/useCaseInterfaces/user/dealtype/get_all_deal_tyoe_usecase.interface";
+import { GetAllDealTypesUseCase } from "../../useCases/user/dealtype/get_all_deal_types-usecase";
+import { IGetAllCategoriesUseCase } from "../../entities/useCaseInterfaces/user/category/get_all_categories_usecase-interface";
+import { GetAllCategoriesUseCase } from "../../useCases/user/category/get_all_categories-usecase";
+import { IGetAllPaginatedOwnerBookUseCase } from "../../entities/useCaseInterfaces/user/book/get_all_paginated_owner_books_usecase-interface";
+import { GetAllPaginatedOwnerBooks } from "../../useCases/user/book/get_all_paginated_owner_books-usecase";
+import { IUpdateBookDetailsUseCase } from "../../entities/useCaseInterfaces/user/book/update_book_details_usecase-interface";
+import { UpdateBookDetailsUseCase} from "../../useCases/user/book/update_book_details-usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -96,10 +108,12 @@ export class UseCaseRegistry {
       useClass: JWTService,
     });
 
-    container.registerSingleton<IUserRepository>('IUserRepository',
-     UserRepository)
+    container.registerSingleton<IUserRepository>(
+      "IUserRepository",
+      UserRepository
+    );
 
-     container.register<ICloudinarySignatureService>(
+    container.register<ICloudinarySignatureService>(
       "ICloudinarySignatureService",
       CloudinarySignatureService
     );
@@ -113,14 +127,9 @@ export class UseCaseRegistry {
       useClass: UserLoginStrategy,
     });
 
-
     container.register("AdminLoginStrategy", {
       useClass: AdminLoginStrategy,
     });
-
-   
-
- 
 
     //* ====== Register UseCases ====== *//
     container.register<IRegisterUserUseCase>("IRegisterUserUseCase", {
@@ -170,8 +179,6 @@ export class UseCaseRegistry {
       useClass: GoogleUseCase,
     });
 
-   
-
     container.register<IForgotPasswordUseCase>("IForgotPasswordUseCase", {
       useClass: ForgotPasswordUseCase,
     });
@@ -180,45 +187,80 @@ export class UseCaseRegistry {
       useClass: ResetPasswordUseCase,
     });
 
-
     //category usecase register
-    
+
     container.register<IcreateNewCategoryUseCase>("ICreateCategoryUseCase", {
       useClass: CreateNewCategoryUseCase,
     });
 
-    container.register<IGetAllPaginatedCategoryUseCase>("IGetAllPaginatedCategoryUseCase",{
-      useClass: GetALLPaginatedCategories
-    })
+    container.register<IGetAllPaginatedCategoryUseCase>(
+      "IGetAllPaginatedCategoryUseCase",
+      {
+        useClass: GetALLPaginatedCategories,
+      }
+    );
 
-    container.register<IUpdateUserStatusUseCase>("IUpdateCategoryStatus",{
-      useClass:UpdateCategoryStatusUseCase
-    })
+    container.register<IUpdateUserStatusUseCase>("IUpdateCategoryStatus", {
+      useClass: UpdateCategoryStatusUseCase,
+    });
 
-    container.register<IUpdateCategoryUseCase>("IUpdateCategoryUseCase",{
-      useClass:UpdateCategoryUseCase
-    })
+    container.register<IUpdateCategoryUseCase>("IUpdateCategoryUseCase", {
+      useClass: UpdateCategoryUseCase,
+    });
 
+    container.register<IGetAllCategoriesUseCase>("IGetAllCategoriesUseCase", {
+      useClass: GetAllCategoriesUseCase,
+    });
 
     //dealtype usecase register
-     
-    container.register<ICreateDealTypeUseCase>("ICreateDealTypeUseCase",{
-      useClass:CreateDealTypeUseCase
-    })
 
-    container.register<IGetAllPaginatedDealTypesUseCase>("IGetAllDealTypesUseCase",{
-      useClass:GetAllPaginatedDealTypesUseCase
-    })
+    container.register<ICreateDealTypeUseCase>("ICreateDealTypeUseCase", {
+      useClass: CreateDealTypeUseCase,
+    });
 
+    container.register<IGetAllPaginatedDealTypesUseCase>(
+      "IGetAllPaginatedDealTypesUseCase",
+      {
+        useClass: GetAllPaginatedDealTypesUseCase,
+      }
+    );
+    container.register<IGetAllDealTypesUseCase>("IGetAllDealTypesUseCase", {
+      useClass: GetAllDealTypesUseCase,
+    });
 
     //users usecase register
 
-    container.register<IUpdateUserProfileUseCase>("IUpdateUserProfileUseCase",{
-      useClass:UpdateUserProfileUseCase
+    container.register<IUpdateUserProfileUseCase>("IUpdateUserProfileUseCase", {
+      useClass: UpdateUserProfileUseCase,
+    });
+
+    container.register<IChangePasswordUseCase>("IChangePasswordUseCase", {
+      useClass: changePasswordUseCase,
+    });
+
+    container.register<IUpdateDealTypeStatusUseCase>(
+      "IUpdateDealTypeStatusUseCase",
+      {
+        useClass: updateDealTypeStatusUseCase,
+      }
+    );
+
+    container.register<IUpdateDealTypeUseCase>("IUpdateDealTypeUseCase", {
+      useClass: UpdateDealTypeUseCase,
+    });
+
+    //books
+
+    container.register<ICreateNewBookUseCase>("ICreateNewBookUseCase", {
+      useClass: CreateNewBookUseCase,
+    });
+
+    container.register<IGetAllPaginatedOwnerBookUseCase>("IGetAllPaginatedOwnerBooksUseCase",{
+      useClass:GetAllPaginatedOwnerBooks
     })
 
-    container.register<IChangePasswordUseCase>("IChangePasswordUseCase",{
-      useClass:changePasswordUseCase
+    container.register<IUpdateBookDetailsUseCase>("IUpdateBookDetailsUseCase",{
+      useClass:UpdateBookDetailsUseCase
     })
   }
 }
