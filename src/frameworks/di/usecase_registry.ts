@@ -79,6 +79,12 @@ import { IGetAllPaginatedOwnerBookUseCase } from "../../entities/useCaseInterfac
 import { GetAllPaginatedOwnerBooks } from "../../useCases/user/book/get_all_paginated_owner_books-usecase";
 import { IUpdateBookDetailsUseCase } from "../../entities/useCaseInterfaces/user/book/update_book_details_usecase-interface";
 import { UpdateBookDetailsUseCase} from "../../useCases/user/book/update_book_details-usecase";
+import { IUpdateBookStatus } from "../../entities/useCaseInterfaces/user/book/update_book_status_usecase-interface";
+import { UpdateBookStatusUseCase } from "../../useCases/user/book/update_book_status-usecase";
+import { IGetAllPaginatedBooksUseCase } from "../../entities/useCaseInterfaces/admin/book/get_all_paginated_books_usecase-interface";
+import { GetAllPaginatedBooksUseCase } from "../../useCases/admin/book/get_all_paginated_books-usecase";
+import { IGetAllUserAvailableBooksUseCase } from "../../entities/useCaseInterfaces/user/book/get_all_user_available_books_usecase-interface";
+import { GetAllUserAvailbleBooksUseCase } from "../../useCases/user/book/get_all_user_available_books-usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -261,6 +267,21 @@ export class UseCaseRegistry {
 
     container.register<IUpdateBookDetailsUseCase>("IUpdateBookDetailsUseCase",{
       useClass:UpdateBookDetailsUseCase
+    })
+
+    container.register<IUpdateBookStatus>("IUpdateBookStatusUseCase",{
+      useClass:UpdateBookStatusUseCase
+    })
+
+
+
+    container.register<IGetAllPaginatedBooksUseCase>("IGetAllPaginatedBooksUseCase",{
+      useClass:GetAllPaginatedBooksUseCase
+    })
+
+
+    container.register<IGetAllUserAvailableBooksUseCase>("IGetAllUserAvailableBooks",{
+      useClass:GetAllUserAvailbleBooksUseCase
     })
   }
 }

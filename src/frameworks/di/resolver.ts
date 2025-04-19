@@ -11,6 +11,7 @@ import { UserController } from "../../interfaceAdapters/controllers/User/user-co
 import { BookController } from "../../interfaceAdapters/controllers/User/book-controller";
 import { CategoryController } from "../../interfaceAdapters/controllers/User/category-controller";
 import { DealTypeController } from "../../interfaceAdapters/controllers/User/deal_type-controller";
+import { AdminBookController } from "../../interfaceAdapters/controllers/Admin/admin_book-controller";
 
 DependancyInjection.registerAll();
 
@@ -19,6 +20,7 @@ export const blockStatusMiddleware = container.resolve(BlockStatusMiddleware);
 export const adminUserController = container.resolve(AdminUserController);
 export const admincategoryController = container.resolve(AdminCategoryController)
 export const adminDealTypeController = container.resolve(AdminDealTypeController)
+export const adminBookController = container.resolve(AdminBookController)
 
 
 //user

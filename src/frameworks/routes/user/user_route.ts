@@ -78,9 +78,9 @@ export class UserRoutes extends BaseRoute {
 
     router.get(
       "/user/category",
-      verifyAuth,
-      authorizeRole(["user"]),
-      blockStatusMiddleware.checkUserStatus as RequestHandler,
+      // verifyAuth,
+      // authorizeRole(["user"]),
+      // blockStatusMiddleware.checkUserStatus as RequestHandler,
       (req: Request, res: Response) => {
         categoryController.getCategories(req, res);
       }
@@ -88,9 +88,9 @@ export class UserRoutes extends BaseRoute {
 
     router.get(
       "/user/dealtype",
-      verifyAuth,
-      authorizeRole(["user"]),
-      blockStatusMiddleware.checkUserStatus as RequestHandler,
+      // verifyAuth,
+      // authorizeRole(["user"]),
+      // blockStatusMiddleware.checkUserStatus as RequestHandler,
       (req: Request, res: Response) => {
         dealtypeController.getDealTypes(req, res);
       }
@@ -106,7 +106,7 @@ export class UserRoutes extends BaseRoute {
       (req: Request, res: Response) => {
         bookController.generateSignatureForBooksUploading(req, res);
       }
-    );
+    ); 
 
     router
       .route("/user/book")
@@ -115,7 +115,7 @@ export class UserRoutes extends BaseRoute {
         authorizeRole(["user"]),
         blockStatusMiddleware.checkUserStatus as RequestHandler,
         (req: Request, res: Response) => {
-          bookController.getAllPaginatedBooks(req, res);
+          bookController.getAllPaginatedBooks(req, res); 
         }
       )
       .post(
@@ -125,7 +125,15 @@ export class UserRoutes extends BaseRoute {
         (req: Request, res: Response) => {
           bookController.createNewBook(req, res);
         }
-      );
+      )
+      .patch(
+        verifyAuth,
+        authorizeRole(["user"]),
+        blockStatusMiddleware.checkUserStatus as RequestHandler,
+        (req: Request, res: Response) => {
+          bookController.updateBookStatus(req, res);
+        }
+      )
 
     router
       .route("/user/updatebook")
@@ -134,10 +142,19 @@ export class UserRoutes extends BaseRoute {
         authorizeRole(["user"]),
         blockStatusMiddleware.checkUserStatus as RequestHandler,
         (req: Request, res: Response) => {
-          console.log("Update book route hit");
-          console.log("Request body:", req.body);
+          // console.log("Update book route hit");
+          // console.log("Request body:", req.body);
           bookController.updateBookDetails(req, res);
         }
       );
+
+
+      router.get(
+        "/user/books-available",
+        (req: Request, res: Response) => {
+          bookController.getAllAvailableUserBooks(req,res)
+        }
+      )
+
   }
 }

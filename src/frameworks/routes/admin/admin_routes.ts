@@ -13,9 +13,10 @@ import {
   adminUserController,
   admincategoryController,
   adminDealTypeController,
-
-
-  userController
+  adminBookController,
+  categoryController,
+  dealtypeController,
+  bookController,
 } from "../../di/resolver";
 
 export class AdminRoutes extends BaseRoute {
@@ -61,7 +62,6 @@ export class AdminRoutes extends BaseRoute {
       }
     );
 
-  
     router
       .route("/admin/categories")
       .get(
@@ -75,7 +75,7 @@ export class AdminRoutes extends BaseRoute {
         verifyAuth,
         authorizeRole(["admin"]),
         (req: Request, res: Response) => {
-          admincategoryController.createNewCategory(req,res)
+          admincategoryController.createNewCategory(req, res);
         }
       );
 
@@ -94,42 +94,77 @@ export class AdminRoutes extends BaseRoute {
         (req: Request, res: Response) => {
           admincategoryController.updateCategory(req, res);
         }
+      );
+
+    //deal types routes
+
+    router
+      .route("/admin/deal-types")
+      .get(
+        verifyAuth,
+        authorizeRole(["admin"]),
+        (req: Request, res: Response) => {
+          adminDealTypeController.getAllPaginatedDealTypes(req, res);
+        }
       )
+      .post(
+        verifyAuth,
+        authorizeRole(["admin"]),
+        (req: Request, res: Response) => {
+          adminDealTypeController.createDealType(req, res);
+        }
+      );
 
-      //deal types routes
+    router
+      .route("/admin/deal-types/:_id")
+      .patch(
+        verifyAuth,
+        authorizeRole(["admin"]),
+        (req: Request, res: Response) => {
+          adminDealTypeController.updateDealTypeStatus(req, res);
+        }
+      )
+      .put(
+        verifyAuth,
+        authorizeRole(["admin"]),
+        (req: Request, res: Response) => {
+          adminDealTypeController.updateDealType(req, res);
+        }
+      );
 
-      router
-        .route("/admin/deal-types")
-        .get(
-          verifyAuth,
-          authorizeRole(["admin"]),
-          (req:Request,res:Response)=>{
-            adminDealTypeController.getAllPaginatedDealTypes(req,res)
-          }
-        )
-        .post(
-          verifyAuth,
-          authorizeRole(["admin"]),
-          (req:Request,res:Response)=>{
-            adminDealTypeController.createDealType(req,res)
-          }
-        )
+    router.get(
+      "/admin/category",
+      verifyAuth,
+      authorizeRole(["admin"]),
+      (req: Request, res: Response) => {
+        categoryController.getCategories(req, res);
+      }
+    );
 
-        router
-          .route("/admin/deal-types/:_id")
-          .patch(
-            verifyAuth,
-            authorizeRole(["admin"]),
-            (req:Request,res:Response)=>{
-              adminDealTypeController.updateDealTypeStatus(req,res)
-            }
-          )
-          .put(
-            verifyAuth,
-            authorizeRole(["admin"]),
-            (req:Request,res:Response)=>{
-              adminDealTypeController.updateDealType(req,res)
-            }
-          )
+    router.get(
+      "/admin/dealtype",
+      verifyAuth,
+      authorizeRole(["admin"]),
+      (req: Request, res: Response) => {
+        dealtypeController.getDealTypes(req, res);
+      }
+    );
+
+    router
+      .route("/admin/book")
+      .get(
+        verifyAuth,
+        authorizeRole(["admin"]),
+        (req: Request, res: Response) => {
+          adminBookController.getAllPaginatedBooks(req, res);
+        }
+      )
+      .patch(
+        verifyAuth,
+        authorizeRole(["admin"]),
+        (req: Request, res: Response) => {
+          bookController.updateBookStatus(req, res);
+        }
+      );
   }
 }
