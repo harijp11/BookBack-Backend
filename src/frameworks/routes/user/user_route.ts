@@ -156,5 +156,21 @@ export class UserRoutes extends BaseRoute {
         }
       )
 
+      router.get(
+        "/user/book-Details/:_id",
+        (req: Request, res: Response) => {
+          bookController.getUserBookDetails(req,res)
+        }
+      )
+
+      
+      router.get(
+        "/user/related-books/:catId", 
+        (req: Request, res: Response) => {
+          bookController.getRelatedBooks(req,res)
+        }
+      )
+
+
   }
 }

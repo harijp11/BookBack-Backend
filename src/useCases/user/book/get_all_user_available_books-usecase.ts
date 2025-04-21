@@ -12,7 +12,9 @@ export class GetAllUserAvailbleBooksUseCase implements IGetAllUserAvailableBooks
      private _bookRepository:IBookRepository
     ){}
 
-   async execute({ latitude, longitude, maxDistance, page, limit, search, filters,sort }: GetBooksByLocationInput): Promise<PaginatedBooks | null> {
+   async execute({ latitude, longitude, maxDistance, page, limit, 
+    search, filters,sort 
+}: GetBooksByLocationInput): Promise<PaginatedBooks | null> {
 
         const Filter = typeof filters === "string" ? JSON.parse(filters) : filters;
         const Sort = typeof sort === "string" ? JSON.parse(sort) : sort;

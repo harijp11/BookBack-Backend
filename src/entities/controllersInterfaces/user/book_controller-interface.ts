@@ -19,4 +19,6 @@ export interface IBookController {
     updateBookDetails(req:Request,res:Response):Promise<void>
     updateBookStatus(req:Request,res:Response):Promise<void>
     getAllAvailableUserBooks(req:Request,res:Response):Promise<void>
+    getUserBookDetails(req:Request,res:Response):Promise<void>
+    getRelatedBooks(req:Request,res:Response):Promise<void>
 }

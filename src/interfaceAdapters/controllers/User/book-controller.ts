@@ -17,6 +17,8 @@ import { IGetAllUserAvailableBooksUseCase } from "../../../entities/useCaseInter
 import { PaginatedBooks } from "../../../entities/models/paginated_books_entity";
 import { CustomError } from "../../../entities/utils/custom_error";
 import { SortOrder } from "mongoose";
+import { IGetUserBookDetailsUseCase } from "../../../entities/useCaseInterfaces/user/book/get_book_details_usecase-interface";
+import { IRelatedBooksUseCase } from "../../../entities/useCaseInterfaces/user/book/get_related_book_usecase-interface";
 
 @injectable()
 export class BookController implements IBookController {
@@ -32,7 +34,11 @@ export class BookController implements IBookController {
     @inject("IUpdateBookStatusUseCase")
     private _updateBookStatusUseCase: IUpdateBookStatus,
     @inject("IGetAllUserAvailableBooks")
-    private _getAllUseAvailableBooksUsecase:IGetAllUserAvailableBooksUseCase
+    private _getAllUseAvailableBooksUsecase:IGetAllUserAvailableBooksUseCase,
+    @inject("IGetUserBookDetailsUseCase")
+    private _getUserBookDetailsUseCase:IGetUserBookDetailsUseCase,
+    @inject("IRelatedBooksUseCase")
+    private _getRelatedBooksUseCase:IRelatedBooksUseCase
   ) {}
 
   generateSignatureForBooksUploading = async (
@@ -150,8 +156,8 @@ export class BookController implements IBookController {
   async updateBookStatus(req: Request, res: Response): Promise<void> {
     try {
       const { bookId } = req.query as { bookId: string };
-      console.log("query", req.query);
-      console.log("paramd", req.params);
+      // console.log("query", req.query);
+      // console.log("paramd", req.params);
 
       await this._updateBookStatusUseCase.execute(bookId);
       res.status(HTTP_STATUS.OK).json({
@@ -187,11 +193,11 @@ export class BookController implements IBookController {
          const value = sortParam[key];
          
          // Assuming SortOrder accepts "1" or "-1" as string values
-         if (value === "1" || value === "-1") {
+         if (value === "1") {
            convertedSort[key] = 1 as SortOrder;
          } else {
            // Default to "-1" for descending order
-           convertedSort[key] = 1 as SortOrder;
+           convertedSort[key] = -1 as SortOrder;
          }
        });
      }
@@ -215,7 +221,6 @@ export class BookController implements IBookController {
       }
       
       const { books, totalBooks, totalPages, currentPage } = locationBasedFilteredBooks;
-      
       if (!books || totalBooks === undefined || totalPages === undefined || currentPage === undefined) {
         throw new CustomError("Invalid data received", 500);
       }
@@ -232,4 +237,38 @@ export class BookController implements IBookController {
       handleErrorResponse(res,error)
     }
   }
+
+   async getUserBookDetails(req: Request, res: Response): Promise<void> {
+        try{
+          const bookId = req.params._id;
+         
+        const book = await this._getUserBookDetailsUseCase.execute(bookId);
+
+        res.status(HTTP_STATUS.OK).json({
+          success: true,
+          message: "Book details fetched successfully",
+          book
+        })
+        }catch(error){
+          handleErrorResponse(res,error)
+        }
+  }
+
+
+ async  getRelatedBooks(req: Request, res: Response): Promise<void> {
+   try{
+    const catId = req.params.catId;
+     
+    const books = await this._getRelatedBooksUseCase.execute(catId);
+    res.status(HTTP_STATUS.OK).json({
+      success: true,
+      message: "Related books fetched successfully",
+      books
+    })
+   }catch(error){
+     handleErrorResponse(res,error)
+   }
+  }
+
+
 }
