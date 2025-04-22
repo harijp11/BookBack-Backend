@@ -14,7 +14,7 @@ export class GetAllPaginatedDealTypesUseCase implements IGetAllPaginatedDealType
 
    async execute(pageNumber:number,pageSize:number,searchTerm:string):Promise<PaginatedDealTypes>{
        
-        let filter :any = {}
+        let filter: { [key: string]: object } = {};
         if(searchTerm?.trim()){
             filter.name = {$regex:searchTerm.trim(),$options:"i"};
         }

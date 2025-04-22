@@ -182,28 +182,6 @@ export class BookController implements IBookController {
         sort = {createdAt:-1}
       } =req.query as unknown as GetBooksByLocationInput
      
-       
-     const sortParam = req.query.sort as Record<string, string>;
-     const convertedSort: Record<string, SortOrder> = {};
-     
-     if (sortParam) {
-       Object.keys(sortParam).forEach(key => {
-         // Since SortOrder appears to be a string type, we keep the string value
-         // But we'll validate it contains only valid values
-         const value = sortParam[key];
-         
-         // Assuming SortOrder accepts "1" or "-1" as string values
-         if (value === "1") {
-           convertedSort[key] = 1 as SortOrder;
-         } else {
-           // Default to "-1" for descending order
-           convertedSort[key] = -1 as SortOrder;
-         }
-       });
-     }
-
-     console.log("queriesss",convertedSort)
-
      
       const locationBasedFilteredBooks = await this._getAllUseAvailableBooksUsecase.execute({
         longitude: Number(longitude),
@@ -213,7 +191,7 @@ export class BookController implements IBookController {
         limit: Number(limit),
         search,
         filters,
-        sort:convertedSort
+        sort
       });
       
       if (!locationBasedFilteredBooks) {
@@ -224,7 +202,6 @@ export class BookController implements IBookController {
       if (!books || totalBooks === undefined || totalPages === undefined || currentPage === undefined) {
         throw new CustomError("Invalid data received", 500);
       }
-
         res.status(200).json({
           success: true,
           message:"Books fetched successfully",
@@ -240,7 +217,7 @@ export class BookController implements IBookController {
 
    async getUserBookDetails(req: Request, res: Response): Promise<void> {
         try{
-          const bookId = req.params._id;
+          const bookId:string = req.params._id;
          
         const book = await this._getUserBookDetailsUseCase.execute(bookId);
 
@@ -257,7 +234,7 @@ export class BookController implements IBookController {
 
  async  getRelatedBooks(req: Request, res: Response): Promise<void> {
    try{
-    const catId = req.params.catId;
+    const catId:string = req.params.catId;
      
     const books = await this._getRelatedBooksUseCase.execute(catId);
     res.status(HTTP_STATUS.OK).json({

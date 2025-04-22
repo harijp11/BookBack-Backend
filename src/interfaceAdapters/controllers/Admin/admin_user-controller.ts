@@ -73,7 +73,7 @@ export class AdminUserController implements IAdminUserController {
     try {
       const { userType, userId } = req.query as {
         userType: string;
-        userId: any;
+        userId: string;
       };
 
       if (!userType || !userId) {

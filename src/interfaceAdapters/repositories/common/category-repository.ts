@@ -18,7 +18,7 @@ export class CategoryRepository implements ICategoryRepository{
     }
     
     async findPaginatedCategory(
-      filter: any, 
+      filter: object, 
       skip: number,
       limit: number
     ): Promise<PaginatedCategories> {
@@ -59,6 +59,6 @@ async updateCategory(_id:string,name: string, description: string):Promise<ICate
 }
 
 async getAllCategories(): Promise<ICategoryEntity[] | []> {
-  return await categoryModel.find()
+  return await categoryModel.find({isActive:true})
 }
 }

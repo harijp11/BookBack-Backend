@@ -59,8 +59,8 @@ export const verifyAuth = async (
 			refresh_token: token.refresh_token,
 		};
 		next();
-	} catch (error: any) {
-		if (error.name === "TokenExpiredError") {
+	} catch (error:unknown) {
+		if (error instanceof Error && error.name === "TokenExpiredError") {
 			console.log(error.name);
 			res.status(HTTP_STATUS.UNAUTHORIZED).json({
 				message: ERROR_MESSAGES.TOKEN_EXPIRED,

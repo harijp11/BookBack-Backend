@@ -1,7 +1,8 @@
-import { Response } from "express";
+import { Request, Response } from "express";
 import { ZodError } from "zod";
 import { CustomError } from "../../entities/utils/custom_error";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../constants"
+import errorLogger from "../../shared/utils/error-logger";
 
 export function handleErrorResponse(res: Response, error: unknown): void {
   console.error(error);
@@ -25,7 +26,7 @@ export function handleErrorResponse(res: Response, error: unknown): void {
     });
     return;
   }
-
+  errorLogger.error(`[${(error as Error).message}`, { stack: (error as Error).stack });
   console.log("Unhandled error:", error);
   res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
     success: false,

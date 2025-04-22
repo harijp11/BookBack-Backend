@@ -1,6 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import { IUserRepository } from "../../entities/repositoryInterface/user/user_repository-interface";
-import { CustomRequest } from "./auth_middleware";
+import { CustomJwtPayload, CustomRequest } from "./auth_middleware";
 import { NextFunction, Response } from "express";
 import { IBlackListTokenUseCase } from "../../entities/useCaseInterfaces/auth/blacklist_token_usecase-interface";
 import { IRevokeRefreshTokenUseCase } from "../../entities/useCaseInterfaces/auth/revoke_refresh_token_usecase-interface";
@@ -31,8 +31,10 @@ export class BlockStatusMiddleware {
         });
       }
 
-      const { _id, role } = req.user;
-      const user = await this.userRepository.findById(_id);
+      const { _id, role } = req.user as CustomJwtPayload;
+      const userId = _id.toString(); // Convert ObjectId to string
+      
+      const user = await this.userRepository.findById(userId);
       
       if (!user) {
         return res.status(HTTP_STATUS.NOT_FOUND).json({

@@ -19,8 +19,8 @@ export class UserRepository implements IUserRepository {
         } as IUserEntity;
     }
   
-    async findById(id: any): Promise<IUserEntity | null> {
-        const User = await UserModel.findById(id).lean();
+    async findById(userId: string): Promise<IUserEntity | null> {
+        const User = await UserModel.findById(userId).lean();
         if (!User) return null;
 
         return {
@@ -30,7 +30,7 @@ export class UserRepository implements IUserRepository {
     }
 
     async find(
-        filter: any,
+        filter: Object,
         skip: number,
         limit: number
     ): Promise<{ user: IUserEntity[] | []; total: number }> {
@@ -73,7 +73,7 @@ export class UserRepository implements IUserRepository {
     }
 
     async findByIdAndUpdate(
-        id: any,
+        id:string,
         updateData: Partial<IUserEntity>
     ): Promise<IUserEntity | null> {
         const User = await UserModel.findByIdAndUpdate(
@@ -88,7 +88,7 @@ export class UserRepository implements IUserRepository {
         } as IUserEntity;
     }
 
-    async findByIdAndChangePassword(_id: any, newPassword: string): Promise<IUserEntity | void> {
+    async findByIdAndChangePassword(_id: string, newPassword: string): Promise<IUserEntity | void> {
         const User = await UserModel.findByIdAndUpdate(
             _id,
             {$set:{password:newPassword}},

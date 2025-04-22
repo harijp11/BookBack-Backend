@@ -6,9 +6,9 @@ import { ICategoryEntity } from "../../models/category_entity";
 export interface ICategoryRepository {
     findByName(name:string):Promise<ICategoryEntity | null>
     save(name:string,description?:string):Promise<ICategoryEntity>
-    findPaginatedCategory(filter:string,skip:number,limit:number):Promise<PaginatedCategories>
-    findByIdAndUpdateStatus(_id:string,active:boolean):Promise<ICategoryEntity | null>
-    findById(_id:string):Promise<ICategoryEntity | null>
-    updateCategory(_id:String,name:String,description:String):Promise<ICategoryEntity | void>
+    findPaginatedCategory(filter:object,skip:number,limit:number):Promise<PaginatedCategories>
+    findByIdAndUpdateStatus(catId:string,active:boolean):Promise<ICategoryEntity | null>
+    findById(catId:string):Promise<ICategoryEntity | null>
+    updateCategory(catId:String,name:String,description:String):Promise<ICategoryEntity | void>
     getAllCategories():Promise<ICategoryEntity[] | []>
 }

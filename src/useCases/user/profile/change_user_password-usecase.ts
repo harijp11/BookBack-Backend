@@ -14,9 +14,9 @@ export class changePasswordUseCase implements IChangePasswordUseCase{
         private _passwordBcrypt : IBcrypt
       ){}
 
-      async execute(_id: string, password: string, newPassword: string): Promise<IUserEntity | void> {
-          const user = await this._userRepository.findById(_id)
-                console.log("check daatas coming",_id,password,newPassword)
+      async execute(userId: string, password: string, newPassword: string): Promise<IUserEntity | void> {
+          const user = await this._userRepository.findById(userId)
+                console.log("check daatas coming",userId,password,newPassword)
           if(!user || !user?.password){
              throw new CustomError("User or user password is not available",404)
           }
@@ -35,6 +35,6 @@ export class changePasswordUseCase implements IChangePasswordUseCase{
         }
            const bcryptedNewPassword = await this._passwordBcrypt.hash(newPassword)
 
-         await this._userRepository.findByIdAndChangePassword(_id,bcryptedNewPassword) as IUserEntity
+         await this._userRepository.findByIdAndChangePassword(userId,bcryptedNewPassword) as IUserEntity
       }
 }

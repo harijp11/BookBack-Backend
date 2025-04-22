@@ -21,7 +21,7 @@ export interface IBookRepository{
     maxDistance: number,
     limit: number,
     skip: number,
-    search?: string,
+    // search?: string,
     filters?: Record<string, object>,
     sort?:Record<string,SortOrder>
   ): Promise<PaginatedBooksRepo | null>

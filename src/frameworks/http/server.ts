@@ -4,8 +4,7 @@ import http from "http";
 import rateLimit from "express-rate-limit";
 import express, { Application, NextFunction, Request, Response } from "express";
 import cookieParser from "cookie-parser";
-import morgan from "morgan";
-
+import morganLogger from "../../shared/utils/logger";
 import { config } from "../../shared/config";
 
 import { notFound } from "../../interfaceAdapters/middlewares/not-found-middleware";
@@ -28,7 +27,7 @@ export class Server {
   }
 
   private configureMiddlewares() {
-    this._app.use(morgan(config.loggerStatus));
+    this._app.use(morganLogger);
     this._app.use(helmet());
 
     this._app.use(
@@ -39,10 +38,6 @@ export class Server {
         credentials: true,
       })
     );
-
-    // this._app.use((req:Request,res:Response,next:NextFunction)=>{
-    //     express.json()(req,res,next);
-    // })
 
     this._app.use(express.json({ limit: "10mb" }));
 
@@ -64,8 +59,7 @@ export class Server {
   }
   private configureErrorHandling() {
     this._app.use(errorHandler);
-  }
-  private getApp(): Application {
+  } private getApp(): Application {
     return this._app;
   }
   public getServer(): http.Server {

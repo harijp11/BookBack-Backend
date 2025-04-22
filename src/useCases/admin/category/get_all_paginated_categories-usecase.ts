@@ -13,7 +13,7 @@ export class GetALLPaginatedCategories implements IGetAllPaginatedCategoryUseCas
     async execute(pageNumber: number,
         pageSize: number,
         searchTerm: string): Promise<PaginatedCategories> {
-        let filter: any = {};
+        let filter: {[key:string]:object}= {};
         //  console.log("search termmm",searchTerm) 
         if (searchTerm?.trim()) {
           filter.name = { $regex: searchTerm.trim(), $options: "i" };

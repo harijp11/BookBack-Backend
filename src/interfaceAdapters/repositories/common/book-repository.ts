@@ -19,6 +19,7 @@ export class BookRepository implements IBookRepository{
     limit: number,
     skip: number
   ): Promise<PaginatedBooksRepo | null> {
+
     const searchQuery = search
       ? {
           $or: [
@@ -28,7 +29,7 @@ export class BookRepository implements IBookRepository{
         }
       : {};
   
-      const query: any = {
+      const query: Record<string,any> = {
         ...filter,
         ...searchQuery
       };
@@ -69,7 +70,7 @@ export class BookRepository implements IBookRepository{
     }
   : {};
 
-  const query: any = {
+  const query: object = {
     ...filter,
     ...searchQuery
   };
@@ -117,92 +118,9 @@ return result;
     maxDistance: number, 
     limit: number,
     skip: number, 
-    search?: string, 
-    filters?: Record<string, any>, // Allow any type for flexibility
-    sort?: Record<string, any>
+    matchStage?: Record<string, any>, 
+    transformedSort?: Record<string, any>
   ): Promise<PaginatedBooksRepo | null> {
-    console.log("Query parameters:", {
-      latitude,
-      longitude,
-      maxDistance,
-      limit,
-      skip,
-      search,
-      filters,
-      sort
-    });
-  
-    // Force maxDistance to be a number and use a reasonable default if invalid
-    const safeMaxDistance = typeof maxDistance === 'number' && !isNaN(maxDistance) 
-      ? maxDistance 
-      : 5000000; // Default to 5000km if not valid
-  
-    // Initialize matchStage
-    const matchStage: Record<string, any> = {};
-  
-    // Convert categoryId to ObjectId if it exists in filters
-    if (filters && filters.categoryId) {
-      try {
-        matchStage.categoryId = new Types.ObjectId(filters.categoryId);
-      } catch (error) {
-        console.error("Invalid categoryId format:", filters.categoryId);
-        return {
-          getBooks: () => [],
-          count: 0
-        } as PaginatedBooksRepo;
-      }
-    }
-
-    if (filters && filters.dealTypeId) {
-      try {
-        matchStage.dealTypeId = new Types.ObjectId(filters.dealTypeId);
-      } catch (error) {
-        console.error("Invalid dealTypeId format:", filters.dealTypeId);
-        return {
-          getBooks: () => [],
-          count: 0
-        } as PaginatedBooksRepo;
-      }
-    }
-  
-
-    
-    // Add search conditions if provided
-    if (search) {
-      matchStage.$or = [
-        { name: { $regex: search, $options: "i" } },
-        { description: { $regex: search, $options: "i" } }
-      ];
-    }
-  
-    // Handle sorting
-    const useDistanceSort = !sort || Object.keys(sort).length === 0;
-    const transformedSort: Record<string, 1 | -1> = {};
-    if (sort) {
-      for (const [key, value] of Object.entries(sort)) {
-        if (key === 'distance' && useDistanceSort) {
-          continue;
-        }
-        if (typeof value === 'number') {
-          transformedSort[key] = value as 1 | -1;
-        } else if (value === 'asc') {
-          transformedSort[key] = 1;
-        } else if (value === 'desc' || value === -1 || value === '-1') {
-          transformedSort[key] = -1;
-        } else {
-          transformedSort[key] = 1;
-        }
-      }
-    }
-  
-    let geoNearSort = 1;
-    if (sort && 'distance' in sort) {
-      const distanceSort = sort.distance;
-      if (distanceSort === -1 || distanceSort === '-1') {
-        geoNearSort = -1;
-      }
-    }
-  
     try {
       const pipeline: PipelineStage[] = [
         {
@@ -212,7 +130,7 @@ return result;
               coordinates: [longitude, latitude]
             },
             distanceField: "distance",
-            maxDistance: 500000000, // Use safeMaxDistance
+            maxDistance: 500000000, 
             spherical: true,
             key: "location",
             query: matchStage,
@@ -250,7 +168,7 @@ return result;
         },
         {
           $lookup: {
-            from: 'deals',
+            from: 'dealtypes',
             localField: 'dealTypeId',
             foreignField: '_id',
             as: 'dealTypeId'
@@ -261,10 +179,16 @@ return result;
             path: "$dealTypeId",
             preserveNullAndEmptyArrays: true
           }
+        },
+        {
+          $match: {
+            "dealTypeId.isActive": true,
+            "categoryId.isActive": true
+          }
         }
       ];
-  
-      if (Object.keys(transformedSort).length > 0) {
+      console.log("max distance",maxDistance)
+      if (transformedSort && Object.keys(transformedSort).length > 0) {
         pipeline.push({
           $sort: transformedSort
         });
@@ -284,11 +208,7 @@ return result;
       const count = countResult.length > 0 ? countResult[0].total : 0;
   
       const books = await BookModel.aggregate(pipeline);
-      console.log("Total books found:", books.length);
-      console.log("Applied sort:", transformedSort);
-      if (books.length > 0) {
-        console.log("Sample book distance:", books[0].distance);
-      }
+      console.log("books",books)
       return {
         getBooks: () => books,
         count

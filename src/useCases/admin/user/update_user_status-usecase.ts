@@ -11,7 +11,7 @@ export class UpdateUserStatusUseCase implements IUpdateUserStatusUseCase {
 		@inject("IUserRepository")
 		private _userRepository: IUserRepository
 	) {}
-	async execute(userType: string, userId: any): Promise<void> {
+	async execute(userType: string, userId: string): Promise<void> {
 		if (userType === "user") {
 			const user = await this._userRepository.findById(userId);
 

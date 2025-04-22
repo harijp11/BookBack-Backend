@@ -8,8 +8,8 @@ import { PaginatedDealTypes } from "../../../entities/models/paginated_deal_type
 injectable()
 export class DealTypeRepository implements IDealTypeRepository{
 
-    async findById(_id:string):Promise<IDealTypeEntity | null>{
-        return await DealTypeModel.findOne({_id})
+    async findById(dealTypeId:string):Promise<IDealTypeEntity | null>{
+        return await DealTypeModel.findOne({_id:dealTypeId})
     }
 
    async findByName(name:string):Promise<IDealTypeEntity | null>{
@@ -22,7 +22,7 @@ export class DealTypeRepository implements IDealTypeRepository{
    }
 
    async findPaginatedDealType(
-    filter: any, 
+    filter: object, 
     skip: number,
     limit: number
   ): Promise<PaginatedDealTypes> {
@@ -42,23 +42,23 @@ export class DealTypeRepository implements IDealTypeRepository{
     };
   }
 
-  async findByIdAndUpdateStatus(_id:string,status:boolean):Promise<IDealTypeEntity | null>{
+  async findByIdAndUpdateStatus(dealTypeId:string,status:boolean):Promise<IDealTypeEntity | null>{
    return  await DealTypeModel.findByIdAndUpdate(
-    {_id},
+    {_id:dealTypeId},
     {isActive:status},
     {new:true}
    )
   }
 
-  async findByIdAndUpdateDealType(_id:string,name:string,description:string):Promise<IDealTypeEntity | null>{
+  async findByIdAndUpdateDealType(dealTypeId:string,name:string,description:string):Promise<IDealTypeEntity | null>{
      return await DealTypeModel.findByIdAndUpdate(
-        {_id},
+        {_id:dealTypeId},
         {name,description},
         {new:true}
      )
   }
   getAllDealTypes(): Promise<IDealTypeEntity[] | []> {
-    return DealTypeModel.find()
+    return DealTypeModel.find({isActive:true})
   }
  
 }

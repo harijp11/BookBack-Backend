@@ -1,3 +1,4 @@
+import { ObjectId } from "mongoose";
 import { IUserEntity } from "../../models/user_entity";
 
 export interface IUserRepository {
@@ -6,24 +7,24 @@ export interface IUserRepository {
   findByEmail(email: string): Promise<IUserEntity | null>;
 
   find(
-    filter: any,
+    filter: object,
     skip: number,
     limit: number
   ): Promise<{ user:IUserEntity[] | []; total: number }>;
 
-  findById(id: any): Promise<IUserEntity | null>;
+  findById(userId: string): Promise<IUserEntity | null>;
   updateByEmail(
     email: string,
     updates: Partial<IUserEntity>
   ): Promise<IUserEntity | null>;
 
   findByIdAndUpdate(
-    id: any,
+    userId: string,
     updateData: Partial<IUserEntity>
   ): Promise<IUserEntity | null>;
 
   findByIdAndChangePassword(
-    _id:any,
+    userId:string,
     newPassword:string
   ):Promise<IUserEntity | void>
 }
