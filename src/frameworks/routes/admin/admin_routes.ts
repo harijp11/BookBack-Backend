@@ -10,10 +10,7 @@ import { BaseRoute } from "../base_route";
 
 import {
   authController,
-  adminUserController,
-  admincategoryController,
-  adminDealTypeController,
-  adminBookController,
+  userController,
   categoryController,
   dealtypeController,
   bookController,
@@ -41,7 +38,7 @@ export class AdminRoutes extends BaseRoute {
       verifyAuth,
       authorizeRole(["admin"]),
       (req: Request, res: Response) => {
-        adminUserController.getAllUsers(req, res);
+        userController.getAllUsers(req, res);
       }
     );
 
@@ -50,7 +47,7 @@ export class AdminRoutes extends BaseRoute {
       verifyAuth,
       authorizeRole(["admin"]),
       (req: Request, res: Response) => {
-        adminUserController.updateUserStatus(req, res);
+        userController.updateUserStatus(req, res);
       }
     );
 
@@ -68,14 +65,14 @@ export class AdminRoutes extends BaseRoute {
         verifyAuth,
         authorizeRole(["admin"]),
         (req: Request, res: Response) => {
-          admincategoryController.getAllPaginatedCategories(req, res);
+          categoryController.getAllPaginatedCategories(req, res);
         }
       )
       .post(
         verifyAuth,
         authorizeRole(["admin"]),
         (req: Request, res: Response) => {
-          admincategoryController.createNewCategory(req, res);
+          categoryController.createNewCategory(req, res);
         }
       );
 
@@ -85,14 +82,14 @@ export class AdminRoutes extends BaseRoute {
         verifyAuth,
         authorizeRole(["admin"]),
         (req: Request, res: Response) => {
-          admincategoryController.updateCategoryStatus(req, res);
+          categoryController.updateCategoryStatus(req, res);
         }
       )
       .put(
         verifyAuth,
         authorizeRole(["admin"]),
         (req: Request, res: Response) => {
-          admincategoryController.updateCategory(req, res);
+          categoryController.updateCategory(req, res);
         }
       );
 
@@ -104,14 +101,14 @@ export class AdminRoutes extends BaseRoute {
         verifyAuth,
         authorizeRole(["admin"]),
         (req: Request, res: Response) => {
-          adminDealTypeController.getAllPaginatedDealTypes(req, res);
+          dealtypeController.getAllPaginatedDealTypes(req, res);
         }
       )
       .post(
         verifyAuth,
         authorizeRole(["admin"]),
         (req: Request, res: Response) => {
-          adminDealTypeController.createDealType(req, res);
+          dealtypeController.createDealType(req, res);
         }
       );
 
@@ -121,14 +118,14 @@ export class AdminRoutes extends BaseRoute {
         verifyAuth,
         authorizeRole(["admin"]),
         (req: Request, res: Response) => {
-          adminDealTypeController.updateDealTypeStatus(req, res);
+          dealtypeController.updateDealTypeStatus(req, res);
         }
       )
       .put(
         verifyAuth,
         authorizeRole(["admin"]),
         (req: Request, res: Response) => {
-          adminDealTypeController.updateDealType(req, res);
+          dealtypeController.updateDealType(req, res);
         }
       );
 
@@ -137,7 +134,7 @@ export class AdminRoutes extends BaseRoute {
       verifyAuth,
       authorizeRole(["admin"]),
       (req: Request, res: Response) => {
-        categoryController.getCategories(req, res);
+        categoryController.getAllCategories(req, res);
       }
     );
 
@@ -156,7 +153,7 @@ export class AdminRoutes extends BaseRoute {
         verifyAuth,
         authorizeRole(["admin"]),
         (req: Request, res: Response) => {
-          adminBookController.getAllPaginatedBooks(req, res);
+          bookController.getAllAdminPaginatedBooks(req, res);
         }
       )
       .patch(

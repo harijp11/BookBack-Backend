@@ -1,4 +1,4 @@
-import { Request, RequestHandler, Response } from "express";
+import express,{ Request, RequestHandler, Response } from "express";
 
 import {
   authorizeRole,
@@ -12,6 +12,8 @@ import {
   bookController,
   categoryController,
   dealtypeController,
+  contractRequestController,
+  purseController,
 } from "../../di/resolver";
 
 import { BaseRoute } from "../base_route";
@@ -78,19 +80,13 @@ export class UserRoutes extends BaseRoute {
 
     router.get(
       "/user/category",
-      // verifyAuth,
-      // authorizeRole(["user"]),
-      // blockStatusMiddleware.checkUserStatus as RequestHandler,
       (req: Request, res: Response) => {
-        categoryController.getCategories(req, res);
+        categoryController.getAllCategories(req, res);
       }
     );
 
     router.get(
       "/user/dealtype",
-      // verifyAuth,
-      // authorizeRole(["user"]),
-      // blockStatusMiddleware.checkUserStatus as RequestHandler,
       (req: Request, res: Response) => {
         dealtypeController.getDealTypes(req, res);
       }
@@ -135,15 +131,13 @@ export class UserRoutes extends BaseRoute {
         }
       )
 
-    router
-      .route("/user/updatebook")
-      .post(
+    // router
+    //   .route("/user/updatebook")
+      .put(
         verifyAuth,
         authorizeRole(["user"]),
         blockStatusMiddleware.checkUserStatus as RequestHandler,
         (req: Request, res: Response) => {
-          // console.log("Update book route hit");
-          // console.log("Request body:", req.body);
           bookController.updateBookDetails(req, res);
         }
       );
@@ -170,6 +164,85 @@ export class UserRoutes extends BaseRoute {
           bookController.getRelatedBooks(req,res)
         }
       )
+
+
+      //contract request routes
+
+      router.get("/user/check-Request-exist",
+        verifyAuth,
+        authorizeRole(["user"]),
+        blockStatusMiddleware.checkUserStatus as RequestHandler,
+        (req:Request,res:Response)=>{
+          contractRequestController.checkBookRequestExist(req,res)
+        }
+      )
+      
+
+      router
+      .route("/user/contract-request")
+      .post(
+        verifyAuth,
+        authorizeRole(["user"]),
+        blockStatusMiddleware.checkUserStatus as RequestHandler,
+        (req:Request,res:Response)=>{
+          contractRequestController.createNewContractRequest(req,res)
+        }
+      )
+
+
+      router
+      .route("/user/owner/contract-request")
+      .get(
+        verifyAuth,
+        authorizeRole(["user"]),
+        blockStatusMiddleware.checkUserStatus as RequestHandler,
+        (req:Request,res:Response)=>{
+          contractRequestController.fetchAllOwnerContractRequests(req,res)
+        }
+      )
+      .patch(
+        verifyAuth,
+        authorizeRole(["user"]),
+        blockStatusMiddleware.checkUserStatus as RequestHandler,
+        (req:Request,res:Response)=>{
+          console.log("cookies")
+          contractRequestController.contractRequestStatusUpdate(req,res)
+        }
+      )
+
+
+      //purse
+
+      router
+      .route("/user/purse")
+      .get(
+        verifyAuth,
+        authorizeRole(["user"]),
+        blockStatusMiddleware.checkUserStatus as RequestHandler,
+        (req:Request,res:Response)=>{
+          purseController.fetchPurseDetails(req,res)
+        }
+      )
+
+      router
+  .route('/user/purse/payment-intent')
+  .post(
+    verifyAuth,
+    authorizeRole(['user']),
+    blockStatusMiddleware.checkUserStatus as RequestHandler,
+    (req: Request, res: Response) => {
+      purseController.createPaymentIntent(req, res);
+    }
+  );
+
+router
+  .route('/webhook')
+  .post(
+    express .raw({ type: 'application/json', limit: '10mb' }),
+    (req: Request, res: Response) => {
+      purseController.handleWebhook(req, res);
+    }
+  );
 
 
   }

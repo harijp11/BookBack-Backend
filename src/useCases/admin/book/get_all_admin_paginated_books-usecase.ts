@@ -1,12 +1,12 @@
 import { inject, injectable } from "tsyringe";
-import { IGetAllPaginatedBooksUseCase } from "../../../entities/useCaseInterfaces/admin/book/get_all_paginated_books_usecase-interface";
+import { IGetAllAdminPaginatedBooksUseCase } from "../../../entities/useCaseInterfaces/admin/book/get_all_paginated_books_usecase-interface";
 import { IBookRepository } from "../../../entities/repositoryInterface/common/book_repository-interface";
 import { PaginatedBooks } from "../../../entities/models/paginated_books_entity";
 import { CustomError } from "../../../entities/utils/custom_error";
 
 
 @injectable()
-export class GetAllPaginatedBooksUseCase implements IGetAllPaginatedBooksUseCase{
+export class GetAllPaginatedBooksUseCase implements IGetAllAdminPaginatedBooksUseCase{
     constructor(
      @inject("IBookRepository")
      private _bookRepository:IBookRepository

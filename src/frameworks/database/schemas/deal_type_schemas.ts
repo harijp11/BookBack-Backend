@@ -11,4 +11,4 @@ export const DealTypeSchema = new Schema<IDealTypeModel>(
   { timestamps: true }
 );
 
-DealTypeSchema.index({ status: 1 });
+DealTypeSchema.index({ isActive: 1 });

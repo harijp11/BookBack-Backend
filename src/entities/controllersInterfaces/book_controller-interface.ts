@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { SortOrder } from "mongoose";
 
 export interface GetBooksByLocationInput {
+    userId:string
     latitude: number;
     longitude: number;
     maxDistance:number
@@ -21,4 +22,7 @@ export interface IBookController {
     getAllAvailableUserBooks(req:Request,res:Response):Promise<void>
     getUserBookDetails(req:Request,res:Response):Promise<void>
     getRelatedBooks(req:Request,res:Response):Promise<void>
+
+    //admin
+    getAllAdminPaginatedBooks(req:Request,res:Response):Promise<void>
 }

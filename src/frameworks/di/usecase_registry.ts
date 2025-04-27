@@ -81,14 +81,31 @@ import { IUpdateBookDetailsUseCase } from "../../entities/useCaseInterfaces/user
 import { UpdateBookDetailsUseCase} from "../../useCases/user/book/update_book_details-usecase";
 import { IUpdateBookStatus } from "../../entities/useCaseInterfaces/user/book/update_book_status_usecase-interface";
 import { UpdateBookStatusUseCase } from "../../useCases/user/book/update_book_status-usecase";
-import { IGetAllPaginatedBooksUseCase } from "../../entities/useCaseInterfaces/admin/book/get_all_paginated_books_usecase-interface";
-import { GetAllPaginatedBooksUseCase } from "../../useCases/admin/book/get_all_paginated_books-usecase";
+import { IGetAllAdminPaginatedBooksUseCase } from "../../entities/useCaseInterfaces/admin/book/get_all_paginated_books_usecase-interface";
+import { GetAllPaginatedBooksUseCase } from "../../useCases/admin/book/get_all_admin_paginated_books-usecase";
 import { IGetAllUserAvailableBooksUseCase } from "../../entities/useCaseInterfaces/user/book/get_all_user_available_books_usecase-interface";
 import { GetAllUserAvailbleBooksUseCase } from "../../useCases/user/book/get_all_user_available_books-usecase";
 import { IGetUserBookDetailsUseCase } from "../../entities/useCaseInterfaces/user/book/get_book_details_usecase-interface";
 import { GetUserBookDetailsUseCase } from "../../useCases/user/book/get_book_details-usecase";
 import { IRelatedBooksUseCase } from "../../entities/useCaseInterfaces/user/book/get_related_book_usecase-interface";
 import { GetRelatedBooksUseCase } from "../../useCases/user/book/get_related_books-usecase";
+import { ICreateNewContractRequestUseCase } from "../../entities/useCaseInterfaces/user/contractrequest/create_new_contract_request_usecase-interface";
+import { CreateNewContractRequest } from "../../useCases/user/contractrequest/create_new_contract_request-usecase";
+import { ICheckBookRequestExistUseCase } from "../../entities/useCaseInterfaces/user/contractrequest/check_book_request_exist_usecase-interface";
+import { CheckBookRequestExist } from "../../useCases/user/contractrequest/check_book_request_exist-usecase";
+import { IFetchAllOwnerRequestsUseCase } from "../../entities/useCaseInterfaces/user/contractrequest/fetch_all_owner_contract_requests_usecase-entity";
+import { FetchAllOwnerContractRequestsUseCase } from "../../useCases/user/contractrequest/fetch_all_owner_contract_requests-usecase";
+import { IContractRequestStatusUpdateUseCase } from "../../entities/useCaseInterfaces/user/contractrequest/contract_request_update_status_usecase-interface";
+import { ContractRequestUpdateStatus } from "../../useCases/user/contractrequest/contract_request_status_update-usecase";
+import { IPurseRepository } from "../../entities/repositoryInterface/user/purse_repository-interface";
+import { IFetchPurseDetailsUseCase } from "../../entities/useCaseInterfaces/user/purse/fetch_purse_details_usecase-interface";
+import { FetchPurseDetailsUseCase } from "../../useCases/user/purse/fetch_purse_details-usecase";
+import { IStripeService } from "../../entities/serviceInterfaces/stripe_service-interface";
+import { StripeService } from "../../interfaceAdapters/services/stripe_service";
+import { IFundPurseUseCase } from "../../entities/useCaseInterfaces/user/purse/fund_usecase-interface";
+import { FundPurseUseCase } from "../../useCases/user/purse/fund-usecase";
+import { IStripeClient } from "../../entities/drivers/stripe_client-entity";
+import { StripeClient } from "../drivers/stripeclient/stripe_client";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -127,6 +144,17 @@ export class UseCaseRegistry {
       "ICloudinarySignatureService",
       CloudinarySignatureService
     );
+
+    container.register<IStripeService>("IStripeService",{
+       useClass:StripeService
+    })
+
+
+    //* =======Register client ===*//
+
+    container.register<IStripeClient>("IStripeClient",{
+      useClass:StripeClient
+    })
 
     //* ====== Register Strategies ====== *//
     container.register("UserRegisterStrategy", {
@@ -279,7 +307,7 @@ export class UseCaseRegistry {
 
 
 
-    container.register<IGetAllPaginatedBooksUseCase>("IGetAllPaginatedBooksUseCase",{
+    container.register<IGetAllAdminPaginatedBooksUseCase>("IGetAllPaginatedBooksUseCase",{
       useClass:GetAllPaginatedBooksUseCase
     })
 
@@ -294,6 +322,36 @@ export class UseCaseRegistry {
 
     container.register<IRelatedBooksUseCase>("IRelatedBooksUseCase",{
       useClass:GetRelatedBooksUseCase
+    })
+
+
+    //contract request 
+
+    container.register<ICreateNewContractRequestUseCase>("ICreateNewContractRequestUseCase",{
+      useClass:CreateNewContractRequest
+    })
+
+    container.register<ICheckBookRequestExistUseCase>("ICheckBookRequestExistUseCase",{
+      useClass:CheckBookRequestExist
+    })
+
+    container.register<IFetchAllOwnerRequestsUseCase>("IFetchAllOwnerRequestsUseCase",{
+      useClass:FetchAllOwnerContractRequestsUseCase
+    })
+
+    container.register<IContractRequestStatusUpdateUseCase>("IContractRequestStatusUpdateUseCase",{
+      useClass:ContractRequestUpdateStatus
+    })
+
+
+    //purse
+
+    container.register<IFetchPurseDetailsUseCase>("IFetchPurseDetailsUseCase",{
+      useClass:FetchPurseDetailsUseCase
+    })
+
+    container.register<IFundPurseUseCase>("IFundPurseUseCase",{
+      useClass:FundPurseUseCase
     })
   }
 }

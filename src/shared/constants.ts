@@ -8,7 +8,12 @@ export enum OtpPurpose {
 	PASSWORD_RESET = "password_reset",
   }
 
-
+  export interface ContractRequestInput  {
+    ownerId: string;
+    bookId: string;
+    requesterId:string;
+    request_type: 'borrow' | 'buy';
+  }; 
 
 
   export enum BookStatus {

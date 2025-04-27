@@ -16,6 +16,10 @@ import { IDealTypeRepository } from "../../entities/repositoryInterface/common/d
 import { DealTypeRepository } from "../../interfaceAdapters/repositories/common/deal_type-repository";
 import { IBookRepository } from "../../entities/repositoryInterface/common/book_repository-interface";
 import { BookRepository } from "../../interfaceAdapters/repositories/common/book-repository";
+import { IContractRequestRepository } from "../../entities/repositoryInterface/user/contract_request_repository-interface";
+import { ContractRequestRepository } from "../../interfaceAdapters/repositories/user/contract_request-repository";
+import { IPurseRepository } from "../../entities/repositoryInterface/user/purse_repository-interface";
+import { PurseRepository } from "../../interfaceAdapters/repositories/user/purse-repository";
 
 
 export class RepositoryRegistry {
@@ -52,7 +56,12 @@ export class RepositoryRegistry {
       useClass: BookRepository
     })
 
-   
+    container.register<IContractRequestRepository>("IContractRequestRepository",{
+      useClass:ContractRequestRepository
+    })
 
+   container.register<IPurseRepository>("IPurseRepository",{
+    useClass:PurseRepository
+   })
 }
 }

@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import { IGetAllUserAvailableBooksUseCase } from "../../../entities/useCaseInterfaces/user/book/get_all_user_available_books_usecase-interface";
 import { IBookRepository, PaginatedBooksRepo } from "../../../entities/repositoryInterface/common/book_repository-interface";
-import { GetBooksByLocationInput } from "../../../entities/controllersInterfaces/user/book_controller-interface";
+import { GetBooksByLocationInput } from "../../../entities/controllersInterfaces/book_controller-interface";
 import { PaginatedBooks } from "../../../entities/models/paginated_books_entity";
 import { CustomError } from "../../../entities/utils/custom_error";
 import { Types } from "mongoose";
@@ -13,7 +13,7 @@ export class GetAllUserAvailbleBooksUseCase implements IGetAllUserAvailableBooks
      private _bookRepository:IBookRepository
     ){}
 
-   async execute({ latitude, longitude, maxDistance, page, limit, 
+   async execute({userId, latitude, longitude, maxDistance, page, limit, 
     search, filters,sort 
 }: GetBooksByLocationInput): Promise<PaginatedBooks | null> {
 
@@ -43,10 +43,14 @@ export class GetAllUserAvailbleBooksUseCase implements IGetAllUserAvailableBooks
                 { description: { $regex: search, $options: "i" } }
               ];
             }
+
+            if (userId && userId !== "") {
+              matchStage["ownerId"] = { $ne: new Types.ObjectId(userId) };
+          }
           
             const useDistanceSort = !Sort || Object.keys(Sort).length === 0;
             const transformedSort: Record<string, 1 | -1> = {};
-            
+              
             if (Sort) {
               for (const [key, value] of Object.entries(Sort)) {
                 if (key === 'distance' && useDistanceSort) continue;

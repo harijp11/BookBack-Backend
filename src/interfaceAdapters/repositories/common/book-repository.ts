@@ -49,6 +49,8 @@ export class BookRepository implements IBookRepository{
       .populate('dealTypeId', 'name'),
       BookModel.countDocuments(query)
     ])
+
+    
     const result: PaginatedBooksRepo = {
       getBooks: () => books, 
       count
@@ -121,6 +123,7 @@ return result;
     matchStage?: Record<string, any>, 
     transformedSort?: Record<string, any>
   ): Promise<PaginatedBooksRepo | null> {
+    // console.log("max distancee ",typeof maxDistance)
     try {
       const pipeline: PipelineStage[] = [
         {
@@ -130,7 +133,7 @@ return result;
               coordinates: [longitude, latitude]
             },
             distanceField: "distance",
-            maxDistance: 500000000, 
+            maxDistance:maxDistance, 
             spherical: true,
             key: "location",
             query: matchStage,
@@ -183,11 +186,12 @@ return result;
         {
           $match: {
             "dealTypeId.isActive": true,
-            "categoryId.isActive": true
+            "categoryId.isActive": true,
+            "isActive":true
           }
         }
       ];
-      console.log("max distance",maxDistance)
+     
       if (transformedSort && Object.keys(transformedSort).length > 0) {
         pipeline.push({
           $sort: transformedSort
@@ -208,7 +212,7 @@ return result;
       const count = countResult.length > 0 ? countResult[0].total : 0;
   
       const books = await BookModel.aggregate(pipeline);
-      console.log("books",books)
+      // console.log("books",books)
       return {
         getBooks: () => books,
         count
