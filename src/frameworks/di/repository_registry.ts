@@ -20,6 +20,10 @@ import { IContractRequestRepository } from "../../entities/repositoryInterface/u
 import { ContractRequestRepository } from "../../interfaceAdapters/repositories/user/contract_request-repository";
 import { IPurseRepository } from "../../entities/repositoryInterface/user/purse_repository-interface";
 import { PurseRepository } from "../../interfaceAdapters/repositories/user/purse-repository";
+import { ISaleRepository } from "../../entities/repositoryInterface/common/sale_repository-interface";
+import { SaleRepository } from "../../interfaceAdapters/repositories/common/sale-repository";
+import { IRentRepository } from "../../entities/repositoryInterface/common/rent_repository-interface";
+import { RentRepository } from "../../interfaceAdapters/repositories/common/rent-repository";
 
 
 export class RepositoryRegistry {
@@ -62,6 +66,14 @@ export class RepositoryRegistry {
 
    container.register<IPurseRepository>("IPurseRepository",{
     useClass:PurseRepository
+   })
+
+   container.register<ISaleRepository>("ISaleRepository",{
+    useClass:SaleRepository
+   })
+
+   container.register<IRentRepository>("IRentRepository",{
+     useClass:RentRepository
    })
 }
 }

@@ -25,13 +25,14 @@ export class FundPurseUseCase implements IFundPurseUseCase {
     // Create a pending transaction
     const tsId = generateUniqueTrsasactionId()
      await this.purseRepository.addTransaction(userId, {
+        tsId,
         type: 'credit',
         amount: amount / 100,
         status: 'pending',
         description: `Funding wallet with ${amount / 100} ${currency.toUpperCase()}`,
       });
       
-      const paymentIntent = await this.stripeService.createPaymentIntent(amount, currency, userId);
+      const paymentIntent = await this.stripeService.createPaymentIntent(amount, currency, purse?.userId.toString(),tsId);
       
       return {
         ...paymentIntent,
@@ -48,20 +49,23 @@ export class FundPurseUseCase implements IFundPurseUseCase {
     tsId?: string;
   }> {
     const result = await this.stripeService.handleWebhookEvent(event);
-
+    console.log("event from db",result.status)
+    
     if (result.status === 'success' && result.walletId && result.amount) {
-      const purse = await this.purseRepository.updateTransactionStatus(result.walletId, result.paymentIntentId!, 'completed');
+      console.log("result details",result.walletId, result.tsId, result.amount)
+      const purse = await this.purseRepository.updateTransactionStatus(result.walletId, result.tsId!, 'completed');
       if (!purse) {
-        throw new Error('Failed to update transaction status');
+        throw new Error('Failed to update transaction status');  
       }
-      await this.purseRepository.updateBalance(result.walletId, result.amount / 100); // Convert cents to dollars
+     
+     await this.purseRepository.updateBalance(result.walletId, result.amount / 100); 
+     console.log("balance updated")
     } else if (result.status === 'failed' && result.walletId && result.paymentIntentId) {
       await this.purseRepository.updateTransactionStatus(result.walletId, result.paymentIntentId, 'failed');
     }
-
     return {
       ...result,
-      tsId: result.paymentIntentId, // Use paymentIntentId as tsId for webhook correlation
+      paymentIntentId: result.paymentIntentId, // Use paymentIntentId as tsId for webhook correlation
     };
   }
 }

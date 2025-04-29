@@ -10,6 +10,7 @@ import { CategoryController } from "../../interfaceAdapters/controllers/category
 import { DealTypeController } from "../../interfaceAdapters/controllers/deal_type-controller";
 import { ContractRequestController } from "../../interfaceAdapters/controllers/contract_request-controller";
 import { PurseController } from "../../interfaceAdapters/controllers/purse-controller";
+import { ContractController } from "../../interfaceAdapters/controllers/contract-controller";
 
 DependancyInjection.registerAll();
 
@@ -23,7 +24,7 @@ export const bookController = container.resolve(BookController)
 export const contractRequestController = container.resolve(ContractRequestController)
 export const purseController = container.resolve(PurseController)
 
-
+export const contractController = container.resolve(ContractController)
 
 
 

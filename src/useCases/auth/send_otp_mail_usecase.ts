@@ -16,7 +16,8 @@ export class SendOtpEmailUseCase implements ISendOtpEmailUseCase {
 		private _userExistenceService: IUserExistenceService,
 		@inject("IOtpBcrypt") private _otpBcrypt: IBcrypt
 	) {}
-	async execute(email: string): Promise<void> {
+	async execute(email: string,purpose:string = "login"): Promise<void> {
+		if(purpose === "login"){
 		const emailExists = await this._userExistenceService.emailExists(email);
 		if (emailExists) {
 			throw new CustomError(
@@ -24,11 +25,12 @@ export class SendOtpEmailUseCase implements ISendOtpEmailUseCase {
 				HTTP_STATUS.CONFLICT
 			);
 		}
+	}
 
 		const otp = this._otpService.generateOtp();
 		console.log(`OTP:${otp} `);
 		const hashedOtp = await this._otpBcrypt.hash(otp);
-		await this._otpService.storeOtp(email, hashedOtp);
+		await this._otpService.storeOtp(email, hashedOtp,purpose);
 		await this._emailService.sendOtpEmail(
 			email,
 			"StriveX - Verify Your Email",

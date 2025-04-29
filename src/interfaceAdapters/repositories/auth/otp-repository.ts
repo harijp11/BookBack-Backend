@@ -5,12 +5,12 @@ import { OTPModel } from "../../../frameworks/database/models/otp_model";
 
 @injectable()
 export class OtpRepository implements IOtpRepository {
-	async saveOtp(email: string, otp: string, expiresAt: Date): Promise<void> {
-		await OTPModel.create({ email, otp, expiresAt });
+	async saveOtp(email: string, otp: string, expiresAt: Date,purpose:string): Promise<void> {
+		await OTPModel.create({ email, otp, expiresAt,purpose });
 	}
 
-	async findOtp(email: string): Promise<IOtpEntity | null> {
-		const otpEntry = await OTPModel.find({ email })
+	async findOtp(email: string,purpose:string = "login"): Promise<IOtpEntity | null> {
+		const otpEntry = await OTPModel.find({ email,purpose })
 			.sort({ createdAt: -1 })
 			.limit(1);
 		return otpEntry.length > 0 ? otpEntry[0] : null;

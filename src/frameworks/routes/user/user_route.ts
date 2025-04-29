@@ -14,6 +14,7 @@ import {
   dealtypeController,
   contractRequestController,
   purseController,
+  contractController,
 } from "../../di/resolver";
 
 import { BaseRoute } from "../base_route";
@@ -210,6 +211,80 @@ export class UserRoutes extends BaseRoute {
         }
       )
 
+      router
+      .route("/user/contract-request")
+      .get(
+        verifyAuth,
+        authorizeRole(["user"]),
+        blockStatusMiddleware.checkUserStatus as RequestHandler,
+        (req:Request,res:Response)=>{
+          contractRequestController.fetchRequesterRequest(req,res)
+        }
+      )
+
+      router
+      .route("/user/contract-request/:conReqId/cancel")
+      .patch(
+        verifyAuth,
+        authorizeRole(["user"]),
+        blockStatusMiddleware.checkUserStatus as RequestHandler,
+        (req:Request,res:Response)=>{
+          contractRequestController.cancelContractRequest(req,res)
+        }
+      )
+
+      router
+      .route("/user/fix-deal")
+      .get(
+        verifyAuth,
+        authorizeRole(["user"]),
+        blockStatusMiddleware.checkUserStatus as RequestHandler,
+        (req:Request,res:Response)=>{
+          contractRequestController.fetchFixDealDetails(req,res)
+        }
+      )
+
+      //contract 
+
+      router
+      .route("/user/contract/send-otp")
+      .post(
+        verifyAuth,
+        authorizeRole(["user"]),
+        blockStatusMiddleware.checkUserStatus as RequestHandler,
+        (req:Request,res:Response)=>{
+          contractController.sendOtpEmail(req,res)
+        }
+      )
+
+      router
+      .route("/user/contract/verify-otp")
+      .post(
+        verifyAuth,
+        authorizeRole(["user"]),
+        blockStatusMiddleware.checkUserStatus as RequestHandler,   
+        (req:Request,res:Response)=>{
+          contractController.verifyOtp(req,res)
+        }
+      )
+
+
+      router
+      .route(`/user/contract/:request_type/:conReqId/create`)
+      .post(
+        verifyAuth,
+        authorizeRole(["user"]),
+        blockStatusMiddleware.checkUserStatus as RequestHandler,
+        (req:Request,res:Response)=>{
+          contractController.createNewContract(req,res)
+        }
+      )
+  
+      
+
+
+
+
 
       //purse
 
@@ -238,12 +313,10 @@ export class UserRoutes extends BaseRoute {
 router
   .route('/webhook')
   .post(
-    express .raw({ type: 'application/json', limit: '10mb' }),
+    express.raw({ type: 'application/json', limit: '10mb' }),
     (req: Request, res: Response) => {
       purseController.handleWebhook(req, res);
     }
   );
-
-
   }
 }

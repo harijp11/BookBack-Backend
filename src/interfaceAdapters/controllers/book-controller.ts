@@ -14,9 +14,7 @@ import { IUpdateBookDetailsUseCase } from "../../entities/useCaseInterfaces/user
 import { IUpdateBookStatus } from "../../entities/useCaseInterfaces/user/book/update_book_status_usecase-interface";
 import { handleErrorResponse } from "../../shared/utils/errorHandler";
 import { IGetAllUserAvailableBooksUseCase } from "../../entities/useCaseInterfaces/user/book/get_all_user_available_books_usecase-interface";
-import { PaginatedBooks } from "../../entities/models/paginated_books_entity";
 import { CustomError } from "../../entities/utils/custom_error";
-import { SortOrder } from "mongoose";
 import { IGetUserBookDetailsUseCase } from "../../entities/useCaseInterfaces/user/book/get_book_details_usecase-interface";
 import { IRelatedBooksUseCase } from "../../entities/useCaseInterfaces/user/book/get_related_book_usecase-interface";
 import { IGetAllAdminPaginatedBooksUseCase } from "../../entities/useCaseInterfaces/admin/book/get_all_paginated_books_usecase-interface";

@@ -1,3 +1,3 @@
 export interface ISendOtpEmailUseCase {
-	execute(email: string): Promise<void>;
+	execute(email: string,purpose?:string): Promise<void>;
 }

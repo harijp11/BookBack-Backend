@@ -29,6 +29,7 @@ export interface IBookRepository {
     bookId: string,
     isActive: boolean
   ): Promise<IBookModel | null>;
+  findByIdAndUpdateLiveStatus(bookId:string,status:string):Promise<void>
   findLocationBasedFilteredBooks(
     latitude: number,
     longitude: number,

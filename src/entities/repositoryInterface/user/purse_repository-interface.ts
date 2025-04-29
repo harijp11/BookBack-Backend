@@ -4,6 +4,7 @@ export interface IPurseRepository {
   findById(userId: string): Promise<IPurseModel | null>;
   create(userId: string): Promise<IPurseModel | null>;
   addTransaction(userId: string, transaction: {
+    tsId:string
     type: 'credit' | 'debit';
     amount: number;
     status: 'pending' | 'completed' | 'failed';

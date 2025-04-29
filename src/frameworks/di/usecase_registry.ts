@@ -106,6 +106,15 @@ import { IFundPurseUseCase } from "../../entities/useCaseInterfaces/user/purse/f
 import { FundPurseUseCase } from "../../useCases/user/purse/fund-usecase";
 import { IStripeClient } from "../../entities/drivers/stripe_client-entity";
 import { StripeClient } from "../drivers/stripeclient/stripe_client";
+import { IFetchRequesterRequestsUseCase } from "../../entities/useCaseInterfaces/user/contractrequest/fetch_requester_requests_usecase-entity";
+import { FetchRequesterRequestsUseCase } from "../../useCases/user/contractrequest/fetch_requester_requests-usecase";
+import { Container } from "winston";
+import { ICancelContractRequestUseCase } from "../../entities/useCaseInterfaces/user/contractrequest/cancel_contract_request_usecase-interface";
+import { CancelContractRequest } from "../../useCases/user/contractrequest/cancel_contract_request-usecase";
+import { IFetchFixDealDetailsUseCase } from "../../entities/useCaseInterfaces/user/contractrequest/fetch_fix_deal_details_usecase-interface";
+import { FetchFixDealDetailsUseCase } from "../../useCases/user/contractrequest/fetch_fix_deal_details-usecase";
+import { ICreateNewContractUseCase } from "../../entities/useCaseInterfaces/user/rental/create_new_contract_usecase-interface";
+import { CreateNewContractUseCase } from "../../useCases/user/contract/create_new_contract-usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -342,6 +351,27 @@ export class UseCaseRegistry {
     container.register<IContractRequestStatusUpdateUseCase>("IContractRequestStatusUpdateUseCase",{
       useClass:ContractRequestUpdateStatus
     })
+
+    container.register<IFetchRequesterRequestsUseCase>("IFetchRequesterRequestsUseCase",{
+      useClass:FetchRequesterRequestsUseCase
+    })
+
+   container.register<ICancelContractRequestUseCase>("ICancelContractRequestUseCase",{
+    useClass:CancelContractRequest
+   })
+
+   container.register<IFetchFixDealDetailsUseCase>("IFetchFixDealDetailsUseCase",{
+    useClass:FetchFixDealDetailsUseCase
+   })
+
+
+
+
+   //contract
+
+   container.register<ICreateNewContractUseCase>("ICreateNewContractUseCase",{
+    useClass:CreateNewContractUseCase
+   })
 
 
     //purse

@@ -1,8 +1,8 @@
 import { Schema, Types } from 'mongoose';
 
-import { ContractRequestModel } from '../models/contract_request-model';
+import { IContractRequestModel } from '../models/contract_request-model';
 
-export const ContractRequestSchema = new Schema<ContractRequestModel>(
+export const ContractRequestSchema = new Schema<IContractRequestModel>(
   {
     ownerId: {
       type: Types.ObjectId,

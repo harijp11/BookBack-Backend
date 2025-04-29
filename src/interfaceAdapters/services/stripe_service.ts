@@ -12,7 +12,7 @@ export class StripeService implements IStripeService {
 
   }
 
-  async createPaymentIntent(amount: number, currency: string, walletId: string): Promise<{ clientSecret: string; paymentIntentId: string }> {
+  async createPaymentIntent(amount: number, currency: string, walletId: string,tsId:string): Promise<{ clientSecret: string; paymentIntentId: string }> {
     try {
       if (amount <= 0) {
         throw new Error('Amount must be greater than zero');
@@ -21,7 +21,7 @@ export class StripeService implements IStripeService {
         throw new Error('Wallet ID is required');
       }
 
-      const paymentIntent = await this._stripeClient.createPaymentIntent(amount, currency, { walletId });
+      const paymentIntent = await this._stripeClient.createPaymentIntent(amount, currency, { walletId,tsId });
       return {
         clientSecret: paymentIntent.client_secret!,
         paymentIntentId: paymentIntent.id,
@@ -31,14 +31,19 @@ export class StripeService implements IStripeService {
     }
   }
 
-  async handleWebhookEvent(event: any): Promise<{ status: string; paymentIntentId?: string; walletId?: string; amount?: number; eventType?: string }> {
+  async handleWebhookEvent(event: any): Promise<{ status: string; paymentIntentId?:string,tsId?:string, walletId?: string; amount?: number; eventType?: string }> {
     try {
+      // console.log("eventttt", event.data.object)
+      // console.log("id", event.data.object.payment_intent)
+      // console.log("amount", event.data.object.amount)
+      // console.log("amount", event.data.object._id)
       switch (event.type) {
         case 'payment_intent.succeeded':
           const paymentIntent = event.data.object;
           return {
             status: 'success',
             paymentIntentId: paymentIntent.id,
+            tsId:paymentIntent.metadata.tsId,
             walletId: paymentIntent.metadata.walletId,
             amount: paymentIntent.amount,
           };
@@ -46,6 +51,7 @@ export class StripeService implements IStripeService {
           return {
             status: 'failed',
             paymentIntentId: event.data.object.id,
+            tsId:event.data.object.metadata.tsId,
             walletId: event.data.object.metadata.walletId,
           };
         default:

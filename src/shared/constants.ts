@@ -6,6 +6,7 @@ export enum OtpPurpose {
 	LOGIN = "login",
 	SIGNUP = "signup",
 	PASSWORD_RESET = "password_reset",
+  CREATE_CONTRACT = "create_contract"
   }
 
   export interface ContractRequestInput  {

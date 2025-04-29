@@ -10,13 +10,13 @@ import { CustomRequest } from '../middlewares/auth_middleware';
 export class PurseController implements IPurseController {
 
   constructor(
-    @inject('IFetchPurseDetailsUseCase') private fetchPurseDetailsUseCase: IFetchPurseDetailsUseCase,
+    @inject('IFetchPurseDetailsUseCase') private _fetchPurseDetailsUseCase: IFetchPurseDetailsUseCase,
     @inject('IFundPurseUseCase') private fundPurseUseCase: IFundPurseUseCase
   ) {}
   async fetchPurseDetails(req: Request, res: Response): Promise<void> {
     try {
       const userId = (req as CustomRequest).user._id.toString();
-      const purse = await this.fetchPurseDetailsUseCase.execute(userId);
+      const purse = await this._fetchPurseDetailsUseCase.execute(userId);
 
       if (!purse) {
         res.status(200).json({
@@ -72,7 +72,7 @@ export class PurseController implements IPurseController {
         message: 'Webhook processed successfully',
         result,
       });
-    } catch (error: any) {
+    } catch (error: any) {   
       handleErrorResponse(res, error);
     }
   }

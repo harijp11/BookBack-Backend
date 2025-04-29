@@ -9,10 +9,11 @@ export class StripeClient implements IStripeClient {
 
   constructor() {
     this.stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2025-03-31.basil' });
-    this.webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+    this.webhookSecret=process.env.STRIPE_WEBHOOK_SECRET!;
   }
 
-  async createPaymentIntent(amount: number, currency: string, metadata: { walletId: string }): Promise<Stripe.PaymentIntent> {
+  async createPaymentIntent(amount: number, currency: string, metadata: { walletId: string,tsId:string }): Promise<Stripe.PaymentIntent> {
+    console.log("paymenetintetnt create",amount,currency,metadata)
     return this.stripe.paymentIntents.create({
       amount,
       currency,

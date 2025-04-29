@@ -15,14 +15,14 @@ export class OtpService implements IOtpService {
 	generateOtp(): string {
 		return (Math.floor(Math.random() * 9000) + 1000).toString();
 	}
-	async storeOtp(email: string, otp: string): Promise<void> {
+	async storeOtp(email: string, otp: string,purpose:string): Promise<void> {
 		const expiresAt = new Date(
 			Date.now() + Number(config.OtpExpiry) * 60 * 1000
 		);
-		await this.otpRepository.saveOtp(email, otp, expiresAt);
+		await this.otpRepository.saveOtp(email, otp, expiresAt,purpose);
 	}
-	async verifyOtp(email: string, otp: string): Promise<Boolean> {
-		const otpEntry = await this.otpRepository.findOtp(email);
+	async verifyOtp(email: string, otp: string,purpose:string): Promise<Boolean> {
+		const otpEntry = await this.otpRepository.findOtp(email,purpose);
 		if (!otpEntry) return false;
 		if (
 			new Date() > otpEntry.expiresAt ||

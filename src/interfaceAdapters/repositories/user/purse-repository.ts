@@ -1,6 +1,7 @@
 import { injectable } from 'tsyringe';
 import { IPurseRepository } from '../../../entities/repositoryInterface/user/purse_repository-interface';
 import { IPurseModel,PurseModel } from '../../../frameworks/database/models/purse_model';
+import { Types } from 'mongoose';
 
 @injectable()
 export class PurseRepository implements IPurseRepository {
@@ -15,6 +16,7 @@ export class PurseRepository implements IPurseRepository {
   async addTransaction(
     userId: string,
     transaction: {
+      tsId:string
       type: 'credit' | 'debit';
       amount: number;
       status: 'pending' | 'completed' | 'failed';
@@ -33,8 +35,12 @@ export class PurseRepository implements IPurseRepository {
     tsId: string,
     status: 'pending' | 'completed' | 'failed'
   ): Promise<IPurseModel | null> {
+    console.log("status updating datas",userId,tsId,status)
+
+    const userObjectId = Types.ObjectId.isValid(userId) ? new Types.ObjectId(userId) : userId;
+    
     return await PurseModel.findOneAndUpdate(
-      { userId, 'transactions.tsId': tsId },
+      { userId:userObjectId, 'transactions.tsId': tsId },
       { $set: { 'transactions.$.status': status } },
       { new: true }
     );

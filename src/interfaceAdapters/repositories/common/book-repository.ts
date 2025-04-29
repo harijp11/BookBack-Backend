@@ -112,6 +112,15 @@ return result;
   }
   
 
+  async findByIdAndUpdateLiveStatus(bookId: string, status: string): Promise<void> {
+    await BookModel.findByIdAndUpdate(
+      {_id:bookId},
+      {$set:{status}},
+      {new:true}
+    )
+  }
+  
+
   
 
   async findLocationBasedFilteredBooks(

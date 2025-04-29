@@ -4,7 +4,7 @@ export interface IStripeClient {
   createPaymentIntent(
     amount: number,
     currency: string,
-    metadata: { walletId: string }
+    metadata: { walletId: string,tsId:string }
   ): Promise<Stripe.PaymentIntent>;
 
   verifyWebhookEvent(
