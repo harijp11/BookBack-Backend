@@ -29,9 +29,9 @@ export class SaleRepository implements ISaleRepository{
         .skip(skip)
         .limit(limit)
         .sort({ createdAt: -1 })
-        .populate('categoryId', 'name') 
-        .populate('ownerId', 'Name')    
-        .populate('dealTypeId', 'name'),
+        .populate('buyerId') 
+        .populate('ownerId')    
+        .populate('bookId'),
         SaleModel.countDocuments(query)
       ])
   
@@ -54,7 +54,7 @@ export class SaleRepository implements ISaleRepository{
         };
 
         if (buyerId !== "") {
-          query.ownerId = buyerId;
+          query.buyerId = buyerId;
         }
   
       const [soldBooks,count] = await Promise.all([
@@ -62,9 +62,9 @@ export class SaleRepository implements ISaleRepository{
         .skip(skip)
         .limit(limit)
         .sort({ createdAt: -1 })
-        .populate('categoryId', 'name') 
-        .populate('ownerId', 'Name')    
-        .populate('dealTypeId', 'name'),
+        .populate('buyerId') 
+        .populate('ownerId')    
+        .populate('bookId'),
         SaleModel.countDocuments(query)
       ])
   
@@ -74,6 +74,39 @@ export class SaleRepository implements ISaleRepository{
         count
       };
       
+      return result;
+    }
+
+
+
+    async findAllBooks(
+      filter: object = {},
+      limit: number,
+      skip: number
+    ): Promise<PaginatedSoldBooksRepo | null> {
+  
+        const query: Record<string,any> = {
+          ...filter
+        };
+
+       
+  
+      const [soldBooks,count] = await Promise.all([
+       SaleModel.find(query)
+        .skip(skip)
+        .limit(limit)
+        .sort({ createdAt: -1 })
+        .populate('buyerId') 
+        .populate('ownerId')    
+        .populate('bookId'),
+        SaleModel.countDocuments(query)
+      ])
+  
+      
+      const result: PaginatedSoldBooksRepo = {
+        getSoldBooksContracts: () => soldBooks, 
+        count
+      };
       return result;
     }
 

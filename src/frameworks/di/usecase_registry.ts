@@ -115,6 +115,18 @@ import { IFetchFixDealDetailsUseCase } from "../../entities/useCaseInterfaces/us
 import { FetchFixDealDetailsUseCase } from "../../useCases/user/contractrequest/fetch_fix_deal_details-usecase";
 import { ICreateNewContractUseCase } from "../../entities/useCaseInterfaces/user/rental/create_new_contract_usecase-interface";
 import { CreateNewContractUseCase } from "../../useCases/user/contract/create_new_contract-usecase";
+import { IFetchSoldBooksContractUseCase } from "../../entities/useCaseInterfaces/user/sales/fetch_sold_books_usecase-interface";
+import { FetchSoldBooksContractUseCase } from "../../useCases/user/sales/fetch_sold_books-usecase";
+import { IFetchBoughtBooksContractsUseCase } from "../../entities/useCaseInterfaces/user/sales/fetch_bought_books_usecase-interface";
+import { FetchBoughtBooksContractUseCase } from "../../useCases/user/sales/fetch_bought_books-usecase";
+import { IGetRentedOutBooksContractUseCase } from "../../entities/useCaseInterfaces/user/rental/get_rented_out_books_contracts_usecase-interface";
+import { GetRentedOutBooksContractUseCase } from "../../useCases/user/rentals/get_rented_out_books_contracts-usecase";
+import { IGetBorrowedOutBooksContractUseCase } from "../../entities/useCaseInterfaces/user/rental/get_borrowed_books_contract_usecase-interface";
+import { GetBorrowedBooksContractUseCase } from "../../useCases/user/rentals/get_borrowed_books_contract-usecase";
+import { IFetchAdminSoldBooksContractUseCase } from "../../entities/useCaseInterfaces/admin/sale/fetch_admin_sold_books_contract_usecase-interface";
+import { FetchAdminSoldBooksContractUseCase } from "../../useCases/admin/sale/fetch_admin_sold_books_contract-usecase";
+import { IGetAdminRentedOutBooksContractUseCase } from "../../entities/useCaseInterfaces/admin/rental/get_admin_rented_out_books_contract_usecase-interface";
+import { GetAdminRentedOutBooksContractUseCase } from "../../useCases/admin/rental/get_admin_rented_out_books_contract-usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -372,6 +384,38 @@ export class UseCaseRegistry {
    container.register<ICreateNewContractUseCase>("ICreateNewContractUseCase",{
     useClass:CreateNewContractUseCase
    })
+
+   //sale contract
+   container.register<IFetchSoldBooksContractUseCase>("IFetchSoldBooksContractsUseCase",{
+    useClass:FetchSoldBooksContractUseCase
+   })
+
+
+   container.register<IFetchBoughtBooksContractsUseCase>("IFetchBoughtBooksContractsUseCase",{
+    useClass:FetchBoughtBooksContractUseCase
+   })
+
+
+   container.register<IFetchAdminSoldBooksContractUseCase>("IFetchAdminSoldBooksContractsUseCase",{
+    useClass:FetchAdminSoldBooksContractUseCase
+   })
+
+
+   //rental contract
+
+   container.register<IGetRentedOutBooksContractUseCase>("IGetRentedOutBooksContractsUseCase",{
+    useClass:GetRentedOutBooksContractUseCase
+   })
+
+   container.register<IGetBorrowedOutBooksContractUseCase>("IGetBorrowedBooksContractsUseCase",{
+    useClass:GetBorrowedBooksContractUseCase
+   })
+
+   container.register<IGetAdminRentedOutBooksContractUseCase>("IGetAdminRentedOutBooksContractsUseCase",{
+    useClass:GetAdminRentedOutBooksContractUseCase
+   })
+
+
 
 
     //purse

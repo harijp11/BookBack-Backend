@@ -15,6 +15,8 @@ import {
   contractRequestController,
   purseController,
   contractController,
+  saleController,
+  rentController,
 } from "../../di/resolver";
 
 import { BaseRoute } from "../base_route";
@@ -280,9 +282,56 @@ export class UserRoutes extends BaseRoute {
         }
       )
   
-      
+    
+    //sale contract
+
+     
+    router
+    .route("/user/owner/sale-contract")
+    .get(
+      verifyAuth,
+      authorizeRole(["user"]),
+      blockStatusMiddleware.checkUserStatus as RequestHandler,
+      (req:Request,res:Response)=>{
+        saleController.fetchSoldBooksContract(req,res)
+      }
+    )
+
+    router
+    .route("/user/buyer/sale-contract")
+    .get(
+      verifyAuth,
+      authorizeRole(["user"]),
+      blockStatusMiddleware.checkUserStatus as RequestHandler,
+      (req:Request,res:Response)=>{
+        saleController.fetchBoughtBooksContract(req,res)
+      }
+    )
+
+    //rental contract
+
+    router
+    .route("/user/owner/rental-contract")
+    .get(
+      verifyAuth,
+      authorizeRole(["user"]),
+      blockStatusMiddleware.checkUserStatus as RequestHandler,
+      (req:Request,res:Response)=>{
+        rentController.getRentedOutBooksContract(req,res)
+      }
+    )
 
 
+    router
+    .route("/user/borrower/rental-contract")
+    .get(
+      verifyAuth,
+      authorizeRole(["user"]),
+      blockStatusMiddleware.checkUserStatus as RequestHandler,
+      (req:Request,res:Response)=>{
+        rentController.getBorrowedBooksContract(req,res)
+      }
+    )
 
 
 

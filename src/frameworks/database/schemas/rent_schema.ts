@@ -71,7 +71,7 @@ export const RentSchema = new Schema<IRentModel>(
     },
     requested_at: {
       type: Date,
-      default: null,
+      default: Date.now(),
     },
     penalty_amount: {
       type: Number,

@@ -121,7 +121,6 @@ export const decodeToken = async (
 ) => {
 	try {
 		const token = extractToken(req);
-
 		if (!token) {
 			console.log("no token");
 			res.status(HTTP_STATUS.UNAUTHORIZED).json({
@@ -138,7 +137,7 @@ export const decodeToken = async (
 		}
 
 		const user = tokenService.decodeAccessToken(token?.access_token);
-		console.log("decoded", user);
+		// console.log("decoded", user);
 		(req as CustomRequest).user = {
 			_id:user?._id,
 			id: user?.id,

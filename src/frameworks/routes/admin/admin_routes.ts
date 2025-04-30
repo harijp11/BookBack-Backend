@@ -14,6 +14,8 @@ import {
   categoryController,
   dealtypeController,
   bookController,
+  saleController,
+  rentController,
 } from "../../di/resolver";
 
 export class AdminRoutes extends BaseRoute {
@@ -163,5 +165,31 @@ export class AdminRoutes extends BaseRoute {
           bookController.updateBookStatus(req, res);
         }
       );
+
+
+      //contracts
+
+      
+    router
+    .route("/admin/sale/contract")
+    .get(
+      verifyAuth,
+      authorizeRole(["admin"]),
+      (req: Request, res: Response) => {
+        saleController.fetchAdminSoldBooksContract(req, res);
+      }
+    )
+
+
+    router
+    .route("/admin/rent/contract")
+    .get(
+      verifyAuth,
+      authorizeRole(["admin"]),
+      (req: Request, res: Response) => {
+        rentController.getAdminRentedOutBooksContract(req, res);
+      }
+    )
+
   }
 }

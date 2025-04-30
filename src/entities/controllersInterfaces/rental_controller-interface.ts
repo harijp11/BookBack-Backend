@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 
 export interface IRentalController {
-    getBooksRentedOutBooks(req:Request,res:Response):Promise<void>
-    getBorrowedBooks(req:Request,res:Response):Promise<void>
+    getRentedOutBooksContract(req:Request,res:Response):Promise<void>
+    getBorrowedBooksContract(req:Request,res:Response):Promise<void>
+
+    //admin
+    getAdminRentedOutBooksContract(req:Request,res:Response):Promise<void>
 }

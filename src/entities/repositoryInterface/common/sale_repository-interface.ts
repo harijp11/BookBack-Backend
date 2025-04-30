@@ -8,7 +8,6 @@ export interface PaginatedSoldBooksRepo {
 
 export interface ISaleRepository {
     createNewSale(data:SaleInput):Promise<void>
-    
     fetchSoldBooksContracts(ownerId: string,
         filter: object,
         limit: number,
@@ -18,4 +17,10 @@ export interface ISaleRepository {
             filter: object,
             limit: number,
             skip: number):Promise<PaginatedSoldBooksRepo | null>
+
+            findAllBooks(
+            filter: object,
+            limit: number,
+            skip: number):Promise<PaginatedSoldBooksRepo | null>
+
 }

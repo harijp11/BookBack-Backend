@@ -11,6 +11,8 @@ import { DealTypeController } from "../../interfaceAdapters/controllers/deal_typ
 import { ContractRequestController } from "../../interfaceAdapters/controllers/contract_request-controller";
 import { PurseController } from "../../interfaceAdapters/controllers/purse-controller";
 import { ContractController } from "../../interfaceAdapters/controllers/contract-controller";
+import { SaleController } from "../../interfaceAdapters/controllers/sale-controller";
+import { RentalController } from "../../interfaceAdapters/controllers/rental-controller";
 
 DependancyInjection.registerAll();
 
@@ -25,7 +27,8 @@ export const contractRequestController = container.resolve(ContractRequestContro
 export const purseController = container.resolve(PurseController)
 
 export const contractController = container.resolve(ContractController)
-
+export const saleController = container.resolve(SaleController)
+export const rentController = container.resolve(RentalController)
 
 
    

@@ -26,7 +26,7 @@ export class CreateNewContractUseCase implements ICreateNewContractUseCase {
     async execute(data: RentalInput | SaleInput, request_type: string,conReqId:string): Promise<ContractResponse | void> {
         if(request_type === "buy"){
             if(isSaleInput(data)){
-                console.log("helloooo")
+    
                 let  purse =  await this._purseRepository.findById(data.buyerId)
                  
                 if(!purse){
@@ -34,6 +34,11 @@ export class CreateNewContractUseCase implements ICreateNewContractUseCase {
                 }
                 if((purse?.balance ?? 0) < data.price){
                     return {message:`your purse have only ${purse?.balance}`,success:false}
+                }
+
+                const book = await this._bookRepository.findById(data.bookId)
+                if(book?.status !== "Avaialable" || !book?.isActive){
+                    return {message:`The Book ${book?.name} is not available for deal`,success:false}
                 }
                 await this._saleRepository.createNewSale(data)
                 const tsId = generateUniqueTrsasactionId()
@@ -57,7 +62,7 @@ export class CreateNewContractUseCase implements ICreateNewContractUseCase {
         }else if(request_type === "borrow"){
            
             if(isRentInput(data)){
-                console.log("datasss checking",data,isRentInput(data))
+                // console.log("datasss checking",data,isRentInput(data))
                 let  purse =  await this._purseRepository.findById(data.borrowerId)
                  
                 if(!purse){
@@ -66,6 +71,13 @@ export class CreateNewContractUseCase implements ICreateNewContractUseCase {
                 if((purse?.balance ?? 0) < data.original_amount){
                     return {message:`your purse have only ${purse?.balance}`,success:false}
                 }
+
+                const book = await this._bookRepository.findById(data.bookId)
+
+                if(book?.status !== "Avaialable" || !book?.isActive){
+                    return {message:`The Book ${book?.name} is not available for deal`,success:false}
+                }
+                
                 await this._rentRepository.createNewRent(data)
 
                 await this._bookRepository.findByIdAndUpdateLiveStatus(data.bookId,'Borrowed')
