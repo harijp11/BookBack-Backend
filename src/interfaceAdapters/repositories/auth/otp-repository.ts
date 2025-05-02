@@ -5,18 +5,46 @@ import { OTPModel } from "../../../frameworks/database/models/otp_model";
 
 @injectable()
 export class OtpRepository implements IOtpRepository {
-	async saveOtp(email: string, otp: string, expiresAt: Date,purpose:string): Promise<void> {
-		await OTPModel.create({ email, otp, expiresAt,purpose });
-	}
+	async saveOtp(
+		email: string,
+		otp: string,
+		expiresAt: Date,
+		purpose: string,
+		requesterId?: string
+	  ): Promise<void> {
+		const otpData: any = { email, otp, expiresAt, purpose };
+		if (requesterId) {
+		  otpData.requesterId = requesterId;
+		}
+	    console.log("store otp query",otpData)
+		await OTPModel.create(otpData);
+	  }
+	  
 
-	async findOtp(email: string,purpose:string = "login"): Promise<IOtpEntity | null> {
-		const otpEntry = await OTPModel.find({ email,purpose })
-			.sort({ createdAt: -1 })
-			.limit(1);
+	  async findOtp(
+		email: string,
+		purpose: string = "login",
+		requesterId?: string
+	  ): Promise<IOtpEntity | null> {
+		const query: any = { email, purpose };
+		if (requesterId) {
+		  query.requesterId = requesterId;
+		}
+		console.log("verify otp query",query)
+		const otpEntry = await OTPModel.find(query)
+		  .sort({ createdAt: -1 })
+		  .limit(1);
+	  
 		return otpEntry.length > 0 ? otpEntry[0] : null;
-	}
+	  }
+	  
 
-	async deleteOtp(email: string, otp: string): Promise<void> {
-		await OTPModel.deleteOne({ email, otp });
+	async deleteOtp(email: string, otp: string, purpose:string = "login" ,requesterId?: string): Promise<void> {
+		const query: any = { email,otp,purpose };
+		if (requesterId) {
+		  query.requesterId = requesterId;
+		}
+	  
+		await OTPModel.deleteOne(query);
 	}
 }

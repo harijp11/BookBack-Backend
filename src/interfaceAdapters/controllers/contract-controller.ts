@@ -11,6 +11,7 @@ import { handleErrorResponse } from "../../shared/utils/errorHandler";
 import { ISendOtpEmailUseCase } from "../../entities/useCaseInterfaces/auth/send_otp_usecase-interface";
 import { IVerifyOtpUseCase } from "../../entities/useCaseInterfaces/auth/verify_otp_usecase-interface";
 import { otpMailValidationSchema } from "./AuthValidation/otp_mail_validation_schema";
+import { CustomRequest } from "../middlewares/auth_middleware";
 
 @injectable()
 export class ContractController implements IContractController {
@@ -26,7 +27,8 @@ export class ContractController implements IContractController {
   async sendOtpEmail(req: Request, res: Response): Promise<void> {
     try {
       const { email } = req.body;
-      await this._sendOtpEmailUseCase.execute(email,"create_contract");
+      const userId = (req as CustomRequest).user._id.toString();
+      await this._sendOtpEmailUseCase.execute(email,"create_contract",userId);
       res.status(HTTP_STATUS.OK).json({
         message: SUCCESS_MESSAGES.OTP_SEND_SUCCESS,
         success: true,
@@ -39,8 +41,9 @@ export class ContractController implements IContractController {
   async verifyOtp(req: Request, res: Response): Promise<void> {
     try {
       const { email, otp } = req.body;
+      const userId = (req as CustomRequest).user._id.toString();
       const validatedData = otpMailValidationSchema.parse({ email, otp });
-      await this._verifyOtpUseCase.execute({...validatedData,purpose:"create_contract"});
+      await this._verifyOtpUseCase.execute({...validatedData,purpose:"create_contract",requesterId:userId});
       console.log("verify", validatedData);
       res.status(HTTP_STATUS.OK).json({
         success: true,

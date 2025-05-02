@@ -5,13 +5,15 @@ import { IFetchPurseDetailsUseCase } from '../../entities/useCaseInterfaces/user
 import { IFundPurseUseCase } from '../../entities/useCaseInterfaces/user/purse/fund_usecase-interface';
 import { handleErrorResponse } from '../../shared/utils/errorHandler';
 import { CustomRequest } from '../middlewares/auth_middleware';
+import { IWebhookHandlingUseCase } from '../../entities/useCaseInterfaces/user/purse/web_hook_handling_usecase-interface';
 
 @injectable()
 export class PurseController implements IPurseController {
 
   constructor(
     @inject('IFetchPurseDetailsUseCase') private _fetchPurseDetailsUseCase: IFetchPurseDetailsUseCase,
-    @inject('IFundPurseUseCase') private fundPurseUseCase: IFundPurseUseCase
+    @inject('IFundPurseUseCase') private fundPurseUseCase: IFundPurseUseCase,
+    @inject("IWebHookHandlingUseCase") private _webHookHandlingUseCase:IWebhookHandlingUseCase
   ) {}
   async fetchPurseDetails(req: Request, res: Response): Promise<void> {
     try {
@@ -65,7 +67,7 @@ export class PurseController implements IPurseController {
   async handleWebhook(req: Request, res: Response): Promise<void> {
     try {
       const event = req.body;
-      const result = await this.fundPurseUseCase.handleWebhookEvent(event);
+      const result = await this._webHookHandlingUseCase.handleWebhookEvent(event);
 
       res.status(200).json({
         success: true,

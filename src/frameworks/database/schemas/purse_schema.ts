@@ -6,7 +6,6 @@ export const PurseSchema = new Schema<IPurseModel>({
   userId: {
     type: Schema.Types.ObjectId,
     required: true,
-    unique: true,
     ref: 'User',
   },
   balance: {
@@ -39,12 +38,7 @@ export const PurseSchema = new Schema<IPurseModel>({
       },
     }
   ],
+  hold_amount:{type:Number,default:0}
 },
 {timestamps:true},
 );
-
-
-
-
-
-

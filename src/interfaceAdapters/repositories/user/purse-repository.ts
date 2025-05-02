@@ -53,4 +53,13 @@ export class PurseRepository implements IPurseRepository {
       { new: true }
     );
   }
+
+ async AddHoldAmount(userId: string, hold_amount: number): Promise<void> {
+    const purse = await PurseModel.findOneAndUpdate(
+      {userId},
+      {$inc:{hold_amount:hold_amount}},
+      {new:true}
+     )
+     console.log("hold amount upfdation",purse)
+  }
 }

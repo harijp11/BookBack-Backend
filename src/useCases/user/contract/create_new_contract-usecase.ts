@@ -33,13 +33,21 @@ export class CreateNewContractUseCase implements ICreateNewContractUseCase {
                   purse = await this._purseRepository.create(data.buyerId)
                 }
                 if((purse?.balance ?? 0) < data.price){
-                    return {message:`your purse have only ${purse?.balance}`,success:false}
+                    return {message:`your purse have only ${purse?.balance}`,success:false}  
                 }
 
-                const book = await this._bookRepository.findById(data.bookId)
-                if(book?.status !== "Avaialable" || !book?.isActive){
-                    return {message:`The Book ${book?.name} is not available for deal`,success:false}
+                if((purse?.balance ?? 0) - (purse?.hold_amount ?? 0) < data.price){
+                    return {message:`your have A hold amount of ${(purse?.balance ?? 0) - (purse?.hold_amount ?? 0)} you can't create deal now`,success:false}  
                 }
+
+                const book = await this._bookRepository.findById(data.bookId)   
+                 
+                if(book?.status !== "Available" || !book?.isActive){
+
+                    await this._contractRepository.deleteRequest(conReqId)
+
+                    return {message:`The Book ${book?.name} is not available for deal`,success:false}
+                }   
                 await this._saleRepository.createNewSale(data)
                 const tsId = generateUniqueTrsasactionId()
                 const description = `Amount debited Due to  bought a book`
@@ -72,15 +80,23 @@ export class CreateNewContractUseCase implements ICreateNewContractUseCase {
                     return {message:`your purse have only ${purse?.balance}`,success:false}
                 }
 
-                const book = await this._bookRepository.findById(data.bookId)
+                if((purse?.balance ?? 0) - (purse?.hold_amount ?? 0) < data.original_amount){
+                    return {message:`your have A hold amount of ${(purse?.hold_amount ?? 0)} you can't create deal now`,success:false}  
+                }
 
-                if(book?.status !== "Avaialable" || !book?.isActive){
+                const book = await this._bookRepository.findById(data.bookId)
+               
+                if(book?.status !== "Available" || !book?.isActive){
+                    await this._contractRepository.deleteRequest(conReqId)
+
                     return {message:`The Book ${book?.name} is not available for deal`,success:false}
                 }
                 
                 await this._rentRepository.createNewRent(data)
 
                 await this._bookRepository.findByIdAndUpdateLiveStatus(data.bookId,'Borrowed')
+                
+                await this._purseRepository.AddHoldAmount(data.borrowerId,data.original_amount)
 
                 await this._contractRepository.deleteRequest(conReqId)
 

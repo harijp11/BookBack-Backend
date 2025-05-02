@@ -13,6 +13,7 @@ export const OTPSchema = new Schema<IOTPModel>(
       default: OtpPurpose.LOGIN 
     },
     expiresAt: { type: Date, required: true, expires: 60 }, 
+    requesterId:{ type: Schema.Types.ObjectId, ref: 'User',default:null},
   },
   { timestamps: true }
 );

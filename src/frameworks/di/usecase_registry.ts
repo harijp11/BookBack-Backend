@@ -127,6 +127,8 @@ import { IFetchAdminSoldBooksContractUseCase } from "../../entities/useCaseInter
 import { FetchAdminSoldBooksContractUseCase } from "../../useCases/admin/sale/fetch_admin_sold_books_contract-usecase";
 import { IGetAdminRentedOutBooksContractUseCase } from "../../entities/useCaseInterfaces/admin/rental/get_admin_rented_out_books_contract_usecase-interface";
 import { GetAdminRentedOutBooksContractUseCase } from "../../useCases/admin/rental/get_admin_rented_out_books_contract-usecase";
+import { IWebhookHandlingUseCase } from "../../entities/useCaseInterfaces/user/purse/web_hook_handling_usecase-interface";
+import { WebHookHandlingUseCase } from "../../useCases/user/purse/web_hook_handling-usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -426,6 +428,10 @@ export class UseCaseRegistry {
 
     container.register<IFundPurseUseCase>("IFundPurseUseCase",{
       useClass:FundPurseUseCase
+    })
+
+    container.register<IWebhookHandlingUseCase>("IWebHookHandlingUseCase",{
+      useClass:WebHookHandlingUseCase
     })
   }
 }

@@ -1,3 +1,4 @@
+import { ObjectId } from "mongoose";
 import {  OtpPurpose } from "../../shared/constants";
 export interface IOtpEntity {
     id?: string;
@@ -5,4 +6,5 @@ export interface IOtpEntity {
     email: string;
     purpose:OtpPurpose
     expiresAt: Date;
+    requesterId?:ObjectId
  }

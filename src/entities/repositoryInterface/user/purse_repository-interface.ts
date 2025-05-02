@@ -12,4 +12,5 @@ export interface IPurseRepository {
   }): Promise<IPurseModel | null>;
   updateTransactionStatus(userId: string, tsId: string, status: 'pending' | 'completed' | 'failed'): Promise<IPurseModel | null>;
   updateBalance(userId: string, amount: number): Promise<IPurseModel | null>;
+  AddHoldAmount(userId:string,hold_amount:number):Promise<void>
 }

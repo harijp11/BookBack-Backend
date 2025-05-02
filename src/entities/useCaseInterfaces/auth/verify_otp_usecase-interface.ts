@@ -1,3 +1,3 @@
 export interface IVerifyOtpUseCase {
-	execute({ email, otp,purpose }: { email: string; otp: string ,purpose?:string }): Promise<void>;
+	execute({ email, otp,purpose,requesterId }: { email: string; otp: string ,purpose?:string,requesterId?:string }): Promise<void>;
 }

@@ -40,32 +40,4 @@ export class FundPurseUseCase implements IFundPurseUseCase {
       };
   }
 
-  async handleWebhookEvent(event: any): Promise<{
-    status: string;
-    paymentIntentId?: string;
-    walletId?: string;
-    amount?: number;
-    eventType?: string;
-    tsId?: string;
-  }> {
-    const result = await this.stripeService.handleWebhookEvent(event);
-    console.log("event from db",result.status)
-    
-    if (result.status === 'success' && result.walletId && result.amount) {
-      console.log("result details",result.walletId, result.tsId, result.amount)
-      const purse = await this.purseRepository.updateTransactionStatus(result.walletId, result.tsId!, 'completed');
-      if (!purse) {
-        throw new Error('Failed to update transaction status');  
-      }
-     
-     await this.purseRepository.updateBalance(result.walletId, result.amount / 100); 
-     console.log("balance updated")
-    } else if (result.status === 'failed' && result.walletId && result.paymentIntentId) {
-      await this.purseRepository.updateTransactionStatus(result.walletId, result.paymentIntentId, 'failed');
-    }
-    return {
-      ...result,
-      paymentIntentId: result.paymentIntentId, // Use paymentIntentId as tsId for webhook correlation
-    };
-  }
 }
