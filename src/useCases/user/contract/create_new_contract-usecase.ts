@@ -49,8 +49,11 @@ export class CreateNewContractUseCase implements ICreateNewContractUseCase {
                     return {message:`The Book ${book?.name} is not available for deal`,success:false}
                 }   
                 await this._saleRepository.createNewSale(data)
+
                 const tsId = generateUniqueTrsasactionId()
+
                 const description = `Amount debited Due to  bought a book`
+                
                 await this._purseRepository.addTransaction(data.buyerId, {
                     tsId,
                     type: "debit",

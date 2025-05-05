@@ -23,4 +23,6 @@ export interface ISaleRepository {
             limit: number,
             skip: number):Promise<PaginatedSoldBooksRepo | null>
 
+            findSoldBookDetails(saleContractId: string): Promise<ISaleModel | null>
+
 }

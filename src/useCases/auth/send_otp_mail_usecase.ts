@@ -34,7 +34,8 @@ export class SendOtpEmailUseCase implements ISendOtpEmailUseCase {
 		await this._emailService.sendOtpEmail(
 			email,
 			"BookBack - Verify Your Email",
-			otp
+			otp,
+			purpose
 		);
 	}
 }

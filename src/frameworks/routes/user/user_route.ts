@@ -308,6 +308,19 @@ export class UserRoutes extends BaseRoute {
       }
     )
 
+    router
+    .route("/user/sale-contract/details/:saleContractId")
+    .get(
+      verifyAuth,
+      authorizeRole(["user"]),
+      blockStatusMiddleware.checkUserStatus as RequestHandler,
+      (req:Request,res:Response)=>{
+        saleController.fetchSoldBookDetails(req,res)
+      }
+    )
+
+
+    
     //rental contract
 
     router
@@ -330,6 +343,17 @@ export class UserRoutes extends BaseRoute {
       blockStatusMiddleware.checkUserStatus as RequestHandler,
       (req:Request,res:Response)=>{
         rentController.getBorrowedBooksContract(req,res)
+      }
+    )
+
+    router
+    .route("/user/rental-contract/details/:rentalId")
+    .get(
+      verifyAuth,
+      authorizeRole(["user"]),
+      blockStatusMiddleware.checkUserStatus as RequestHandler,
+      (req:Request,res:Response)=>{
+        rentController.getRentedOutBookDetails(req,res)
       }
     )
 

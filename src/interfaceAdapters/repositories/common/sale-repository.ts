@@ -1,7 +1,7 @@
 import { injectable } from "tsyringe";
 import { ISaleRepository, PaginatedSoldBooksRepo } from "../../../entities/repositoryInterface/common/sale_repository-interface";
 import { SaleInput } from "../../../entities/models/contract_input_entity";
-import { SaleModel } from "../../../frameworks/database/models/sale_model";
+import { ISaleModel, SaleModel } from "../../../frameworks/database/models/sale_model";
 
 @injectable()
 export class SaleRepository implements ISaleRepository{
@@ -15,7 +15,7 @@ export class SaleRepository implements ISaleRepository{
       limit: number,
       skip: number
     ): Promise<PaginatedSoldBooksRepo | null> {
-  
+           console.log("filter",filter)
         const query: Record<string,any> = {
           ...filter
         };
@@ -109,6 +109,10 @@ export class SaleRepository implements ISaleRepository{
       };
       return result;
     }
+  
 
+      async findSoldBookDetails(saleContractId: string): Promise<ISaleModel | null> {
+            return await SaleModel.findOne({_id:saleContractId}).populate('bookId').populate('buyerId').populate('ownerId')
+          }
 
 }

@@ -196,7 +196,7 @@ return result;
           $match: {
             "dealTypeId.isActive": true,
             "categoryId.isActive": true,
-            "isActive":true
+            "isActive":true,
           }
         }
       ];

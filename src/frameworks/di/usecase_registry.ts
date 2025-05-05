@@ -4,7 +4,6 @@ import { IBcrypt } from "../security/bcrypt_interface";
 import { PasswordBcrypt } from "../security/password_bcrypt";
 import { OtpBcrypt } from "../security/otp_bcryptInterface";
 
-import { IRegisterStrategy } from "../../useCases/auth/register_stratergies/register_startegy_interface";
 import { UserRegisterStrategy } from "../../useCases/auth/register_stratergies/user_register_stratergy";
 import { UserLoginStrategy } from "../../useCases/auth/login_startegies/user_login_startergy";
 import { AdminLoginStrategy } from "../../useCases/auth/login_startegies/admin_login_startegy";
@@ -97,7 +96,6 @@ import { IFetchAllOwnerRequestsUseCase } from "../../entities/useCaseInterfaces/
 import { FetchAllOwnerContractRequestsUseCase } from "../../useCases/user/contractrequest/fetch_all_owner_contract_requests-usecase";
 import { IContractRequestStatusUpdateUseCase } from "../../entities/useCaseInterfaces/user/contractrequest/contract_request_update_status_usecase-interface";
 import { ContractRequestUpdateStatus } from "../../useCases/user/contractrequest/contract_request_status_update-usecase";
-import { IPurseRepository } from "../../entities/repositoryInterface/user/purse_repository-interface";
 import { IFetchPurseDetailsUseCase } from "../../entities/useCaseInterfaces/user/purse/fetch_purse_details_usecase-interface";
 import { FetchPurseDetailsUseCase } from "../../useCases/user/purse/fetch_purse_details-usecase";
 import { IStripeService } from "../../entities/serviceInterfaces/stripe_service-interface";
@@ -129,6 +127,10 @@ import { IGetAdminRentedOutBooksContractUseCase } from "../../entities/useCaseIn
 import { GetAdminRentedOutBooksContractUseCase } from "../../useCases/admin/rental/get_admin_rented_out_books_contract-usecase";
 import { IWebhookHandlingUseCase } from "../../entities/useCaseInterfaces/user/purse/web_hook_handling_usecase-interface";
 import { WebHookHandlingUseCase } from "../../useCases/user/purse/web_hook_handling-usecase";
+import { IGetRentedOutBookDetailsUseCase } from "../../entities/useCaseInterfaces/user/rental/get_rented_out_book_details_usecase-interface";
+import { GetRentedOutBookDetailsUseCase } from "../../useCases/user/rentals/get_rented_out_book_details-usecase";
+import { IFetchSoldBooksContractDetailsUseCase } from "../../entities/useCaseInterfaces/user/sales/fetch_sold_book_contract_details_usecase-interface";
+import { FetchSoldBookContractDetailsUseCase } from "../../useCases/user/sales/fetch_sold_book_contract_details-usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -402,6 +404,10 @@ export class UseCaseRegistry {
     useClass:FetchAdminSoldBooksContractUseCase
    })
 
+   container.register<IFetchSoldBooksContractDetailsUseCase>("IFetchSoldBookDetailsUseCase",{
+    useClass:FetchSoldBookContractDetailsUseCase
+   })
+
 
    //rental contract
 
@@ -415,6 +421,10 @@ export class UseCaseRegistry {
 
    container.register<IGetAdminRentedOutBooksContractUseCase>("IGetAdminRentedOutBooksContractsUseCase",{
     useClass:GetAdminRentedOutBooksContractUseCase
+   })
+
+   container.register<IGetRentedOutBookDetailsUseCase>("IGetRentedOutBookDetailsUseCase",{
+       useClass:GetRentedOutBookDetailsUseCase
    })
 
 

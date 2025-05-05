@@ -24,4 +24,6 @@ export interface IRentRepository {
                 findAllRentedBooksContracts(filter: object,
                     limit: number,
                     skip: number):Promise<PaginatedRentedBooksRepo | null>
+
+                    findRentedOutBookDetails(rentalId:string):Promise<IRentModel | null>
 }

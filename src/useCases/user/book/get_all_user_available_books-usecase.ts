@@ -47,6 +47,8 @@ export class GetAllUserAvailbleBooksUseCase implements IGetAllUserAvailableBooks
             if (userId && userId !== "") {
               matchStage["ownerId"] = { $ne: new Types.ObjectId(userId) };
           }
+
+          matchStage["status"] = { $ne: "Sold Out" };
           
             const useDistanceSort = !Sort || Object.keys(Sort).length === 0;
             const transformedSort: Record<string, 1 | -1> = {};

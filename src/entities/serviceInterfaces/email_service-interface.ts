@@ -5,5 +5,5 @@ export interface IEmailService {
 		subject: string,
 		resetLink: string
 	): Promise<void>;
-	sendOtpEmail(to: string, subject: string, otp: string): Promise<void>;
+	sendOtpEmail(to: string, subject: string, otp: string,purspose:string): Promise<void>;
 }

@@ -8,6 +8,7 @@ import { IFetchSoldBooksContractUseCase } from "../../entities/useCaseInterfaces
 import { IFetchBoughtBooksContractsUseCase } from "../../entities/useCaseInterfaces/user/sales/fetch_bought_books_usecase-interface";
 import { handleErrorResponse } from "../../shared/utils/errorHandler";
 import { IFetchAdminSoldBooksContractUseCase } from "../../entities/useCaseInterfaces/admin/sale/fetch_admin_sold_books_contract_usecase-interface";
+import { IFetchSoldBooksContractDetailsUseCase } from "../../entities/useCaseInterfaces/user/sales/fetch_sold_book_contract_details_usecase-interface";
 
 @injectable()
 export class SaleController implements ISaleController{
@@ -16,6 +17,8 @@ export class SaleController implements ISaleController{
     private _fetchSoldBooksContractUseCase:IFetchSoldBooksContractUseCase,
     @inject("IFetchBoughtBooksContractsUseCase")
     private _fetchBoughtBooksContractUseCase:IFetchBoughtBooksContractsUseCase,
+    @inject("IFetchSoldBookDetailsUseCase")
+    private _fetchSoldBookContractDetails:IFetchSoldBooksContractDetailsUseCase,
 
 
 
@@ -115,5 +118,24 @@ async fetchAdminSoldBooksContract(req: Request, res: Response): Promise<void> {
      handleErrorResponse(res,error)
   }
 }
+
+async fetchSoldBookDetails(req: Request, res: Response): Promise<void> {
+  try{
+    const {saleContractId} = req.params
+
+    const saleContract = await this._fetchSoldBookContractDetails.execute(saleContractId.toString())
+
+    res.status(HTTP_STATUS.OK).json({
+      success:true,
+      message:"Sale contract successfully fetched",
+      saleContract
+    })
+
+  }catch(error){
+    handleErrorResponse(res,error)
+  }
+}
+
+
 
 }

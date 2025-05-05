@@ -8,6 +8,7 @@ import { Request, Response } from "express";
 import { IGetRentedOutBooksContractUseCase } from "../../entities/useCaseInterfaces/user/rental/get_rented_out_books_contracts_usecase-interface";
 import { IGetBorrowedOutBooksContractUseCase } from "../../entities/useCaseInterfaces/user/rental/get_borrowed_books_contract_usecase-interface";
 import { IGetAdminRentedOutBooksContractUseCase } from "../../entities/useCaseInterfaces/admin/rental/get_admin_rented_out_books_contract_usecase-interface";
+import { IGetRentedOutBookDetailsUseCase } from "../../entities/useCaseInterfaces/user/rental/get_rented_out_book_details_usecase-interface";
 
 @injectable()
 export class RentalController implements IRentalController{
@@ -16,6 +17,8 @@ export class RentalController implements IRentalController{
     private _getRentedOutBooksContractUseCase:IGetRentedOutBooksContractUseCase,
     @inject("IGetBorrowedBooksContractsUseCase")
     private _getBorrowedBooksContractUseCase:IGetBorrowedOutBooksContractUseCase,
+    @inject("IGetRentedOutBookDetailsUseCase")
+    private _getRentedBookDetailsUseCase:IGetRentedOutBookDetailsUseCase,
 
 
     @inject("IGetAdminRentedOutBooksContractsUseCase")
@@ -112,6 +115,24 @@ export class RentalController implements IRentalController{
         }catch(error){
            handleErrorResponse(res,error)
         }
+}
+
+async getRentedOutBookDetails(req: Request, res: Response): Promise<void> {
+   try{
+     const {rentalId} = req.params as {rentalId:string}
+      console.log("req paramsss",req.params)
+     const rentedBooksContracts = await this._getRentedBookDetailsUseCase.execute(rentalId.toString())
+     
+     res.status(HTTP_STATUS.OK).json({
+      success:true,
+      message:"Rental Contract details fetched successfully",
+      rentedBooksContracts
+     })
+
+
+   }catch(error){
+      handleErrorResponse(res,error)
+   }
 }
 
 

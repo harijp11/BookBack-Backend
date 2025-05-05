@@ -6,7 +6,8 @@ export enum OtpPurpose {
 	LOGIN = "login",
 	SIGNUP = "signup",
 	PASSWORD_RESET = "password_reset",
-  CREATE_CONTRACT = "create_contract"
+  CREATE_CONTRACT = "create_contract",
+  BOOK_RETURN = "book_return"
   }
 
   export interface ContractRequestInput  {
@@ -263,3 +264,67 @@ export const PASSWORD_RESET_MAIL_CONTENT = (resetLink: string) => `
   </div>
 </div>
 `;
+
+export const CREATE_CONTRACT_VERIFICATION = (OTP: String) => { 
+  const now = new Date();
+  const formattedDate = now.toLocaleString('en-US', {
+    weekday: 'short',
+    year: 'numeric',
+    month: 'short',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true,
+  });
+  return `
+  <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; background: #ffffff; border-radius: 8px; border: 1px solid #ddd; text-align: center;">
+    <h2 style="color: #1a73e8;">BookBack Contract Verification</h2>
+    <p>You’ve received a contract request from a user on <strong>BookBack</strong>.</p>
+    <p>If you're interested in proceeding with this contract (sale or rental), please share the OTP below with the buyer or borrower.</p>
+    <p>This code is required to complete and verify the contract process.</p>
+    
+    <p style="font-size: 30px; font-weight: bold; background: #f0f4ff; padding: 15px; border-radius: 6px; color: #1a73e8; letter-spacing: 6px; margin: 20px 0;">${OTP}</p>
+    
+    <p><strong>Generated At:</strong> ${formattedDate}</p>
+    <p style="color: #d93025;"><strong>Note:</strong> This OTP is valid for only 1 minute.</p>
+    
+    <p><strong>Do not share</strong> this OTP unless you agree to the contract. If you didn't expect this request, you can safely ignore this email.</p>
+    
+    <p>Thank you for being a part of BookBack!</p>
+  </div>
+`
+};
+
+export const SEND_CONTRACT_OTP_TO_REQUESTER = (OTP: String): string => {
+  const now = new Date();
+  const formattedDate = now.toLocaleString('en-US', {
+    weekday: 'short',
+    year: 'numeric',
+    month: 'short',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true,
+  });
+
+  return `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; background: #ffffff; border-radius: 8px; border: 1px solid #ddd; text-align: center;">
+      <h2 style="color: #1a73e8;">BookBack Contract OTP Verification</h2>
+      <p>The owner has approved your request for a book contract on <strong>BookBack</strong>.</p>
+      <p>To verify and complete the contract, please enter the OTP provided below:</p>
+      
+      <p style="font-size: 30px; font-weight: bold; background: #f0f4ff; padding: 15px; border-radius: 6px; color: #1a73e8; letter-spacing: 6px; margin: 20px 0;">${OTP}</p>
+      
+      <p><strong>Generated At:</strong> ${formattedDate}</p>
+      <p style="color: #d93025;"><strong>Note:</strong> This OTP is valid for only 1 minute. Please complete verification promptly.</p>
+
+      <p>If you did not request this contract, you can ignore this email.</p>
+
+      <p>Thank you for using BookBack!</p>
+    </div>
+  `;
+};
+
+

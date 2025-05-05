@@ -1,7 +1,7 @@
 import { injectable } from "tsyringe";
 import { IRentRepository, PaginatedRentedBooksRepo } from "../../../entities/repositoryInterface/common/rent_repository-interface";
 import { RentalInput } from "../../../entities/models/contract_input_entity";
-import { RentModel } from "../../../frameworks/database/models/rent_model";
+import { IRentModel, RentModel } from "../../../frameworks/database/models/rent_model";
 
 @injectable()
 export class RentRepository implements IRentRepository {
@@ -102,5 +102,9 @@ export class RentRepository implements IRentRepository {
           count
         };
         return result;
+      }
+
+      async findRentedOutBookDetails(rentalId: string): Promise<IRentModel | null> {
+        return await RentModel.findOne({_id:rentalId}).populate('bookId').populate('borrowerId').populate('ownerId')
       }
 }
