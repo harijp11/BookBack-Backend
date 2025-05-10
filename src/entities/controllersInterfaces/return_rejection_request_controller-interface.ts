@@ -4,4 +4,5 @@ export interface IReturnRejectionRequestController {
     createNewReturnRejectionRequest(req:Request,res:Response):Promise<void>
 
     fetchAllPaginatedAdminReturnRequest(req:Request,res:Response):Promise<void>
+    updateReturnRejectionRequestStatus(req:Request,res:Response):Promise<void>
 }

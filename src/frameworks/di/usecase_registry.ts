@@ -139,6 +139,8 @@ import { ISubmitContractRenewalRequestUseCase } from "../../entities/useCaseInte
 import { SubmitContractRenewalRequestUseCase } from "../../useCases/user/rentals/submit_contract_renwal_request-usecase";
 import { IFetchAllPaginatedReturnRejectionRequestUseCase } from "../../entities/useCaseInterfaces/admin/returnrejectionrequest/fetch_all_paginated_return_rejection_request_usecase-interface";
 import { FetchAllPaginatedAdminReturnRejectionRequestUseCase } from "../../useCases/admin/returnrejectionrequest/fetch_all_paginated_return_rejection_request-usecase";
+import { IUpdateReturnRejectionRequestStatusUseCase } from "../../entities/useCaseInterfaces/admin/returnrejectionrequest/update_return_rejection_request_status_usecase-interface";
+import { UpdateReturnRejectionRequestStatusUseCase } from "../../useCases/admin/returnrejectionrequest/update_return_rejection_request_status-usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -453,6 +455,12 @@ export class UseCaseRegistry {
   container.register<IFetchAllPaginatedReturnRejectionRequestUseCase>("IFetchAllPaginatedReturnRejectionRequestUseCase",{
     useClass:FetchAllPaginatedAdminReturnRejectionRequestUseCase
   })
+
+  container.register<IUpdateReturnRejectionRequestStatusUseCase>("IUpdateReturnRejectionRequestStatusUseCase",{
+    useClass:UpdateReturnRejectionRequestStatusUseCase
+  })
+
+
 
 
 

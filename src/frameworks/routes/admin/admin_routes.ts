@@ -205,5 +205,17 @@ export class AdminRoutes extends BaseRoute {
       }
     )
 
+    router
+    .route("/admin/return-rejection-request/:retRejId/update")
+    .put(
+      verifyAuth,
+      authorizeRole(["admin"]),
+      (req: Request, res: Response) => {
+        returnRejectionRequestController.updateReturnRejectionRequestStatus(req, res);
+      }
+    )
+
+
+
   }
 }

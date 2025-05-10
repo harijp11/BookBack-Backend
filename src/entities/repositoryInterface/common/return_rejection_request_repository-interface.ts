@@ -3,6 +3,8 @@ import { IReturnRejectionRequestModel } from "../../../frameworks/database/model
 import { IReturnRejectionRequestcreateDTO } from "../../models/return_rejection_request_input_data_entity";
 
 export interface IReturnRejectionRequestRepository{
+     
+    findById(retRejId: string):Promise<IReturnRejectionRequestModel | null> 
     create(data:IReturnRejectionRequestcreateDTO):Promise<IReturnRejectionRequestModel | null>
 
     findAllReturnRejectionRequestAnalysis(baseFilter:object,skip:number,limit:number):Promise<{
@@ -27,4 +29,6 @@ export interface IReturnRejectionRequestRepository{
         totalPages: number;
         currentPage: number;
       }>
+
+      updateStatus(retRejId:string,status:string):Promise<void>
 }

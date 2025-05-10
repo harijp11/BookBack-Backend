@@ -6,6 +6,7 @@ import { ICreateNewReturnRejectionRequestUseCase } from "../../entities/useCaseI
 import { HTTP_STATUS } from "../../shared/constants";
 import { handleErrorResponse } from "../../shared/utils/errorHandler";
 import { IFetchAllPaginatedReturnRejectionRequestUseCase } from "../../entities/useCaseInterfaces/admin/returnrejectionrequest/fetch_all_paginated_return_rejection_request_usecase-interface";
+import { IUpdateReturnRejectionRequestStatusUseCase } from "../../entities/useCaseInterfaces/admin/returnrejectionrequest/update_return_rejection_request_status_usecase-interface";
 
 @injectable()
 export class ReturnRejectionRequestController implements IReturnRejectionRequestController{
@@ -15,7 +16,9 @@ export class ReturnRejectionRequestController implements IReturnRejectionRequest
 
 
         @inject("IFetchAllPaginatedReturnRejectionRequestUseCase")
-        private _fetchAllPaginatedReturnRejectionRequestUseCase:IFetchAllPaginatedReturnRejectionRequestUseCase
+        private _fetchAllPaginatedReturnRejectionRequestUseCase:IFetchAllPaginatedReturnRejectionRequestUseCase,
+        @inject("IUpdateReturnRejectionRequestStatusUseCase")
+        private _updateReturnRejectionRequestStatusUseCase:IUpdateReturnRejectionRequestStatusUseCase
     ){}
 
     async createNewReturnRejectionRequest(req: Request, res: Response): Promise<void> {
@@ -74,6 +77,24 @@ export class ReturnRejectionRequestController implements IReturnRejectionRequest
          
         }catch(error){
           handleErrorResponse(res,error)
+        }
+    }
+
+
+    async updateReturnRejectionRequestStatus(req: Request, res: Response): Promise<void> {
+        try{ 
+            const {status} = req.body as {status:string}
+            const {retRejId}= req.params as {retRejId:string}
+
+            await this._updateReturnRejectionRequestStatusUseCase.execute(status,retRejId)
+
+            res.status(HTTP_STATUS.OK).json({
+                success:true,
+                message:`Return Rejection Request ${status} successfully`
+            })
+
+        }catch(error){
+            handleErrorResponse(res,error)
         }
     }
 

@@ -6,6 +6,11 @@ import { Schema } from "mongoose";
 
 @injectable()
 export class ReturnRejectionRequestRepository implements IReturnRejectionRequestRepository {
+   
+ async findById(retRejId: string): Promise<IReturnRejectionRequestModel | null> {
+    return  await ReturnRejectionRequestModel.findOne({_id:retRejId})
+  }
+
   async create(data: IReturnRejectionRequestcreateDTO): Promise<IReturnRejectionRequestModel | null> {
       return await ReturnRejectionRequestModel.create(data)
   }
@@ -127,5 +132,15 @@ export class ReturnRejectionRequestRepository implements IReturnRejectionRequest
 
     currentPage:Math.floor(skip / limit) + 1
   };
+  }
+
+
+
+  async updateStatus(retRejId: string, status: string): Promise<void> {
+    await ReturnRejectionRequestModel.findByIdAndUpdate(
+      {_id:retRejId},
+      {$set:{status}},
+      {new:true}
+    )
   }
 }
