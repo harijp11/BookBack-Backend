@@ -63,7 +63,27 @@ export class CreateNewContractUseCase implements ICreateNewContractUseCase {
                   });
 
                   await this._purseRepository.updateBalance(data.buyerId,-(data.price))
+
+
+                   //Payment to owner
+
+                   let ownerPurse = await this._purseRepository.findById(data.ownerId) 
+                     
+                   if(!ownerPurse){
+                    ownerPurse = await this._purseRepository.create(data.ownerId)
+                  }
+
+                  await this._purseRepository.addTransaction(data.ownerId, {
+                    tsId,
+                    type: "credit",
+                    amount: data.price,
+                    status: "completed",
+                    description:"Amount credited through Sale of a book"
+                  });
+
+                  await this._purseRepository.updateBalance(data.ownerId,(data.price))
                   
+                   //Update book details and request
                   await this._bookRepository.findByIdAndUpdateLiveStatus(data.bookId,'Sold Out')
 
                   await this._contractRepository.deleteRequest(conReqId)

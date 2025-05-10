@@ -17,9 +17,12 @@ import {
   contractController,
   saleController,
   rentController,
+  returnRejectionRequestController,
 } from "../../di/resolver";
 
 import { BaseRoute } from "../base_route";
+import { verify } from "crypto";
+import { RentalController } from "../../../interfaceAdapters/controllers/rental-controller";
 
 export class UserRoutes extends BaseRoute {
   constructor() {
@@ -357,6 +360,83 @@ export class UserRoutes extends BaseRoute {
       }
     )
 
+
+    router
+    .route("/user/rental-book/return/send-otp")
+    .post(
+      verifyAuth,
+      authorizeRole(["user"]),
+      blockStatusMiddleware.checkUserStatus as RequestHandler,
+      (req:Request,res:Response)=>{
+        rentController.sendOtpEmail(req,res)
+      }
+    )
+
+    router
+    .route("/user/rental-book/return/verify-otp")
+    .post(
+      verifyAuth,
+      authorizeRole(["user"]),
+      blockStatusMiddleware.checkUserStatus as RequestHandler,   
+      (req:Request,res:Response)=>{
+        rentController.verifyOtp(req,res)
+      }
+    )
+
+    router
+    .route("/user/rental-contract/:rentalId/status")
+    .patch(
+      verifyAuth,
+      authorizeRole(["user"]),
+      blockStatusMiddleware.checkUserStatus as RequestHandler,
+      (req:Request,res:Response)=>{
+        rentController.updateRentalStatusContractDetails(req,res)
+      }
+    )
+
+
+
+  //renew contract
+
+    router
+    .route("/user/renew-rental-contract/:rentalId")
+    .put(
+      verifyAuth,
+      authorizeRole(["user"]),
+      blockStatusMiddleware.checkUserStatus as RequestHandler,
+      (req:Request,res:Response)=>{
+        rentController.submitContractRenewalRequest(req,res)
+      }
+    )
+
+    router
+    .route("/user/renew-rental-contract/:rentalId")
+    .patch(
+      verifyAuth,
+      authorizeRole(["user"]),
+      blockStatusMiddleware.checkUserStatus as RequestHandler,
+      (req:Request,res:Response)=>{
+        rentController.handleContractRenewalResponse(req,res)
+      }
+    )
+
+
+
+
+    //return  rejection request 
+
+    router
+    .route("/user/Return-rejection-request/")
+    .post(
+      verifyAuth,
+      authorizeRole(["user"]),
+      blockStatusMiddleware.checkUserStatus as RequestHandler,
+      (req:Request,res:Response)=>{
+        returnRejectionRequestController.createNewReturnRejectionRequest(req,res)
+      }
+    )
+
+   
 
 
       //purse

@@ -1,5 +1,6 @@
-import { Schema, model, Types } from 'mongoose';
+import { Schema, Types } from 'mongoose';
 import { IRentModel } from '../models/rent_model';
+
 
 export const RentSchema = new Schema<IRentModel>(
   {
@@ -46,6 +47,7 @@ export const RentSchema = new Schema<IRentModel>(
         'Returned',
         'Return Rejected',
         'Contract Date Exceeded',
+        "Return Rejection Requested"
       ],
       required: true,
       default:'On Rental'
@@ -62,16 +64,24 @@ export const RentSchema = new Schema<IRentModel>(
       default:'No Renewal'
     },
     renewal_details: {
-      type: {
-        days: { type: Number, required: true },
-        amount: { type: Number, required: true },
-      },
-      required: false,
-      default: null,
+      type: [
+        {
+          days: { type: Number, required: true },
+          amount: { type: Number, required: true },
+          requested_at: { type: Date, required: true, default: Date.now },
+          response: { type: String, enum: ["Pending", "Accepted", "Rejected"], default: "Pending" },
+          responded_at: { type: Date, default: null },
+        },
+      ],
+      default: [], 
     },
     requested_at: {
       type: Date,
       default: Date.now(),
+    },
+    returned_at: {
+      type: Date,
+      default: null,
     },
     penalty_amount: {
       type: Number,

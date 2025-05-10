@@ -131,6 +131,14 @@ import { IGetRentedOutBookDetailsUseCase } from "../../entities/useCaseInterface
 import { GetRentedOutBookDetailsUseCase } from "../../useCases/user/rentals/get_rented_out_book_details-usecase";
 import { IFetchSoldBooksContractDetailsUseCase } from "../../entities/useCaseInterfaces/user/sales/fetch_sold_book_contract_details_usecase-interface";
 import { FetchSoldBookContractDetailsUseCase } from "../../useCases/user/sales/fetch_sold_book_contract_details-usecase";
+import { IUpdateRentalContractStatusUseCase } from "../../entities/useCaseInterfaces/user/rental/update_rental_contract_status_usecase-interface";
+import { UpdateRentalContractStatusUseCase } from "../../useCases/user/rentals/update_rental_contract_status-usecase";
+import { ICreateNewReturnRejectionRequestUseCase } from "../../entities/useCaseInterfaces/user/return_rejection_request_usecase-interface/create_new_return_rejection_request_usecase-interface";
+import { CreateNewReturnRejectionRequestUseCase } from "../../useCases/user/returnrejectionrequest/create_new_return_rejection_request-usecase";
+import { ISubmitContractRenewalRequestUseCase } from "../../entities/useCaseInterfaces/user/rental/submit_contract_renewal_request_usecase-interface";
+import { SubmitContractRenewalRequestUseCase } from "../../useCases/user/rentals/submit_contract_renwal_request-usecase";
+import { IFetchAllPaginatedReturnRejectionRequestUseCase } from "../../entities/useCaseInterfaces/admin/returnrejectionrequest/fetch_all_paginated_return_rejection_request_usecase-interface";
+import { FetchAllPaginatedAdminReturnRejectionRequestUseCase } from "../../useCases/admin/returnrejectionrequest/fetch_all_paginated_return_rejection_request-usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -426,6 +434,26 @@ export class UseCaseRegistry {
    container.register<IGetRentedOutBookDetailsUseCase>("IGetRentedOutBookDetailsUseCase",{
        useClass:GetRentedOutBookDetailsUseCase
    })
+
+  container.register<IUpdateRentalContractStatusUseCase>("IUpdateRentalContractStatusUseCase",{
+    useClass:UpdateRentalContractStatusUseCase
+  })
+
+  container.register<ISubmitContractRenewalRequestUseCase>("ISubmitContractRenewalRequestUseCase",{
+    useClass:SubmitContractRenewalRequestUseCase
+  })
+
+
+  //return rejection request
+
+ container.register<ICreateNewReturnRejectionRequestUseCase>("ICreateNewReturnRejectionRequestUseCase",{
+    useClass:CreateNewReturnRejectionRequestUseCase
+  })
+
+  container.register<IFetchAllPaginatedReturnRejectionRequestUseCase>("IFetchAllPaginatedReturnRejectionRequestUseCase",{
+    useClass:FetchAllPaginatedAdminReturnRejectionRequestUseCase
+  })
+
 
 
 

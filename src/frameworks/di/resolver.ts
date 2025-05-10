@@ -13,6 +13,7 @@ import { PurseController } from "../../interfaceAdapters/controllers/purse-contr
 import { ContractController } from "../../interfaceAdapters/controllers/contract-controller";
 import { SaleController } from "../../interfaceAdapters/controllers/sale-controller";
 import { RentalController } from "../../interfaceAdapters/controllers/rental-controller";
+import { ReturnRejectionRequestController } from "../../interfaceAdapters/controllers/return_rejection_request-controller";
 
 DependancyInjection.registerAll();
 
@@ -29,7 +30,8 @@ export const purseController = container.resolve(PurseController)
 export const contractController = container.resolve(ContractController)
 export const saleController = container.resolve(SaleController)
 export const rentController = container.resolve(RentalController)
+export const returnRejectionRequestController = container.resolve(ReturnRejectionRequestController)
 
 
-   
+
 export const authController = container.resolve(AuthController);

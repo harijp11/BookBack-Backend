@@ -16,6 +16,7 @@ import {
   bookController,
   saleController,
   rentController,
+  returnRejectionRequestController,
 } from "../../di/resolver";
 
 export class AdminRoutes extends BaseRoute {
@@ -188,6 +189,19 @@ export class AdminRoutes extends BaseRoute {
       authorizeRole(["admin"]),
       (req: Request, res: Response) => {
         rentController.getAdminRentedOutBooksContract(req, res);
+      }
+    )
+
+
+    //return rejection request
+
+    router
+    .route("/admin/return-rejection-request")
+    .get(
+      verifyAuth,
+      authorizeRole(["admin"]),
+      (req: Request, res: Response) => {
+        returnRejectionRequestController.fetchAllPaginatedAdminReturnRequest(req, res);
       }
     )
 

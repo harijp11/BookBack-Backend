@@ -24,6 +24,8 @@ import { ISaleRepository } from "../../entities/repositoryInterface/common/sale_
 import { SaleRepository } from "../../interfaceAdapters/repositories/common/sale-repository";
 import { IRentRepository } from "../../entities/repositoryInterface/common/rent_repository-interface";
 import { RentRepository } from "../../interfaceAdapters/repositories/common/rent-repository";
+import { IReturnRejectionRequestRepository } from "../../entities/repositoryInterface/common/return_rejection_request_repository-interface";
+import { ReturnRejectionRequestRepository } from "../../interfaceAdapters/repositories/common/return_rejection_request-repository";
 
 
 export class RepositoryRegistry {
@@ -75,5 +77,11 @@ export class RepositoryRegistry {
    container.register<IRentRepository>("IRentRepository",{
      useClass:RentRepository
    })
+
+   container.register<IReturnRejectionRequestRepository>("IReturnRejectionRequestRepository",{
+    useClass:ReturnRejectionRequestRepository
+  })
+
+
 }
 }

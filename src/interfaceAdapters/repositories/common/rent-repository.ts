@@ -5,6 +5,10 @@ import { IRentModel, RentModel } from "../../../frameworks/database/models/rent_
 
 @injectable()
 export class RentRepository implements IRentRepository {
+
+  async findById(rentalId: string): Promise<IRentModel | null> {
+    return RentModel.findOne({_id:rentalId})
+  }
    async createNewRent(data: RentalInput): Promise<void> {
        await RentModel.create(data)
    }
@@ -107,4 +111,18 @@ export class RentRepository implements IRentRepository {
       async findRentedOutBookDetails(rentalId: string): Promise<IRentModel | null> {
         return await RentModel.findOne({_id:rentalId}).populate('bookId').populate('borrowerId').populate('ownerId')
       }
+
+      async findByIdAndUpdateStatus(rentalId: string, status: string): Promise<IRentModel | null> {
+          return await RentModel.findByIdAndUpdate(
+            {_id:rentalId},
+            {$set:{status}},
+            {new:true}
+          )
+      }
+
+     async save(rentalContract:IRentModel):Promise<void>{
+       await rentalContract.save()
+     }
+
+
 }
