@@ -1,17 +1,15 @@
-import { IMessageModel } from "../../../../frameworks/database/models/message_model";
+import { Message } from "../../../socket/socket_server-interface";
 
 export interface ISendMessageUseCase {
-    execute({
-        senderId,
-        receiverId,
-        content,
-        mediaUrl,
-        messageType,
-      }: {
-        senderId: string;
-        receiverId: string;
-        content?: string;
-        mediaUrl?: string;
-        messageType: 'text' | 'media';
-      }): Promise<{ chatId: string; message: IMessageModel }>
+  execute(data: {
+    senderId: string;
+    receiverId: string;
+    content?: string;
+    mediaUrl?: string;
+    messageType: 'text' | 'media';
+  }): Promise<{
+    chatId: string;
+    message: Message;
+    isNewChat: boolean;
+  }>;
 }

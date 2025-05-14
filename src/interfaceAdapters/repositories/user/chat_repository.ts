@@ -1,9 +1,8 @@
+import { injectable } from "tsyringe";
 import { IChatRepository } from "../../../entities/repositoryInterface/user/chat_repository-interface";
-import {
-  ChatModel,
-  IChatModel,
-} from "../../../frameworks/database/models/chat_model";
+import { ChatModel, IChatModel } from "../../../frameworks/database/models/chat_model";
 
+@injectable()
 export class ChatRepository implements IChatRepository {
   async createChat(chat: {
     chatId: string;
@@ -30,8 +29,8 @@ export class ChatRepository implements IChatRepository {
     chatId: string,
     last_message: string
   ): Promise<IChatModel | null> {
-    return await ChatModel.findByIdAndUpdate(
-      chatId,
+    return await ChatModel.findOneAndUpdate(
+      { chatId },
       { last_message, updatedAt: new Date() },
       { new: true }
     ).exec();
@@ -41,8 +40,8 @@ export class ChatRepository implements IChatRepository {
     return await ChatModel.find({
       $or: [{ userId1: userId }, { userId2: userId }],
     })
-      .sort({ updated_at: -1 }) // Optional: to get the most recent chats first
-      .populate("userId1", "_id Name profileImage") // optional: populate user details
+      .sort({ updated_at: -1 })
+      .populate("userId1", "_id Name profileImage")
       .populate("userId2", "_id Name profileImage")
       .exec();
   }

@@ -1,69 +1,100 @@
-// import { ChatModel } from '../../../frameworks/database/models/chat_model';
-// import { IMessageEntity } from '../../../entities/models/IMessageEntity';
+import { injectable, inject } from 'tsyringe';
+import { ISendMessageUseCase } from '../../../entities/useCaseInterfaces/user/chat/send_message_usecase-interface';
 import { IChatRepository } from '../../../entities/repositoryInterface/user/chat_repository-interface';
 import { IMessageRepository } from '../../../entities/repositoryInterface/user/message_repository-interface';
-import { ISendMessageUseCase } from '../../../entities/useCaseInterfaces/user/chat/send_message_usecase-interface';
-import { inject, injectable } from 'tsyringe';
-import { randomUUID } from 'crypto';
-import { IMessageModel } from '../../../frameworks/database/models/message_model';
+import { Message } from '../../../entities/socket/socket_server-interface';
+import { v4 as uuidv4 } from 'uuid';
+import { model } from 'mongoose';
 
+interface IUser {
+  _id: string;
+  Name: string;
+  profileImage?: string;
+}
+
+const UserModel = model<IUser>('User');
 
 @injectable()
 export class SendMessageUseCase implements ISendMessageUseCase {
   constructor(
-    @inject("IChatRepository")
-    private _chatRepository: IChatRepository,
-    @inject("IMessageRepository")
-    private _messageRepository: IMessageRepository
+    @inject('IChatRepository') private chatRepository: IChatRepository,
+    @inject('IMessageRepository') private messageRepository: IMessageRepository
   ) {}
 
-  async execute({
-          senderId,
-          receiverId,
-          content,
-          mediaUrl,
-          messageType,
-        }: {
-          senderId: string;
-          receiverId: string;
-          content?: string;
-          mediaUrl?: string;
-          messageType: 'text' | 'media';
-        }): Promise<{ chatId: string; message: IMessageModel }> {
-    let chat = await this._chatRepository.findChatByParticipants(senderId, receiverId);
+  async execute(data: {
+    senderId: string;
+    receiverId: string;
+    content?: string;
+    mediaUrl?: string;
+    messageType: 'text' | 'media';
+  }): Promise<{ chatId: string; message: Message; isNewChat: boolean }> {
+    // Find or create chat
+    let chat = await this.chatRepository.findChatByParticipants(data.senderId, data.receiverId);
+    let isNewChat = false;
 
-    
-    const last_message = content || (mediaUrl ? 'Media' : '');
+    const lastMessage = data.content || data.mediaUrl || '';
+
     if (!chat) {
-      let Chat = {
-        chatId:`BkBc-chat-${randomUUID().slice(10)}`,
-        userId1: senderId,
-        userId2: receiverId,
-        last_message,
-      }
-      chat =  await this._chatRepository.createChat(Chat);
+      chat = await this.chatRepository.createChat({
+        chatId: uuidv4(),
+        userId1: data.senderId,
+        userId2: data.receiverId,
+        last_message: lastMessage,
+      });
+      isNewChat = true;
     } else {
-       await this._chatRepository.updateLastMessage(chat._id.toString(), last_message);
+      chat = await this.chatRepository.updateLastMessage(chat.chatId, lastMessage);
     }
 
-    
-
-    const status:"sent"| "delivered" | "read" = 'sent'
-
-
-
-    const message = {
-      messageId: `BkBc-message-${randomUUID().slice(10)}`,
-      chatId: chat!._id,
-      senderId,
-      receiverId,
-      messageType,
-      content: content || "",
-      mediaUrl,
-      status,
+    if (!chat) {
+      throw new Error('Failed to create or update chat');
     }
-    const Message =  await this._messageRepository.saveMessage(message);
-  
-    return { chatId: chat!._id.toString(), message:Message };
+
+    // Create message
+    const message = await this.messageRepository.saveMessage({
+      messageId: uuidv4(),
+      chatId: chat._id.toString(),
+      senderId: data.senderId,
+      receiverId: data.receiverId,
+      content: data.content || '',
+      mediaUrl: data.mediaUrl || '',
+      messageType: data.messageType,
+      status: 'sent',
+    });
+
+    // Fetch user data
+    const [sender, receiver] = await Promise.all([
+      UserModel.findById(data.senderId).select('_id Name profileImage').lean().exec(),
+      UserModel.findById(data.receiverId).select('_id Name profileImage').lean().exec(),
+    ]);
+
+    if (!sender || !receiver) {
+      throw new Error('Failed to fetch sender or receiver data');
+    }
+
+    return {
+      chatId: chat.chatId,
+      message: {
+        messageId: message.messageId.toString(),
+        chatId: message.chatId.toString(),
+        senderId: {
+          _id: sender._id.toString(),
+          Name: sender.Name,
+          profileImage: sender.profileImage,
+        },
+        receiverId: {
+          _id: receiver._id.toString(),
+          Name: receiver.Name,
+          profileImage: receiver.profileImage,
+        },
+        content: message.content ?? "",
+        mediaUrl: message.mediaUrl || '',
+        messageType: message.messageType,
+        status: message.status,
+        created_at: message.created_at.toISOString(),
+        updated_at: message.updated_at.toISOString(),
+      },
+      isNewChat,
+    };
   }
 }
