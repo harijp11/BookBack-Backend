@@ -75,9 +75,9 @@ export const RentSchema = new Schema<IRentModel>(
       ],
       default: [], 
     },
-    requested_at: {
+    return_requested_at: {
       type: Date,
-      default: Date.now(),
+      default:null,
     },
     returned_at: {
       type: Date,

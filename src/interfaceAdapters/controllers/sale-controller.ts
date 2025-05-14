@@ -88,6 +88,27 @@ export class SaleController implements ISaleController{
 }
 
 
+async fetchSoldBookDetails(req: Request, res: Response): Promise<void> {
+  try{
+    const {saleContractId} = req.params
+
+    const saleContract = await this._fetchSoldBookContractDetails.execute(saleContractId.toString())
+
+    res.status(HTTP_STATUS.OK).json({
+      success:true,
+      message:"Sale contract successfully fetched",
+      saleBooksContracts:saleContract
+    })
+
+  }catch(error){
+    handleErrorResponse(res,error)
+  }
+}
+
+
+
+
+
 //admin
 
 
@@ -119,22 +140,7 @@ async fetchAdminSoldBooksContract(req: Request, res: Response): Promise<void> {
   }
 }
 
-async fetchSoldBookDetails(req: Request, res: Response): Promise<void> {
-  try{
-    const {saleContractId} = req.params
 
-    const saleContract = await this._fetchSoldBookContractDetails.execute(saleContractId.toString())
-
-    res.status(HTTP_STATUS.OK).json({
-      success:true,
-      message:"Sale contract successfully fetched",
-      saleContract
-    })
-
-  }catch(error){
-    handleErrorResponse(res,error)
-  }
-}
 
 
 

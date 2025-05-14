@@ -6,6 +6,7 @@ import { IRentModel } from "../../../frameworks/database/models/rent_model";
 import { IPurseRepository } from "../../../entities/repositoryInterface/user/purse_repository-interface";
 import { generateUniqueTrsasactionId } from "../../../frameworks/security/uniqueid_bcrypt";
 import { IBookRepository } from "../../../entities/repositoryInterface/common/book_repository-interface";
+import { stat } from "fs";
 
 
 @injectable()
@@ -26,9 +27,13 @@ export class UpdateRentalContractStatusUseCase implements IUpdateRentalContractS
             throw new CustomError("No rental contract available", 404)
         }
 
-        // console.log("statussssssssss",status)
+        if(status === "Return Requested"){
+  
+          rentalContract.return_requested_at = new Date()
 
-        if(status === "Returned"){
+          await this._rentRepository.save(rentalContract)
+
+        }else if(status === "Returned"){
            //borrower side
            const tsId = generateUniqueTrsasactionId()
 

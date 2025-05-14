@@ -26,7 +26,10 @@ import { IRentRepository } from "../../entities/repositoryInterface/common/rent_
 import { RentRepository } from "../../interfaceAdapters/repositories/common/rent-repository";
 import { IReturnRejectionRequestRepository } from "../../entities/repositoryInterface/common/return_rejection_request_repository-interface";
 import { ReturnRejectionRequestRepository } from "../../interfaceAdapters/repositories/common/return_rejection_request-repository";
-
+import { IChatRepository } from "../../entities/repositoryInterface/user/chat_repository-interface";
+import { ChatRepository } from "../../interfaceAdapters/repositories/user/chat_repository";
+import { IMessageRepository } from "../../entities/repositoryInterface/user/message_repository-interface";
+import { MessageRepository } from "../../interfaceAdapters/repositories/user/message_repository";
 
 export class RepositoryRegistry {
   static registerRepositories(): void {
@@ -43,45 +46,57 @@ export class RepositoryRegistry {
     });
 
     container.register<IRefreshTokenRepository>("IRefreshTokenRepository", {
-      useClass: RefreshTokenRepository, 
+      useClass: RefreshTokenRepository,
     });
 
     container.register<IAdminRepository>("IAdminRepository", {
       useClass: AdminRepository,
     });
 
-    container.register<ICategoryRepository>("ICategoryRepository",{
-      useClass: CategoryRepository
-    })
+    container.register<ICategoryRepository>("ICategoryRepository", {
+      useClass: CategoryRepository,
+    });
 
-    container.register<IDealTypeRepository>("IDealTypeRepository",{
-      useClass: DealTypeRepository
-    })
+    container.register<IDealTypeRepository>("IDealTypeRepository", {
+      useClass: DealTypeRepository,
+    });
 
-    container.register<IBookRepository>("IBookRepository",{
-      useClass: BookRepository
-    })
+    container.register<IBookRepository>("IBookRepository", {
+      useClass: BookRepository,
+    });
 
-    container.register<IContractRequestRepository>("IContractRequestRepository",{
-      useClass:ContractRequestRepository
-    })
+    container.register<IContractRequestRepository>(
+      "IContractRequestRepository",
+      {
+        useClass: ContractRequestRepository,
+      }
+    );
 
-   container.register<IPurseRepository>("IPurseRepository",{
-    useClass:PurseRepository
-   })
+    container.register<IPurseRepository>("IPurseRepository", {
+      useClass: PurseRepository,
+    });
 
-   container.register<ISaleRepository>("ISaleRepository",{
-    useClass:SaleRepository
-   })
+    container.register<ISaleRepository>("ISaleRepository", {
+      useClass: SaleRepository,
+    });
 
-   container.register<IRentRepository>("IRentRepository",{
-     useClass:RentRepository
-   })
+    container.register<IRentRepository>("IRentRepository", {
+      useClass: RentRepository,
+    });
 
-   container.register<IReturnRejectionRequestRepository>("IReturnRejectionRequestRepository",{
-    useClass:ReturnRejectionRequestRepository
-  })
+    container.register<IReturnRejectionRequestRepository>(
+      "IReturnRejectionRequestRepository",
+      {
+        useClass: ReturnRejectionRequestRepository,
+      }
+    );
 
+    container.register<IChatRepository>("IChatRepository", {
+      useClass: ChatRepository,
+    });
 
-}
+    container.register<IMessageRepository>("IMessageRepository", {
+      useClass: MessageRepository,
+    });
+  }
 }

@@ -77,7 +77,7 @@ import { GetAllCategoriesUseCase } from "../../useCases/user/category/get_all_ca
 import { IGetAllPaginatedOwnerBookUseCase } from "../../entities/useCaseInterfaces/user/book/get_all_paginated_owner_books_usecase-interface";
 import { GetAllPaginatedOwnerBooks } from "../../useCases/user/book/get_all_paginated_owner_books-usecase";
 import { IUpdateBookDetailsUseCase } from "../../entities/useCaseInterfaces/user/book/update_book_details_usecase-interface";
-import { UpdateBookDetailsUseCase} from "../../useCases/user/book/update_book_details-usecase";
+import { UpdateBookDetailsUseCase } from "../../useCases/user/book/update_book_details-usecase";
 import { IUpdateBookStatus } from "../../entities/useCaseInterfaces/user/book/update_book_status_usecase-interface";
 import { UpdateBookStatusUseCase } from "../../useCases/user/book/update_book_status-usecase";
 import { IGetAllAdminPaginatedBooksUseCase } from "../../entities/useCaseInterfaces/admin/book/get_all_paginated_books_usecase-interface";
@@ -106,7 +106,6 @@ import { IStripeClient } from "../../entities/drivers/stripe_client-entity";
 import { StripeClient } from "../drivers/stripeclient/stripe_client";
 import { IFetchRequesterRequestsUseCase } from "../../entities/useCaseInterfaces/user/contractrequest/fetch_requester_requests_usecase-entity";
 import { FetchRequesterRequestsUseCase } from "../../useCases/user/contractrequest/fetch_requester_requests-usecase";
-import { Container } from "winston";
 import { ICancelContractRequestUseCase } from "../../entities/useCaseInterfaces/user/contractrequest/cancel_contract_request_usecase-interface";
 import { CancelContractRequest } from "../../useCases/user/contractrequest/cancel_contract_request-usecase";
 import { IFetchFixDealDetailsUseCase } from "../../entities/useCaseInterfaces/user/contractrequest/fetch_fix_deal_details_usecase-interface";
@@ -141,6 +140,12 @@ import { IFetchAllPaginatedReturnRejectionRequestUseCase } from "../../entities/
 import { FetchAllPaginatedAdminReturnRejectionRequestUseCase } from "../../useCases/admin/returnrejectionrequest/fetch_all_paginated_return_rejection_request-usecase";
 import { IUpdateReturnRejectionRequestStatusUseCase } from "../../entities/useCaseInterfaces/admin/returnrejectionrequest/update_return_rejection_request_status_usecase-interface";
 import { UpdateReturnRejectionRequestStatusUseCase } from "../../useCases/admin/returnrejectionrequest/update_return_rejection_request_status-usecase";
+import { ISendMessageUseCase } from "../../entities/useCaseInterfaces/user/chat/send_message_usecase-interface";
+import { SendMessageUseCase } from "../../useCases/user/chat/send_message-usecase";
+import { IReceiveMessagesUseCase } from "../../entities/useCaseInterfaces/user/chat/receive_message_usecase-interface";
+import { ReceiveMessagesUseCase } from "../../useCases/user/chat/receive_message-usecase";
+import { IFetchChatListUseCase } from "../../entities/useCaseInterfaces/user/chat/fetch_chat_list_usecase-interface";
+import { FetchChatListUseCase } from "../../useCases/user/chat/fetch_chat_list-usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -180,16 +185,18 @@ export class UseCaseRegistry {
       CloudinarySignatureService
     );
 
-    container.register<IStripeService>("IStripeService",{
-       useClass:StripeService
-    })
-
+    container.register<IStripeService>("IStripeService", {
+      useClass: StripeService,
+    });
 
     //* =======Register client ===*//
 
-    container.register<IStripeClient>("IStripeClient",{
-      useClass:StripeClient
-    })
+    container.register<IStripeClient>("IStripeClient", {
+      useClass: StripeClient,
+    });
+
+   
+    
 
     //* ====== Register Strategies ====== *//
     container.register("UserRegisterStrategy", {
@@ -203,6 +210,12 @@ export class UseCaseRegistry {
     container.register("AdminLoginStrategy", {
       useClass: AdminLoginStrategy,
     });
+
+    // //* ======Socket io server ====== *//
+    // container.register<ISocketServer>("ISocketServer", {
+    //   useClass: SocketServer,
+    // });
+
 
     //* ====== Register UseCases ====== *//
     container.register<IRegisterUserUseCase>("IRegisterUserUseCase", {
@@ -328,156 +341,222 @@ export class UseCaseRegistry {
       useClass: CreateNewBookUseCase,
     });
 
-    container.register<IGetAllPaginatedOwnerBookUseCase>("IGetAllPaginatedOwnerBooksUseCase",{
-      useClass:GetAllPaginatedOwnerBooks
-    })
+    container.register<IGetAllPaginatedOwnerBookUseCase>(
+      "IGetAllPaginatedOwnerBooksUseCase",
+      {
+        useClass: GetAllPaginatedOwnerBooks,
+      }
+    );
 
-    container.register<IUpdateBookDetailsUseCase>("IUpdateBookDetailsUseCase",{
-      useClass:UpdateBookDetailsUseCase
-    })
+    container.register<IUpdateBookDetailsUseCase>("IUpdateBookDetailsUseCase", {
+      useClass: UpdateBookDetailsUseCase,
+    });
 
-    container.register<IUpdateBookStatus>("IUpdateBookStatusUseCase",{
-      useClass:UpdateBookStatusUseCase
-    })
+    container.register<IUpdateBookStatus>("IUpdateBookStatusUseCase", {
+      useClass: UpdateBookStatusUseCase,
+    });
 
+    container.register<IGetAllAdminPaginatedBooksUseCase>(
+      "IGetAllPaginatedBooksUseCase",
+      {
+        useClass: GetAllPaginatedBooksUseCase,
+      }
+    );
 
+    container.register<IGetAllUserAvailableBooksUseCase>(
+      "IGetAllUserAvailableBooks",
+      {
+        useClass: GetAllUserAvailbleBooksUseCase,
+      }
+    );
 
-    container.register<IGetAllAdminPaginatedBooksUseCase>("IGetAllPaginatedBooksUseCase",{
-      useClass:GetAllPaginatedBooksUseCase
-    })
+    container.register<IGetUserBookDetailsUseCase>(
+      "IGetUserBookDetailsUseCase",
+      {
+        useClass: GetUserBookDetailsUseCase,
+      }
+    );
 
+    container.register<IRelatedBooksUseCase>("IRelatedBooksUseCase", {
+      useClass: GetRelatedBooksUseCase,
+    });
 
-    container.register<IGetAllUserAvailableBooksUseCase>("IGetAllUserAvailableBooks",{
-      useClass:GetAllUserAvailbleBooksUseCase
-    })
+    //contract request
 
-    container.register<IGetUserBookDetailsUseCase>("IGetUserBookDetailsUseCase",{
-      useClass:GetUserBookDetailsUseCase
-    })
+    container.register<ICreateNewContractRequestUseCase>(
+      "ICreateNewContractRequestUseCase",
+      {
+        useClass: CreateNewContractRequest,
+      }
+    );
 
-    container.register<IRelatedBooksUseCase>("IRelatedBooksUseCase",{
-      useClass:GetRelatedBooksUseCase
-    })
+    container.register<ICheckBookRequestExistUseCase>(
+      "ICheckBookRequestExistUseCase",
+      {
+        useClass: CheckBookRequestExist,
+      }
+    );
 
+    container.register<IFetchAllOwnerRequestsUseCase>(
+      "IFetchAllOwnerRequestsUseCase",
+      {
+        useClass: FetchAllOwnerContractRequestsUseCase,
+      }
+    );
 
-    //contract request 
+    container.register<IContractRequestStatusUpdateUseCase>(
+      "IContractRequestStatusUpdateUseCase",
+      {
+        useClass: ContractRequestUpdateStatus,
+      }
+    );
 
-    container.register<ICreateNewContractRequestUseCase>("ICreateNewContractRequestUseCase",{
-      useClass:CreateNewContractRequest
-    })
+    container.register<IFetchRequesterRequestsUseCase>(
+      "IFetchRequesterRequestsUseCase",
+      {
+        useClass: FetchRequesterRequestsUseCase,
+      }
+    );
 
-    container.register<ICheckBookRequestExistUseCase>("ICheckBookRequestExistUseCase",{
-      useClass:CheckBookRequestExist
-    })
+    container.register<ICancelContractRequestUseCase>(
+      "ICancelContractRequestUseCase",
+      {
+        useClass: CancelContractRequest,
+      }
+    );
 
-    container.register<IFetchAllOwnerRequestsUseCase>("IFetchAllOwnerRequestsUseCase",{
-      useClass:FetchAllOwnerContractRequestsUseCase
-    })
+    container.register<IFetchFixDealDetailsUseCase>(
+      "IFetchFixDealDetailsUseCase",
+      {
+        useClass: FetchFixDealDetailsUseCase,
+      }
+    );
 
-    container.register<IContractRequestStatusUpdateUseCase>("IContractRequestStatusUpdateUseCase",{
-      useClass:ContractRequestUpdateStatus
-    })
+    //contract
 
-    container.register<IFetchRequesterRequestsUseCase>("IFetchRequesterRequestsUseCase",{
-      useClass:FetchRequesterRequestsUseCase
-    })
+    container.register<ICreateNewContractUseCase>("ICreateNewContractUseCase", {
+      useClass: CreateNewContractUseCase,
+    });
 
-   container.register<ICancelContractRequestUseCase>("ICancelContractRequestUseCase",{
-    useClass:CancelContractRequest
-   })
+    //sale contract
+    container.register<IFetchSoldBooksContractUseCase>(
+      "IFetchSoldBooksContractsUseCase",
+      {
+        useClass: FetchSoldBooksContractUseCase,
+      }
+    );
 
-   container.register<IFetchFixDealDetailsUseCase>("IFetchFixDealDetailsUseCase",{
-    useClass:FetchFixDealDetailsUseCase
-   })
+    container.register<IFetchBoughtBooksContractsUseCase>(
+      "IFetchBoughtBooksContractsUseCase",
+      {
+        useClass: FetchBoughtBooksContractUseCase,
+      }
+    );
 
+    container.register<IFetchAdminSoldBooksContractUseCase>(
+      "IFetchAdminSoldBooksContractsUseCase",
+      {
+        useClass: FetchAdminSoldBooksContractUseCase,
+      }
+    );
 
+    container.register<IFetchSoldBooksContractDetailsUseCase>(
+      "IFetchSoldBookDetailsUseCase",
+      {
+        useClass: FetchSoldBookContractDetailsUseCase,
+      }
+    );
 
+    //rental contract
 
-   //contract
+    container.register<IGetRentedOutBooksContractUseCase>(
+      "IGetRentedOutBooksContractsUseCase",
+      {
+        useClass: GetRentedOutBooksContractUseCase,
+      }
+    );
 
-   container.register<ICreateNewContractUseCase>("ICreateNewContractUseCase",{
-    useClass:CreateNewContractUseCase
-   })
+    container.register<IGetBorrowedOutBooksContractUseCase>(
+      "IGetBorrowedBooksContractsUseCase",
+      {
+        useClass: GetBorrowedBooksContractUseCase,
+      }
+    );
 
-   //sale contract
-   container.register<IFetchSoldBooksContractUseCase>("IFetchSoldBooksContractsUseCase",{
-    useClass:FetchSoldBooksContractUseCase
-   })
+    container.register<IGetAdminRentedOutBooksContractUseCase>(
+      "IGetAdminRentedOutBooksContractsUseCase",
+      {
+        useClass: GetAdminRentedOutBooksContractUseCase,
+      }
+    );
 
+    container.register<IGetRentedOutBookDetailsUseCase>(
+      "IGetRentedOutBookDetailsUseCase",
+      {
+        useClass: GetRentedOutBookDetailsUseCase,
+      }
+    );
 
-   container.register<IFetchBoughtBooksContractsUseCase>("IFetchBoughtBooksContractsUseCase",{
-    useClass:FetchBoughtBooksContractUseCase
-   })
+    container.register<IUpdateRentalContractStatusUseCase>(
+      "IUpdateRentalContractStatusUseCase",
+      {
+        useClass: UpdateRentalContractStatusUseCase,
+      }
+    );
 
+    container.register<ISubmitContractRenewalRequestUseCase>(
+      "ISubmitContractRenewalRequestUseCase",
+      {
+        useClass: SubmitContractRenewalRequestUseCase,
+      }
+    );
 
-   container.register<IFetchAdminSoldBooksContractUseCase>("IFetchAdminSoldBooksContractsUseCase",{
-    useClass:FetchAdminSoldBooksContractUseCase
-   })
+    //return rejection request
 
-   container.register<IFetchSoldBooksContractDetailsUseCase>("IFetchSoldBookDetailsUseCase",{
-    useClass:FetchSoldBookContractDetailsUseCase
-   })
+    container.register<ICreateNewReturnRejectionRequestUseCase>(
+      "ICreateNewReturnRejectionRequestUseCase",
+      {
+        useClass: CreateNewReturnRejectionRequestUseCase,
+      }
+    );
 
+    container.register<IFetchAllPaginatedReturnRejectionRequestUseCase>(
+      "IFetchAllPaginatedReturnRejectionRequestUseCase",
+      {
+        useClass: FetchAllPaginatedAdminReturnRejectionRequestUseCase,
+      }
+    );
 
-   //rental contract
-
-   container.register<IGetRentedOutBooksContractUseCase>("IGetRentedOutBooksContractsUseCase",{
-    useClass:GetRentedOutBooksContractUseCase
-   })
-
-   container.register<IGetBorrowedOutBooksContractUseCase>("IGetBorrowedBooksContractsUseCase",{
-    useClass:GetBorrowedBooksContractUseCase
-   })
-
-   container.register<IGetAdminRentedOutBooksContractUseCase>("IGetAdminRentedOutBooksContractsUseCase",{
-    useClass:GetAdminRentedOutBooksContractUseCase
-   })
-
-   container.register<IGetRentedOutBookDetailsUseCase>("IGetRentedOutBookDetailsUseCase",{
-       useClass:GetRentedOutBookDetailsUseCase
-   })
-
-  container.register<IUpdateRentalContractStatusUseCase>("IUpdateRentalContractStatusUseCase",{
-    useClass:UpdateRentalContractStatusUseCase
-  })
-
-  container.register<ISubmitContractRenewalRequestUseCase>("ISubmitContractRenewalRequestUseCase",{
-    useClass:SubmitContractRenewalRequestUseCase
-  })
-
-
-  //return rejection request
-
- container.register<ICreateNewReturnRejectionRequestUseCase>("ICreateNewReturnRejectionRequestUseCase",{
-    useClass:CreateNewReturnRejectionRequestUseCase
-  })
-
-  container.register<IFetchAllPaginatedReturnRejectionRequestUseCase>("IFetchAllPaginatedReturnRejectionRequestUseCase",{
-    useClass:FetchAllPaginatedAdminReturnRejectionRequestUseCase
-  })
-
-  container.register<IUpdateReturnRejectionRequestStatusUseCase>("IUpdateReturnRejectionRequestStatusUseCase",{
-    useClass:UpdateReturnRejectionRequestStatusUseCase
-  })
-
-
-
-
-
-
+    container.register<IUpdateReturnRejectionRequestStatusUseCase>(
+      "IUpdateReturnRejectionRequestStatusUseCase",
+      {
+        useClass: UpdateReturnRejectionRequestStatusUseCase,
+      }
+    );
 
     //purse
 
-    container.register<IFetchPurseDetailsUseCase>("IFetchPurseDetailsUseCase",{
-      useClass:FetchPurseDetailsUseCase
-    })
+    container.register<IFetchPurseDetailsUseCase>("IFetchPurseDetailsUseCase", {
+      useClass: FetchPurseDetailsUseCase,
+    });
 
-    container.register<IFundPurseUseCase>("IFundPurseUseCase",{
-      useClass:FundPurseUseCase
-    })
+    container.register<IFundPurseUseCase>("IFundPurseUseCase", {
+      useClass: FundPurseUseCase,
+    });
 
-    container.register<IWebhookHandlingUseCase>("IWebHookHandlingUseCase",{
-      useClass:WebHookHandlingUseCase
+    container.register<IWebhookHandlingUseCase>("IWebHookHandlingUseCase", {
+      useClass: WebHookHandlingUseCase,
+    });
+
+    //chat
+    container.register<ISendMessageUseCase>('ISendMessageUseCase', SendMessageUseCase);
+
+    container.register<IReceiveMessagesUseCase>("IReceiveMessagesUseCase", {
+      useClass: ReceiveMessagesUseCase,
+    });
+
+    container.register<IFetchChatListUseCase>("IFetchChatListUseCase", {
+      useClass: FetchChatListUseCase,
     })
   }
 }

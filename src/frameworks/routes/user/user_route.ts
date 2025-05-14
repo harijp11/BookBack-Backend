@@ -18,6 +18,7 @@ import {
   saleController,
   rentController,
   returnRejectionRequestController,
+  chatController,
 } from "../../di/resolver";
 
 import { BaseRoute } from "../base_route";
@@ -471,5 +472,29 @@ router
       purseController.handleWebhook(req, res);
     }
   );
+
+
+//chat
+
+router.get(
+  "/user/chat/media-signature",
+  verifyAuth,
+  authorizeRole(["user"]),
+  blockStatusMiddleware.checkUserStatus as RequestHandler,
+  (req: Request, res: Response) => {
+    chatController.generateSignatureForBooksUploading(req, res);
+  }
+)
+  
+router.get(
+  "/user/chat-list",
+  verifyAuth,
+  authorizeRole(["user"]),
+  blockStatusMiddleware.checkUserStatus as RequestHandler,
+  (req: Request, res: Response) => {
+    chatController.fetchChatList(req, res);
+  }
+)
+
   }
 }
