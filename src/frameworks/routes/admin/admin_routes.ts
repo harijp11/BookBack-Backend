@@ -17,6 +17,7 @@ import {
   saleController,
   rentController,
   returnRejectionRequestController,
+  dashboardController,
 } from "../../di/resolver";
 
 export class AdminRoutes extends BaseRoute {
@@ -212,6 +213,16 @@ export class AdminRoutes extends BaseRoute {
       authorizeRole(["admin"]),
       (req: Request, res: Response) => {
         returnRejectionRequestController.updateReturnRejectionRequestStatus(req, res);
+      }
+    )
+
+    router
+    .route("/admin/fetch-dashboard")
+    .get(
+      verifyAuth,
+      authorizeRole(["admin"]),
+      (req: Request, res: Response) => {
+        dashboardController.fetchDashboardDetails(req, res);
       }
     )
 

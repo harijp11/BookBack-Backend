@@ -35,4 +35,7 @@ export interface IRentRepository {
   findByIdAndUpdateStatus(rentalId: string,status:string):Promise<IRentModel | null>
 
  save(rentalContract:IRentModel):Promise<void>
+
+ count(filter: object): Promise<number>;
+  aggregate(pipeline: any[]): Promise<any[]>;
 }

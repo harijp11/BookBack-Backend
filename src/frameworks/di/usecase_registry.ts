@@ -146,6 +146,8 @@ import { IReceiveMessagesUseCase } from "../../entities/useCaseInterfaces/user/c
 import { ReceiveMessagesUseCase } from "../../useCases/user/chat/receive_message-usecase";
 import { IFetchChatListUseCase } from "../../entities/useCaseInterfaces/user/chat/fetch_chat_list_usecase-interface";
 import { FetchChatListUseCase } from "../../useCases/user/chat/fetch_chat_list-usecase";
+import { IFetchDashboardDetailsUseCase } from "../../entities/useCaseInterfaces/admin/dashboard/fetch_dashboard_details_useacse-interface";
+import { FetchDashboardDetailsUseCase } from "../../useCases/admin/dashboard/fetch_dashboard_details-usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -557,6 +559,13 @@ export class UseCaseRegistry {
 
     container.register<IFetchChatListUseCase>("IFetchChatListUseCase", {
       useClass: FetchChatListUseCase,
+    })
+
+
+    //dashboard
+
+    container.register<IFetchDashboardDetailsUseCase>("IFetchDashboardDetailsUseCase", {
+      useClass: FetchDashboardDetailsUseCase,
     })
   }
 }

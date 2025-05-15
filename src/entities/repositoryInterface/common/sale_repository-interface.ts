@@ -24,5 +24,6 @@ export interface ISaleRepository {
             skip: number):Promise<PaginatedSoldBooksRepo | null>
 
             findSoldBookDetails(saleContractId: string): Promise<ISaleModel | null>
-
+            count(filter: object): Promise<number>;
+            aggregate(pipeline: any[]): Promise<any[]>;
 }

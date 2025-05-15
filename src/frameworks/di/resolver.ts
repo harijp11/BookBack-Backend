@@ -15,6 +15,7 @@ import { SaleController } from "../../interfaceAdapters/controllers/sale-control
 import { RentalController } from "../../interfaceAdapters/controllers/rental-controller";
 import { ReturnRejectionRequestController } from "../../interfaceAdapters/controllers/return_rejection_request-controller";
 import { ChatController } from "../../interfaceAdapters/controllers/chat/chat_controller";
+import { DashboardController } from "../../interfaceAdapters/controllers/dashboard-controller";
 
 DependancyInjection.registerAll();
 
@@ -33,6 +34,8 @@ export const saleController = container.resolve(SaleController)
 export const rentController = container.resolve(RentalController)
 export const returnRejectionRequestController = container.resolve(ReturnRejectionRequestController)
 export const chatController = container.resolve(ChatController)
+export const dashboardController = container.resolve(DashboardController)
+
 
 
 

@@ -115,4 +115,13 @@ export class SaleRepository implements ISaleRepository{
             return await SaleModel.findOne({_id:saleContractId}).populate('bookId').populate('buyerId').populate('ownerId')
           }
 
+
+          async count(filter: object): Promise<number> {
+              return await SaleModel.countDocuments(filter)
+          }
+        
+          async aggregate(pipeline: any[]): Promise<any[]>{
+              return await SaleModel.aggregate(pipeline)
+          }
+
 }

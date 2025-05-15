@@ -124,5 +124,13 @@ export class RentRepository implements IRentRepository {
        await rentalContract.save()
      }
 
+     async count(filter: object): Promise<number> {
+        return await RentModel.countDocuments(filter);
+    }
+  
+    async aggregate(pipeline: any[]): Promise<any[]> {
+        return await RentModel.aggregate(pipeline);
+    }
+
 
 }

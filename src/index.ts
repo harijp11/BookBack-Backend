@@ -6,6 +6,9 @@ import { config } from "./shared/config"
 import { SocketServer } from "./frameworks/socket/socket_server"
 import { container } from "tsyringe"
 
+import startRentStatusCron from "./interfaceAdapters/crons/rent_status_check_and_update-cron"
+import startContractPenaltyCron from "./interfaceAdapters/crons/check_status_and_update_penalty_amount_and_wallet-cron"
+
 
 const server = new Server()
 const mongoConnect = new MongoConnect()
@@ -18,6 +21,10 @@ const httpServer = server.getServer();
 const socketServer = container.resolve(SocketServer);
    
 socketServer.initialize(httpServer);
+
+//cron jobs
+startRentStatusCron()
+startContractPenaltyCron()
 
 server.getServer()
 .listen(config.server.PORT,()=>
