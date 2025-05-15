@@ -37,7 +37,7 @@ export class FetchDashboardDetailsUseCase implements IFetchDashboardDetailsUseCa
       });
       const totalRentals = await this._rentRepository.count({
         rent_start_date: { $gte: start, $lte: end },
-        status: { $in: ["Returned"] },
+        status: { $in: ["On Rental", "Returned"] },
       });
 
       // Fetch salesData
@@ -102,7 +102,7 @@ export class FetchDashboardDetailsUseCase implements IFetchDashboardDetailsUseCa
       {
         $match: {
           rent_start_date: { $gte: start, $lte: end },
-          status: { $in: [ "Returned"] },
+          status: { $in: ["On Rental", "Returned"] },
         },
       },
       {

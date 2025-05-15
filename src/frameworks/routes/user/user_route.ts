@@ -19,6 +19,7 @@ import {
   rentController,
   returnRejectionRequestController,
   chatController,
+  notificationController,
 } from "../../di/resolver";
 
 import { BaseRoute } from "../base_route";
@@ -496,5 +497,17 @@ router.get(
   }
 )
 
+
+//notification
+
+router.get(
+  "/user/notifications",
+  verifyAuth,
+  authorizeRole(["user"]),
+  blockStatusMiddleware.checkUserStatus as RequestHandler,
+  (req: Request, res: Response) => {
+    notificationController.fetchAllUserNotifications(req, res);
+  }
+)
   }
 }
