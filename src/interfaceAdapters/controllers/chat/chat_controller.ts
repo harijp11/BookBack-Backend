@@ -3,11 +3,12 @@ import { injectable, inject } from 'tsyringe';
 import { IChatController } from '../../../entities/controllersInterfaces/chat/chat_controller-interface';
 import { ICloudinarySignatureService } from '../../../entities/serviceInterfaces/cloudinary_service-interface';
 import { Request, Response } from 'express';
-import { ISocketServer } from '../../../entities/socket/socket_server-interface';
+// import { ISocketServer } from '../../../entities/socket/socket_server-interface';
 import { CustomRequest } from '../../middlewares/auth_middleware';
 import { handleErrorResponse } from '../../../shared/utils/errorHandler';
 import { HTTP_STATUS } from '../../../shared/constants';
 import { IFetchChatListUseCase } from '../../../entities/useCaseInterfaces/user/chat/fetch_chat_list_usecase-interface';
+import { IFetchReceiverDetailsUseCase } from '../../../entities/useCaseInterfaces/user/chat/fetch_receiver_details_usecase-interface';
 
 @injectable()
 export class ChatController implements IChatController {
@@ -16,7 +17,9 @@ export class ChatController implements IChatController {
     @inject("ICloudinarySignatureService")
         private _cloudinarySignatureService: ICloudinarySignatureService,
         @inject("IFetchChatListUseCase")
-        private _fetchChatListUseCase:IFetchChatListUseCase
+        private _fetchChatListUseCase:IFetchChatListUseCase,
+        @inject("IFetchReceiverDetailsUseCase")
+        private _fetchReceiverDetailsUseCase:IFetchReceiverDetailsUseCase
   ) {}
     generateSignatureForBooksUploading = async (
       req: Request,
@@ -63,6 +66,24 @@ export class ChatController implements IChatController {
           message:"Chats fetched successfully",
           chatList
         })
+      }catch(error){
+        handleErrorResponse(res,error)
+      }
+    }
+
+
+    async fetchReceiverDetails(req: Request, res: Response): Promise<void> {
+      try{
+        const {receiverId} = req.params as {receiverId:string}
+
+      const receiverDetails = await this._fetchReceiverDetailsUseCase.execute(receiverId)
+
+      res.status(HTTP_STATUS.OK).json({
+        success:true,
+        message:"fetched Receiver details",
+        receiverDetails
+      })
+
       }catch(error){
         handleErrorResponse(res,error)
       }

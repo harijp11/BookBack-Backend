@@ -1,7 +1,7 @@
-import { inject, injectable } from "tsyringe";
+import {  injectable } from "tsyringe";
 import { INotificationRepository, PaginatedNotificationRepo } from "../../../entities/repositoryInterface/user/notification_repository-interface";
 import { NotificationModel } from "../../../frameworks/database/models/notification_model";
-import { Paginatednotifications } from "../../../entities/models/paginated_notification_entity";
+
 
 @injectable()
 export class NotificationRepository implements INotificationRepository{
@@ -12,6 +12,7 @@ export class NotificationRepository implements INotificationRepository{
    async findNotificationByUserId(userId: string, filter: object, limit: number, skip: number): Promise<PaginatedNotificationRepo | null> {
 
     const query: Record<string,any> = {
+      userId,
         ...filter
       };
 

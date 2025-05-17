@@ -5,7 +5,7 @@ import { ISaleRepository } from "../../../entities/repositoryInterface/common/sa
 import { IRentRepository } from "../../../entities/repositoryInterface/common/rent_repository-interface";
 import { ICategoryRepository } from "../../../entities/repositoryInterface/common/category_repository-interface";
 import { DashboardData, SalesData, DataPoint, User, Category } from "../../../entities/models/dashboard_entities";
-import { startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfYear, endOfYear, subYears, parseISO } from "date-fns";
+import { startOfDay, endOfDay, subYears, parseISO } from "date-fns";
 
 @injectable()
 export class FetchDashboardDetailsUseCase implements IFetchDashboardDetailsUseCase {
@@ -28,26 +28,32 @@ export class FetchDashboardDetailsUseCase implements IFetchDashboardDetailsUseCa
       const start = startDate ? parseISO(startDate) : subYears(end, 1);
       const limit = parseInt(topLimit || "5", 10) || 5;
 
+      // Adjust to start and end of day in UTC
+      const startUTC = startOfDay(start);
+      const endUTC = endOfDay(end);
+
+      console.log(`Fetching dashboard data: start=${startUTC.toISOString()}, end=${endUTC.toISOString()}`);
+
       // Fetch total users
       const totalUsers = await this._userRepository.find({ isActive: true }, 0, 0).then((res) => res.total);
 
       // Fetch total sales and rentals
       const totalSales = await this._saleRepository.count({
-        sale_date: { $gte: start, $lte: end },
+        sale_date: { $gte: startUTC, $lte: endUTC },
       });
       const totalRentals = await this._rentRepository.count({
-        rent_start_date: { $gte: start, $lte: end },
-        status: { $in: ["On Rental", "Returned"] },
+        rent_start_date: { $gte: startUTC, $lte: endUTC },
+        status: { $in: [ "Returned"] },
       });
 
       // Fetch salesData
-      const salesData = await this.getSalesData(start, end);
+      const salesData = await this.getSalesData(startUTC, endUTC);
 
       // Fetch top users
-      const topUsers = await this.getTopUsers(start, end, limit);
+      const topUsers = await this.getTopUsers(startUTC, endUTC, limit);
 
       // Fetch top categories
-      const topCategories = await this.getTopCategories(start, end, limit);
+      const topCategories = await this.getTopCategories(startUTC, endUTC, limit);
 
       return {
         totalSales,
@@ -58,6 +64,7 @@ export class FetchDashboardDetailsUseCase implements IFetchDashboardDetailsUseCa
         topCategories,
       };
     } catch (error) {
+      console.error(`Failed to fetch dashboard data: ${error}`);
       throw new Error(`Failed to fetch dashboard data: ${error}`);
     }
   }
@@ -102,7 +109,7 @@ export class FetchDashboardDetailsUseCase implements IFetchDashboardDetailsUseCa
       {
         $match: {
           rent_start_date: { $gte: start, $lte: end },
-          status: { $in: ["On Rental", "Returned"] },
+          status: { $in: [ "Returned"] },
         },
       },
       {
@@ -180,7 +187,7 @@ export class FetchDashboardDetailsUseCase implements IFetchDashboardDetailsUseCa
       {
         $match: {
           rent_start_date: { $gte: start, $lte: end },
-          status: { $in: ["Returned"] },
+          status: { $in: [ "Returned"] },
         },
       },
       {
@@ -260,7 +267,7 @@ export class FetchDashboardDetailsUseCase implements IFetchDashboardDetailsUseCa
       {
         $match: {
           rent_start_date: { $gte: start, $lte: end },
-          status: { $in: ["Returned"] },
+          status: { $in: [ "Returned"] },
         },
       },
       {
@@ -350,7 +357,7 @@ export class FetchDashboardDetailsUseCase implements IFetchDashboardDetailsUseCa
       {
         $match: {
           rent_start_date: { $gte: start, $lte: end },
-          status: { $in: ["Returned"] },
+          status: { $in: [ "Returned"] },
         },
       },
       {
@@ -390,7 +397,8 @@ export class FetchDashboardDetailsUseCase implements IFetchDashboardDetailsUseCa
   }
 
   private async getTopUsers(start: Date, end: Date, limit: number): Promise<User[]> {
-    const sales = await this._saleRepository.aggregate([
+    // Aggregate sales by buyerId
+    const salesByBuyer = await this._saleRepository.aggregate([
       {
         $match: {
           sale_date: { $gte: start, $lte: end },
@@ -399,13 +407,28 @@ export class FetchDashboardDetailsUseCase implements IFetchDashboardDetailsUseCa
       {
         $group: {
           _id: "$buyerId",
-          transactions: { $sum: 1 },
-          amount: { $sum: "$price" },
+          contractCount: { $sum: 1 },
         },
       },
     ]);
 
-    const rentals = await this._rentRepository.aggregate([
+    // Aggregate sales by ownerId
+    const salesByOwner = await this._saleRepository.aggregate([
+      {
+        $match: {
+          sale_date: { $gte: start, $lte: end },
+        },
+      },
+      {
+        $group: {
+          _id: "$ownerId",
+          contractCount: { $sum: 1 },
+        },
+      },
+    ]);
+
+    // Aggregate rentals by borrowerId
+    const rentalsByBorrower = await this._rentRepository.aggregate([
       {
         $match: {
           rent_start_date: { $gte: start, $lte: end },
@@ -415,40 +438,78 @@ export class FetchDashboardDetailsUseCase implements IFetchDashboardDetailsUseCa
       {
         $group: {
           _id: "$borrowerId",
-          transactions: { $sum: 1 },
-          amount: { $sum: "$rent_amount" },
+          contractCount: { $sum: 1 },
         },
       },
     ]);
 
-    // Combine sales and rentals by user
-    const userMap = new Map<string, { transactions: number; amount: number }>();
-    sales.forEach((sale) => {
-      userMap.set(sale._id.toString(), {
-        transactions: sale.transactions,
-        amount: sale.amount,
-      });
-    });
-    rentals.forEach((rental) => {
-      const existing = userMap.get(rental._id.toString()) || { transactions: 0, amount: 0 };
-      userMap.set(rental._id.toString(), {
-        transactions: existing.transactions + rental.transactions,
-        amount: existing.amount + rental.amount,
+    // Aggregate rentals by ownerId
+    const rentalsByOwner = await this._rentRepository.aggregate([
+      {
+        $match: {
+          rent_start_date: { $gte: start, $lte: end },
+          status: { $in: [ "Returned"] },
+        },
+      },
+      {
+        $group: {
+          _id: "$ownerId",
+          contractCount: { $sum: 1 },
+        },
+      },
+    ]);
+
+    // Combine all participations
+    const userMap = new Map<string, { contractCount: number }>();
+    
+    // Process sales by buyer
+    salesByBuyer.forEach((sale) => {
+      const userId = sale._id.toString();
+      const existing = userMap.get(userId) || { contractCount: 0 };
+      userMap.set(userId, {
+        contractCount: existing.contractCount + sale.contractCount,
       });
     });
 
-    // Fetch user details
+    // Process sales by owner
+    salesByOwner.forEach((sale) => {
+      const userId = sale._id.toString();
+      const existing = userMap.get(userId) || { contractCount: 0 };
+      userMap.set(userId, {
+        contractCount: existing.contractCount + sale.contractCount,
+      });
+    });
+
+    // Process rentals by borrower
+    rentalsByBorrower.forEach((rental) => {
+      const userId = rental._id.toString();
+      const existing = userMap.get(userId) || { contractCount: 0 };
+      userMap.set(userId, {
+        contractCount: existing.contractCount + rental.contractCount,
+      });
+    });
+
+    // Process rentals by owner
+    rentalsByOwner.forEach((rental) => {
+      const userId = rental._id.toString();
+      const existing = userMap.get(userId) || { contractCount: 0 };
+      userMap.set(userId, {
+        contractCount: existing.contractCount + rental.contractCount,
+      });
+    });
+
+    // Fetch user details for top users
     const topUsers = await Promise.all(
       Array.from(userMap.entries())
-        .sort((a, b) => b[1].amount - a[1].amount)
+        .sort((a, b) => b[1].contractCount - a[1].contractCount)
         .slice(0, limit)
-        .map(async ([userId, { transactions, amount }], index) => {
+        .map(async ([userId, { contractCount }], index) => {
           const user = await this._userRepository.findById(userId);
           return {
             id: index + 1,
             name: user?.Name || "Unknown",
-            transactions,
-            amount,
+            transactions: contractCount,
+            amount: 0,
           };
         })
     );
@@ -457,6 +518,33 @@ export class FetchDashboardDetailsUseCase implements IFetchDashboardDetailsUseCa
   }
 
   private async getTopCategories(start: Date, end: Date, limit: number): Promise<Category[]> {
+    // Aggregate rentals
+    const rentals = await this._rentRepository.aggregate([
+      {
+        $match: {
+          rent_start_date: { $gte: start, $lte: end },
+          status: "Returned",
+        },
+      },
+      {
+        $lookup: {
+          from: "books",
+          localField: "bookId",
+          foreignField: "_id",
+          as: "book",
+        },
+      },
+      { $unwind: "$book" },
+      {
+        $group: {
+          _id: "$book.categoryId",
+          rentalCount: { $sum: 1 },
+          totalRentAmount: { $sum: "$rent_amount" },
+        },
+      },
+    ]);
+
+    // Aggregate sales
     const sales = await this._saleRepository.aggregate([
       {
         $match: {
@@ -473,30 +561,47 @@ export class FetchDashboardDetailsUseCase implements IFetchDashboardDetailsUseCa
       },
       { $unwind: "$book" },
       {
-        $match: {
-          "book.status": "Sold Out",
-        },
-      },
-      {
         $group: {
           _id: "$book.categoryId",
-          sales: { $sum: 1 },
-          amount: { $sum: "$price" },
+          saleCount: { $sum: 1 },
+          totalSaleAmount: { $sum: "$price" },
         },
       },
     ]);
 
+    // Combine rentals and sales by category
+    const categoryMap = new Map<string, { contractCount: number; totalAmount: number }>();
+
+    // Process rentals
+    rentals.forEach((rental) => {
+      const categoryId = rental._id.toString();
+      categoryMap.set(categoryId, {
+        contractCount: rental.rentalCount,
+        totalAmount: rental.totalRentAmount,
+      });
+    });
+
+  
+    sales.forEach((sale) => {
+      const categoryId = sale._id.toString();
+      const existing = categoryMap.get(categoryId) || { contractCount: 0, totalAmount: 0 };
+      categoryMap.set(categoryId, {
+        contractCount: existing.contractCount + sale.saleCount,
+        totalAmount: existing.totalAmount + sale.totalSaleAmount,
+      });
+    });
+
     const topCategories = await Promise.all(
-      sales
-        .sort((a, b) => b.amount - a.amount)
+      Array.from(categoryMap.entries())
+        .sort((a, b) => b[1].contractCount - a[1].contractCount)
         .slice(0, limit)
-        .map(async (cat, index) => {
-          const category = await this._categoryRepository.findById(cat._id.toString());
+        .map(async ([categoryId, { contractCount, totalAmount }], index) => {
+          const category = await this._categoryRepository.findById(categoryId);
           return {
             id: index + 1,
             name: category?.name || "Unknown",
-            sales: cat.sales,
-            amount: cat.amount,
+            sales: contractCount,
+            amount: totalAmount,
           };
         })
     );

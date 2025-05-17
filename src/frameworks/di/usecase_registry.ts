@@ -150,6 +150,8 @@ import { IFetchDashboardDetailsUseCase } from "../../entities/useCaseInterfaces/
 import { FetchDashboardDetailsUseCase } from "../../useCases/admin/dashboard/fetch_dashboard_details-usecase";
 import { IFetchAllUserNoticationUseCase } from "../../entities/useCaseInterfaces/user/notification/fetch_all_user_notification_usecase-interface";
 import { FetchAllUserNotificationUseCase } from "../../useCases/user/notification/fetch_all_user_notification-usecase";
+import { IFetchReceiverDetailsUseCase } from "../../entities/useCaseInterfaces/user/chat/fetch_receiver_details_usecase-interface";
+import { FetchReceiverDetailsUseCase } from "../../useCases/user/chat/fetch_receiver_details-usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -561,6 +563,10 @@ export class UseCaseRegistry {
 
     container.register<IFetchChatListUseCase>("IFetchChatListUseCase", {
       useClass: FetchChatListUseCase,
+    })
+
+    container.register<IFetchReceiverDetailsUseCase>("IFetchReceiverDetailsUseCase", {
+      useClass: FetchReceiverDetailsUseCase,
     })
 
 

@@ -24,7 +24,7 @@ export class ChatRepository implements IChatRepository {
       ],
     }).exec();
   }
-
+ 
   async updateLastMessage(
     chatId: string,
     last_message: string

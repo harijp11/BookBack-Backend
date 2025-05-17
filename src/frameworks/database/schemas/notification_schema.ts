@@ -4,7 +4,7 @@ import { INotificationModel } from '../models/notification_model';
 export const NotificationSchema = new Schema<INotificationModel>(
   {
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    title: { type: String, required: true },
+    title: { type: String },
     message: { type: String, required: true },
     type: {
       type: String,

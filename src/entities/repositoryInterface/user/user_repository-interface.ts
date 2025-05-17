@@ -1,7 +1,27 @@
 import { ObjectId } from "mongoose";
 import { IUserEntity } from "../../models/user_entity";
+import { IUserModel } from "../../../frameworks/database/models/User_model";
+
+
+
+export interface IUserBasicInfo {
+  _id: ObjectId;
+  Name?: string;
+  profileImage?: string;
+}
+
+
 
 export interface IUserRepository {
+ findSenderAndReceiver (
+  senderId: string,
+  receiverId: string
+): Promise<{
+  sender: IUserBasicInfo | null;
+  receiver: IUserBasicInfo | null;
+}>
+
+
   save(data: Partial<IUserEntity>): Promise<IUserEntity>;
 
   findByEmail(email: string): Promise<IUserEntity | null>;
@@ -27,4 +47,7 @@ export interface IUserRepository {
     userId:string,
     newPassword:string
   ):Promise<IUserEntity | void>
+
+  findByIdAndChangeOnlineStatus(userId:string,status:string):Promise<IUserModel | null>
+
 }

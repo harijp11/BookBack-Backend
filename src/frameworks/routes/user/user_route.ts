@@ -497,6 +497,16 @@ router.get(
   }
 )
 
+router.get(
+  "/user/chat-list/receiver-details/:receiverId",
+  verifyAuth,
+  authorizeRole(["user"]),
+  blockStatusMiddleware.checkUserStatus as RequestHandler,
+  (req: Request, res: Response) => {
+    chatController.fetchReceiverDetails(req, res);
+  }
+)
+
 
 //notification
 

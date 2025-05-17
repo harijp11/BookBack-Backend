@@ -1,7 +1,8 @@
 import { injectable } from "tsyringe";
-import { IUserRepository } from "../../../entities/repositoryInterface/user/user_repository-interface";
-import { UserModel } from "../../../frameworks/database/models/User_model";
+import {IUserBasicInfo, IUserRepository } from "../../../entities/repositoryInterface/user/user_repository-interface";
+import { IUserModel, UserModel } from "../../../frameworks/database/models/User_model";
 import { IUserEntity } from "../../../entities/models/user_entity";
+
 
 @injectable()
 export class UserRepository implements IUserRepository {
@@ -96,4 +97,29 @@ export class UserRepository implements IUserRepository {
         )
         return User as IUserEntity
     }
+
+   
+async findSenderAndReceiver(
+  senderId: string,
+  receiverId: string
+): Promise<{
+  sender: IUserBasicInfo | null;
+  receiver: IUserBasicInfo | null;
+}> {
+  const [sender, receiver] = await Promise.all([
+    UserModel.findById({_id:senderId}).select('_id Name profileImage').lean(),
+    UserModel.findById({_id:receiverId}).select('_id Name profileImage').lean(),
+  ]);
+
+  return { sender, receiver };
+};
+
+async findByIdAndChangeOnlineStatus(userId: string, status: string): Promise<IUserModel | null> {
+    return await  UserModel.findByIdAndUpdate(
+        {_id:userId},
+        {$set:{onlineStatus:status}},
+        {new:true}
+    )
+}
+
 }

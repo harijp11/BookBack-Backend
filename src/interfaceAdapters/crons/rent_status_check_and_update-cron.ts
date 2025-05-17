@@ -3,6 +3,8 @@
 // src/cronJobs/rentStatusUpdater.js
 import cron from 'node-cron'
 import { RentModel } from "../../frameworks/database/models/rent_model";
+import { NotificationModel } from '../../frameworks/database/models/notification_model';
+import { IBookModel } from '../../frameworks/database/models/book_model';
 
 
 async function updateRentStatus() {
@@ -15,7 +17,9 @@ async function updateRentStatus() {
       const overdueRentals = await RentModel.find({
         status: 'On Rental',
         rent_end_date: { $lt: currentDate }
-      });
+      }).populate<{ bookId: IBookModel }>("bookId");
+
+
   
       console.log(`[CRON] Found ${overdueRentals.length} overdue rentals`);
   
@@ -25,6 +29,13 @@ async function updateRentStatus() {
           rental.status = 'Contract Date Exceeded';
           await rental.save();
           updatedCount++;
+
+           await NotificationModel.create({
+        userId: rental.borrowerId,
+        message:
+          "The Contract Date of book " + (rental.bookId as IBookModel).name  + "return it fast",
+        type: "warning",
+      });
           console.log(`[CRON] Updated rental ${rental._id} to 'Contract Date Exceeded'`);
         } catch (error) {
           console.error(`[CRON] Error updating rental ${rental._id}:`, error);

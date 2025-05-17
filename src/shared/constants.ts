@@ -311,7 +311,7 @@ export const SEND_CONTRACT_OTP_TO_REQUESTER = (OTP: String): string => {
 
   return `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; background: #ffffff; border-radius: 8px; border: 1px solid #ddd; text-align: center;">
-      <h2 style="color: #1a73e8;">BookBack Contract OTP Verification</h2>
+      <h2 style="color: #1a73e8;">BookBack Contract Return OTP Verification</h2>
       <p>The owner has approved your request for a book contract on <strong>BookBack</strong>.</p>
       <p>To verify and complete the contract, please enter the OTP provided below:</p>
       

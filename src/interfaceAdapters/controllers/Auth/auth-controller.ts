@@ -218,7 +218,6 @@ export class AuthController implements IAuthController{
           handleTokenRefresh(req: Request, res: Response): void {
             try {
               const refreshToken = (req as CustomRequest).user.refresh_token;
-              console.log("request",req)
               const newTokens = this._refreshTokenUseCase.execute(refreshToken);
               const accessTokenName = `${newTokens.role}_access_token`;
               updateCookieWithAccessToken(res, newTokens.accessToken, accessTokenName);
