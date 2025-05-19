@@ -3,5 +3,5 @@ import { IMessageModel } from "../../../../frameworks/database/models/message_mo
 
 
 export interface IReceiveMessagesUseCase {
-  execute({ senderId, receiverId }: { senderId: string; receiverId: string }): Promise<IMessageModel[] | []>;
+  execute({ senderId, receiverId }: { senderId: string; receiverId: string ,status?: string}): Promise<IMessageModel[] | []>;
 }

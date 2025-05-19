@@ -25,4 +25,16 @@ export class MessageRepository implements IMessageRepository {
       .populate("receiverId", "_id Name profileImage")
       .exec();
   }
+
+  async findById(messageId: string): Promise<IMessageModel | null> {
+    return await MessageModel.findById({_id:messageId})
+  }
+  
+  async updateStatus(messageId: string, status: string): Promise<void> {
+    await MessageModel.findByIdAndUpdate(
+      {_id:messageId},
+      {$set:{status}},
+      {new:true}
+    )
+  }
 }

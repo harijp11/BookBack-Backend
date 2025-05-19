@@ -3,13 +3,14 @@ import { IBlackListTokenUseCase } from "../../entities/useCaseInterfaces/auth/bl
 import { IRedisTokenRepository } from "../../entities/repositoryInterface/redis/redis_token_repository-interface";
 import { ITokenService } from "../../entities/serviceInterfaces/token_service-interface";
 import { JwtPayload } from "jsonwebtoken";
+import { IUserRepository } from "../../entities/repositoryInterface/user/user_repository-interface";
 
 @injectable()
 export class BlackListTokenUseCase implements IBlackListTokenUseCase {
 	constructor(
 		@inject("IRedisTokenRepository")
 		private _redisTokenRepository: IRedisTokenRepository,
-		@inject("ITokenService") private tokenService: ITokenService
+		@inject("ITokenService") private tokenService: ITokenService,
 	) {}
 	async execute(token: string): Promise<void> {
 		const decoded: string | JwtPayload | null =

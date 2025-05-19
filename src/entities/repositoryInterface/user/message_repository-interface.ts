@@ -13,4 +13,6 @@ export interface IMessageRepository{
         status: "sent" | "delivered" | "read";
       }): Promise<IMessageModel>;
     getMessagesByChatId(chatId: string): Promise<IMessageModel[]>;
+    findById(messageId:string):Promise<IMessageModel | null>
+    updateStatus(messageId:string,status:string):Promise<void>
 }

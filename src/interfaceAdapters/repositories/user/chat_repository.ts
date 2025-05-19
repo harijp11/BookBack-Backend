@@ -41,8 +41,8 @@ export class ChatRepository implements IChatRepository {
       $or: [{ userId1: userId }, { userId2: userId }],
     })
       .sort({ updated_at: -1 })
-      .populate("userId1", "_id Name profileImage")
-      .populate("userId2", "_id Name profileImage")
+      .populate("userId1", "_id Name profileImage onlineStatus")
+      .populate("userId2", "_id Name profileImage onlineStatus")
       .exec();
   }
 }

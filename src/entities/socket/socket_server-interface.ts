@@ -2,6 +2,7 @@ import { Server as HttpServer } from 'http';
 
 
 export interface Message {
+ _id:string
   messageId: string;
   chatId: string;
   senderId: { _id: string; Name: string; profileImage?: string };
@@ -16,8 +17,8 @@ export interface Message {
 
 export interface Chat {
   chatId: string;
-  userId1: { _id: string; Name: string; profileImage?: string };
-  userId2: { _id: string; Name: string; profileImage?: string };
+  userId1: { _id: string; Name: string; profileImage?: string ,onlineStatus :string};
+  userId2: { _id: string; Name: string; profileImage?: string,onlineStatus :string };
   last_message: string;
   created_at: string;
   updated_at: string;

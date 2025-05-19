@@ -152,6 +152,12 @@ import { IFetchAllUserNoticationUseCase } from "../../entities/useCaseInterfaces
 import { FetchAllUserNotificationUseCase } from "../../useCases/user/notification/fetch_all_user_notification-usecase";
 import { IFetchReceiverDetailsUseCase } from "../../entities/useCaseInterfaces/user/chat/fetch_receiver_details_usecase-interface";
 import { FetchReceiverDetailsUseCase } from "../../useCases/user/chat/fetch_receiver_details-usecase";
+import { IChangeOnlineStatusUseCase } from "../../entities/useCaseInterfaces/user/chat/change_online_status_usecase-interface";
+import { ChangeOnlineStatusUseCase } from "../../useCases/user/chat/change_online_status-usecase";
+import { IUpdateMessageStatusUseCase } from "../../entities/useCaseInterfaces/user/chat/update_message_status_usecase-interface";
+import { UpdateMessageStatusUseCase } from "../../useCases/user/chat/update_message_status-usecase";
+import { IGetMessageUseCase } from "../../entities/useCaseInterfaces/user/chat/get_message_usecase-interface";
+import { GetMessageUseCase } from "../../interfaceAdapters/repositories/user/get_message-usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -568,6 +574,19 @@ export class UseCaseRegistry {
     container.register<IFetchReceiverDetailsUseCase>("IFetchReceiverDetailsUseCase", {
       useClass: FetchReceiverDetailsUseCase,
     })
+
+    container.register<IChangeOnlineStatusUseCase>("IChangeOnlineStatusUseCase", {
+      useClass: ChangeOnlineStatusUseCase,
+    })
+
+    container.register<IUpdateMessageStatusUseCase>("IUpdateMessageStatusUseCase", {
+      useClass: UpdateMessageStatusUseCase,
+    }) 
+
+     container.register<IGetMessageUseCase>("IGetMessageUseCase", {
+      useClass: GetMessageUseCase,
+    }) 
+
 
 
     //dashboard

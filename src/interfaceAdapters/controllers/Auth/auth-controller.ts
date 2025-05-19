@@ -25,6 +25,7 @@ import { IResetPasswordUseCase } from "../../../entities/useCaseInterfaces/auth/
 import { resetPasswordValidationSchema } from "../AuthValidation/reset_password_validation_schema"
 import { ZodError } from "zod"
 import { forgotPasswordValidationSchema } from "../AuthValidation/forgot_password_validation_schema"
+import { IChangeOnlineStatusUseCase } from "../../../entities/useCaseInterfaces/user/chat/change_online_status_usecase-interface"
 
 
 @injectable()
@@ -51,7 +52,9 @@ export class AuthController implements IAuthController{
         @inject("IForgotPasswordUseCase")
         private _forgotPasswordUseCase: IForgotPasswordUseCase,
         @inject("IResetPasswordUseCase")
-        private _resetPasswordUseCase: IResetPasswordUseCase
+        private _resetPasswordUseCase: IResetPasswordUseCase,
+        @inject("IChangeOnlineStatusUseCase")
+        private _changeOnlineStatusUseCase:IChangeOnlineStatusUseCase
       ) {}
 
       async authenticateWithGoogle(req: Request, res: Response): Promise<void> {
@@ -73,7 +76,8 @@ export class AuthController implements IAuthController{
                 user.email,
                 user.role
               );
-
+              await this._changeOnlineStatusUseCase.execute(user?._id.toString(),"online") 
+              
               const accessTokenName = `${user.role}_access_token`;
               const refreshTokenName = `${user.role}_refresh_token`;
 
@@ -151,6 +155,8 @@ export class AuthController implements IAuthController{
               accessTokenName,
               refreshTokenName
             );
+
+            await this._changeOnlineStatusUseCase.execute(user?._id.toString(),"online")
             
             res.status(HTTP_STATUS.OK).json({
               success: true,
@@ -190,7 +196,8 @@ export class AuthController implements IAuthController{
           
               await this._revokeRefreshToken.execute(user.refresh_token);
               console.log("Refresh token revoked");
-          
+              
+              await this._changeOnlineStatusUseCase.execute(user?._id.toString(),"offline")
               const accessTokenName = `${user.role}_access_token`;
               const refreshTokenName = `${user.role}_refresh_token`;
               clearAuthCookies(res, accessTokenName, refreshTokenName);

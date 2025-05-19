@@ -109,6 +109,7 @@ export class SendMessageUseCase implements ISendMessageUseCase {
     return {
       chatId: chat.chatId,
       message: {
+        _id:message._id,
         messageId: message.messageId.toString(),
         chatId: message.chatId.toString(),
         senderId: {
