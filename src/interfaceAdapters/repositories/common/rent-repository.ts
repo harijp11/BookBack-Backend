@@ -32,7 +32,7 @@ export class RentRepository implements IRentRepository {
           RentModel.find(query)
            .skip(skip)
            .limit(limit)
-           .sort({ createdAt: -1 })
+           .sort({ created_at: -1 })
            .populate('borrowerId') 
            .populate('ownerId')    
            .populate('bookId'),
@@ -61,7 +61,7 @@ export class RentRepository implements IRentRepository {
          RentModel.find(query)
           .skip(skip)
           .limit(limit)
-          .sort({ createdAt: -1 })
+          .sort({ created_at: -1 })
           .populate('borrowerId') 
           .populate('ownerId')    
           .populate('bookId'),
@@ -93,7 +93,7 @@ export class RentRepository implements IRentRepository {
          RentModel.find(query)
           .skip(skip)
           .limit(limit)
-          .sort({ createdAt: -1 })
+          .sort({ created_at: -1 })
           .populate('borrowerId') 
           .populate('ownerId')    
           .populate('bookId'),

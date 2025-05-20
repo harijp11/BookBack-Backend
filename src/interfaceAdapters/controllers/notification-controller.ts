@@ -5,12 +5,15 @@ import { CustomRequest } from "../middlewares/auth_middleware";
 import { HTTP_STATUS } from "../../shared/constants";
 import { handleErrorResponse } from "../../shared/utils/errorHandler";
 import { IFetchAllUserNoticationUseCase } from "../../entities/useCaseInterfaces/user/notification/fetch_all_user_notification_usecase-interface";
+import { IGetChatAndNotificationUpdatesUseCase } from "../../entities/useCaseInterfaces/user/notification/get_chat_and_notification_updates_usecase-interface";
 
 @injectable()
 export class NotificationController implements INotificationController {
   constructor(
     @inject("IFetchAllUserNoticationUseCase")
-    private _fetchAllUserNoticationUseCase:IFetchAllUserNoticationUseCase
+    private _fetchAllUserNoticationUseCase:IFetchAllUserNoticationUseCase,
+    @inject("IGetChatAndNotificationUpdatesUseCase")
+    private _getChatAndNotificationUpdates:IGetChatAndNotificationUpdatesUseCase
   ){}
 
   async fetchAllUserNotifications(req: Request, res: Response): Promise<void> {
@@ -36,5 +39,23 @@ export class NotificationController implements INotificationController {
       }catch(error){
         handleErrorResponse(res,error)
       }
+  }
+
+  async getChatAndNotificationUpdates(req: Request, res: Response): Promise<void> {
+     try{
+      const userId = (req as CustomRequest).user._id.toString();
+      
+      const {unReadMessagesCount,unReadNotificationsCount} = await this._getChatAndNotificationUpdates.execute(userId)
+     
+      res.status(HTTP_STATUS.OK).json({
+        success:true,
+        message:"Notification Count fetched successfully",
+        unReadMessagesCount,
+        unReadNotificationsCount,
+      })
+
+     }catch(error){
+      handleErrorResponse(res,error)
+     }
   }
 }

@@ -12,7 +12,7 @@ export const NotificationSchema = new Schema<INotificationModel>(
       required: true,
     },
     isRead: { type: Boolean, default: false },
-    navlink: { type: String, required: true },
+    navlink: { type: String },
   },
   {
     timestamps: {

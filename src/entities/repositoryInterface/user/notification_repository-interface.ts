@@ -12,4 +12,13 @@ export interface INotificationRepository{
             filter: object,
             limit: number,
             skip: number):Promise<PaginatedNotificationRepo | null>
+
+    UpdateReadStatus(userId:string):Promise<void>
+
+    deleteDateExceeded(checkDate:Date):Promise<{
+  acknowledged: boolean,
+  deletedCount: number
+}>
+
+ findUnReadCountByUserId(userId: string): Promise<number>
 }

@@ -42,4 +42,5 @@ export interface IBookRepository {
   ): Promise<PaginatedBooksRepo | null>;
   findByIdFetchWholeDetails(bookId: string): Promise<IBookModel | null>;
   getRelatedBooks(catId: string): Promise<IBookModel[] | []>;
+  findByOwnerId(ownerId:string):Promise<IBookModel | null>
 }

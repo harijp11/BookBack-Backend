@@ -17,6 +17,7 @@ import { ReturnRejectionRequestController } from "../../interfaceAdapters/contro
 import { ChatController } from "../../interfaceAdapters/controllers/chat/chat_controller";
 import { DashboardController } from "../../interfaceAdapters/controllers/dashboard-controller";
 import { NotificationController } from "../../interfaceAdapters/controllers/notification-controller";
+import NotificationCleanupJob from "../../interfaceAdapters/crons/check_notification_cleanup-cron";
 
 DependancyInjection.registerAll();
 
@@ -42,3 +43,10 @@ export const notificationController = container.resolve(NotificationController)
 
 
 export const authController = container.resolve(AuthController);
+
+
+//crons
+export default function startNotificationCleanupCron() {
+  const job = container.resolve(NotificationCleanupJob);
+  job.start();
+}

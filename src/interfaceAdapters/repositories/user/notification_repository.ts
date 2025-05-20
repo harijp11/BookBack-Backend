@@ -20,7 +20,7 @@ export class NotificationRepository implements INotificationRepository{
            NotificationModel.find(query)
             .skip(skip)
             .limit(limit)
-            .sort({ createdAt: -1 }),
+            .sort({ created_at: -1 }),
             NotificationModel.countDocuments(query)
           ])
 
@@ -30,4 +30,22 @@ export class NotificationRepository implements INotificationRepository{
                 };
                 return result
    }
+
+   async UpdateReadStatus(userId: string): Promise<void> {
+     await NotificationModel.updateMany({userId},{$set:{isRead:true}})
+   }
+
+    async deleteDateExceeded(checkDate:Date): Promise<{
+  acknowledged: boolean,
+  deletedCount: number
+}> {
+     const deleted = await NotificationModel.deleteMany({isRead:true,created_at:{$lt:checkDate}})  
+     return deleted
+   }
+
+   async findUnReadCountByUserId(userId: string): Promise<number> {
+  const count = await NotificationModel.countDocuments({ userId, isRead: false });
+  return count;
+}
+
 }

@@ -37,4 +37,10 @@ export class MessageRepository implements IMessageRepository {
       {new:true}
     )
   }
+
+  async findUnReadMessagesCount(userId: string): Promise<number> {
+     return await MessageModel.countDocuments({receiverId:userId,status:{$ne:"read"}})
+  }
+
+
 }

@@ -123,6 +123,22 @@ export class CreateNewContractUseCase implements ICreateNewContractUseCase {
 
         await this._contractRepository.deleteRequest(conReqId);
 
+        await this._notitficationRepository.setNotitfication({
+          userId: data.buyerId,
+          title: "Sold Out",
+          message: `You have purchased the book titled "${book.name}" for ₹${book.originalAmount}.`,
+          type: "good",
+          navlink: "/bought-books",
+        });
+
+        await this._notitficationRepository.setNotitfication({
+          userId: data.ownerId,
+          title: "Book Sold",
+          message: `Your book titled "${book.name}" has been sold for ₹${book.originalAmount}.`,
+          type: "info",
+          navlink: "/sold-books",
+        });
+
         return {
           message: `New Sale contract created successfully`,
           success: true,
@@ -180,15 +196,29 @@ export class CreateNewContractUseCase implements ICreateNewContractUseCase {
 
         await this._notitficationRepository.setNotitfication({
           userId: data.borrowerId,
-          title: "Update your balance",
-          message:
-            "You got Hold amount of " + data.original_amount + " for the rental of a book",
+          title: "Hold Amount Placed",
+          message: `An amount of ₹${data.original_amount} has been held for renting the book "${book?.name}".`,
           type: "warning",
           navlink: "/purse",
         });
 
         await this._contractRepository.deleteRequest(conReqId);
 
+        await this._notitficationRepository.setNotitfication({
+          userId: data.ownerId,
+          title: "Book Borrowed",
+          message: `Your book "${book?.name}" has been rented out for ₹${data.original_amount}.`,
+          type: "info",
+          navlink: "/rented-books",
+        });
+
+        await this._notitficationRepository.setNotitfication({
+          userId: data.borrowerId,
+          title: "Book Rented",
+          message: `You have successfully rented the book "${book?.name}" by holding ₹${data.original_amount}.`,
+          type: "good",
+          navlink: "/borrowed-books",
+        });
         return {
           message: `New Rental contract created successfully`,
           success: true,

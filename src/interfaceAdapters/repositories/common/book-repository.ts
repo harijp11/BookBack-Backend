@@ -240,9 +240,13 @@ return result;
   }
 
   async getRelatedBooks(catId: string): Promise<IBookModel[] | []> {
-    console.log("category id found",catId)
     const books = await BookModel.find({categoryId: catId})
     return books 
   } 
+
+
+  async findByOwnerId(ownerId: string): Promise<IBookModel | null> {
+    return await BookModel.findOne({ownerId})
+  }
 
 }

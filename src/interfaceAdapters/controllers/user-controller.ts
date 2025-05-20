@@ -10,6 +10,7 @@ import { IChangePasswordUseCase } from "../../entities/useCaseInterfaces/user/pr
 import { IGetAllUsersUseCase } from "../../entities/useCaseInterfaces/admin/user/get_all_users_usecase-interface";
 import { IUpdateUserStatusUseCase } from "../../entities/useCaseInterfaces/admin/user/update_user_status_usecase-interface";
 import { CustomError } from "../../entities/utils/custom_error";
+import { CustomRequest } from "../middlewares/auth_middleware";
 
 
 @injectable()
@@ -55,7 +56,7 @@ export class UserController implements IUserController{
 
 
   async updateUserProfile(req: Request, res: Response): Promise<void> {
-      const userId = req.params.userId
+      const userId = (req as CustomRequest).user._id.toString();
       const profileData = req.body
       
      console.log(profileData)
@@ -84,10 +85,10 @@ export class UserController implements IUserController{
 
   async changePassword(req: Request, res: Response): Promise<void> {
     try{
-      const {_id} = req.query as {_id:string}
+      const userId = (req as CustomRequest).user._id.toString();
       const {password,newPassword} = req.body as {password:string,newPassword:string}
        
-      await this._changePasswordUseCase.execute(_id,password,newPassword)
+      await this._changePasswordUseCase.execute(userId,password,newPassword)
       res.status(HTTP_STATUS.OK).json({
         success:true,
         messasge:"password successfully updated"

@@ -8,6 +8,7 @@ import { container } from "tsyringe"
 
 import startRentStatusCron from "./interfaceAdapters/crons/rent_status_check_and_update-cron"
 import startContractPenaltyCron from "./interfaceAdapters/crons/check_status_and_update_penalty_amount_and_wallet-cron"
+import startNotificationCleanupCron from "./frameworks/di/resolver"
 
 
 const server = new Server()
@@ -25,6 +26,7 @@ socketServer.initialize(httpServer);
 //cron jobs
 startRentStatusCron()
 startContractPenaltyCron()
+startNotificationCleanupCron();
 
 server.getServer()
 .listen(config.server.PORT,()=>

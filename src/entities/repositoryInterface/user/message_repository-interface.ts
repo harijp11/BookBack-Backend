@@ -15,4 +15,5 @@ export interface IMessageRepository{
     getMessagesByChatId(chatId: string): Promise<IMessageModel[]>;
     findById(messageId:string):Promise<IMessageModel | null>
     updateStatus(messageId:string,status:string):Promise<void>
+    findUnReadMessagesCount(userId:string):Promise<number>
 }

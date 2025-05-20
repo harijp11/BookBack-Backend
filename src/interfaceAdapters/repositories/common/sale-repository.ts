@@ -28,11 +28,12 @@ export class SaleRepository implements ISaleRepository{
        SaleModel.find(query)
         .skip(skip)
         .limit(limit)
-        .sort({ createdAt: -1 })
+        .sort({ created_at: -1 })
         .populate('buyerId') 
         .populate('ownerId')    
         .populate('bookId'),
         SaleModel.countDocuments(query)
+        
       ])
   
       
@@ -61,7 +62,7 @@ export class SaleRepository implements ISaleRepository{
        SaleModel.find(query)
         .skip(skip)
         .limit(limit)
-        .sort({ createdAt: -1 })
+        .sort({ created_at: -1 })
         .populate('buyerId') 
         .populate('ownerId')    
         .populate('bookId'),

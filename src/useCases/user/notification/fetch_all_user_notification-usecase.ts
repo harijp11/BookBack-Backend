@@ -22,9 +22,15 @@ export class FetchAllUserNotificationUseCase
     if (!userId) {
       throw new CustomError("No user found", 404);
     }
+
     const skip = (page - 1) * limit;
 
-    const result = await this._notificationRepository.findNotificationByUserId(userId,Filter,limit,skip);
+    const result = await this._notificationRepository.findNotificationByUserId(
+      userId,
+      Filter,
+      limit,
+      skip
+    );
 
     if (!result) {
       throw new CustomError("No books found", 404);
@@ -36,8 +42,10 @@ export class FetchAllUserNotificationUseCase
 
     const totalPages = Math.ceil(count / limit);
 
+    await this._notificationRepository.UpdateReadStatus(userId);
+
     return {
-      notifications:notifications || [],
+      notifications: notifications || [],
       totalnotifications: Number(count),
       totalPages,
       currentPage: page,
