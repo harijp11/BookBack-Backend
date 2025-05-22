@@ -85,7 +85,7 @@ export class ContractRequestController implements IContractRequestController {
     res: Response
   ): Promise<void> {
     try {
-      const { ownerId } = req.query as { ownerId: string };
+      const ownerId = (req as CustomRequest).user._id.toString();
       
       const requests = await this._fetchAllownerContractRequestsUseCase.execute(
         ownerId

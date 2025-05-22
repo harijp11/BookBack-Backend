@@ -1,6 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import { IGetAllUserAvailableBooksUseCase } from "../../../entities/useCaseInterfaces/user/book/get_all_user_available_books_usecase-interface";
-import { IBookRepository, PaginatedBooksRepo } from "../../../entities/repositoryInterface/common/book_repository-interface";
+import { IBookRepository,} from "../../../entities/repositoryInterface/common/book_repository-interface";
 import { GetBooksByLocationInput } from "../../../entities/controllersInterfaces/book_controller-interface";
 import { PaginatedBooks } from "../../../entities/models/paginated_books_entity";
 import { CustomError } from "../../../entities/utils/custom_error";
@@ -34,7 +34,7 @@ export class GetAllUserAvailbleBooksUseCase implements IGetAllUserAvailableBooks
     
         if (filters && filters.dealTypeId) {
             matchStage.dealTypeId = new Types.ObjectId(Filter.dealTypeId);
-            console.error("Invalid dealTypeId format:", filters.dealTypeId)
+            // console.error("Invalid dealTypeId format:", filters.dealTypeId)
         }
            
         if (search) {
