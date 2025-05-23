@@ -16,6 +16,8 @@ export class AdminLoginStrategy implements ILoginStrategy {
 
   async login(user: LoginUserDTO): Promise<Partial<IUserEntity>> {
     const admin = await this.adminRepository.findByEmail(user.email);
+
+    console.log("admin details",admin,user.email)
     if (!admin) {
       throw new CustomError(
         ERROR_MESSAGES.EMAIL_NOT_FOUND,

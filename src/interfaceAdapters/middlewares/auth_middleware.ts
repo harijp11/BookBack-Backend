@@ -3,7 +3,6 @@ import { JwtPayload } from "jsonwebtoken";
 import { JWTService } from "../services/jwt_service";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 import user from "../../frameworks/cache/redis_client";
-import { Interface } from "readline";
 import { ObjectId } from "mongoose";
 
 const tokenService = new JWTService();
