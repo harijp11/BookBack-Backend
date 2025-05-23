@@ -23,8 +23,7 @@ import {
 } from "../../di/resolver";
 
 import { BaseRoute } from "../base_route";
-import { verify } from "crypto";
-import { RentalController } from "../../../interfaceAdapters/controllers/rental-controller";
+
 
 export class UserRoutes extends BaseRoute {
   constructor() {

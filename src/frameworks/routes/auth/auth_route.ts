@@ -15,6 +15,7 @@ export class AuthRoutes extends BaseRoute {
         });
 
         router.post("/login",(req:Request,res:Response)=>{
+          console.log("login req.body reached",req.body)
             authController.login(req,res);
         })
         router.post("/google-auth", (req: Request, res: Response) => {
