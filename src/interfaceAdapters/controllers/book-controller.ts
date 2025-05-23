@@ -18,6 +18,7 @@ import { CustomError } from "../../entities/utils/custom_error";
 import { IGetUserBookDetailsUseCase } from "../../entities/useCaseInterfaces/user/book/get_book_details_usecase-interface";
 import { IRelatedBooksUseCase } from "../../entities/useCaseInterfaces/user/book/get_related_book_usecase-interface";
 import { IGetAllAdminPaginatedBooksUseCase } from "../../entities/useCaseInterfaces/admin/book/get_all_paginated_books_usecase-interface";
+import { CustomRequest } from "../middlewares/auth_middleware";
 
 @injectable()
 export class BookController implements IBookController {
@@ -238,8 +239,10 @@ export class BookController implements IBookController {
  async  getRelatedBooks(req: Request, res: Response): Promise<void> {
    try{
     const catId:string = req.params.catId;
+
+    const ownerId = (req as CustomRequest)?.user?._id.toString()
      
-    const books = await this._getRelatedBooksUseCase.execute(catId);
+    const books = await this._getRelatedBooksUseCase.execute(catId,ownerId);
     res.status(HTTP_STATUS.OK).json({
       success: true,
       message: "Related books fetched successfully",

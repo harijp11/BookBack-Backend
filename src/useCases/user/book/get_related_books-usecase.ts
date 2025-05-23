@@ -11,8 +11,8 @@ export class GetRelatedBooksUseCase implements IRelatedBooksUseCase{
     private _bookRepository:IBookRepository
   ){}
 
-  async execute(catId: string): Promise<IBookModel[] | []> {
-      const relatedBooks = await this._bookRepository.getRelatedBooks(catId);
+  async execute(catId: string,ownerId?:string): Promise<IBookModel[] | []> {
+      const relatedBooks = await this._bookRepository.getRelatedBooks(catId,ownerId);
       
       if(!relatedBooks){
         throw new CustomError("No Related Books Found",404)

@@ -239,8 +239,14 @@ return result;
        return await BookModel.findById(bookId).populate('categoryId', 'name').populate('ownerId', 'Name').populate('dealTypeId','name')
   }
 
-  async getRelatedBooks(catId: string): Promise<IBookModel[] | []> {
-    const books = await BookModel.find({categoryId: catId})
+  async getRelatedBooks(catId: string,ownerId?:string): Promise<IBookModel[] | []> {
+    const query:{categoryId:string,ownerId?:string} = {
+      categoryId: catId
+    }
+    if(ownerId){
+       query.ownerId = ownerId
+    }
+    const books = await BookModel.find(query)
     return books 
   } 
 
