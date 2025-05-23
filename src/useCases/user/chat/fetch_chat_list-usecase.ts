@@ -12,7 +12,7 @@ export class FetchChatListUseCase implements IFetchChatListUseCase{
 
     async execute(userId: string): Promise<IChatModel[] | []> {
         let chat = await this._chatRepository.findChatByUserId(userId)
-        console.log("chattssss",chat)
+       
         return chat
     }
 }

@@ -35,7 +35,6 @@ export class ContractRequestController implements IContractRequestController {
   async createNewContractRequest(req: Request, res: Response): Promise<void> {
     try {
       const data: ContractRequestInput = req.body;
-      console.log("contract data", data);
       await this._createNewContractRequestUseCase.execute(data);
       res
         .status(201)
@@ -59,7 +58,7 @@ export class ContractRequestController implements IContractRequestController {
         requesterId,
         bookId
       );
-      console.log("contract request", request);
+     
 
       if (!request) {
         res.status(200).json({
@@ -112,7 +111,7 @@ export class ContractRequestController implements IContractRequestController {
   async contractRequestStatusUpdate(req: Request, res: Response): Promise<void> {
     try{
       const {conReqId,status} = req.body as {conReqId:string,status:string}
-       console.log("req.body",req.body)
+      
       const request = await this._contractRequestStatusUpdateUseCase.execute(conReqId,status)
         
       res.status(200).json({
@@ -164,7 +163,7 @@ export class ContractRequestController implements IContractRequestController {
   async cancelContractRequest(req: Request, res: Response): Promise<void> {
     try{
       const{ conReqId } = req.params as {conReqId:string}
-     console.log(req.params)
+     
     const request = await this._cancelContractRequestUseCase.execute(conReqId.toString())
      
     res.status(HTTP_STATUS.OK).json({

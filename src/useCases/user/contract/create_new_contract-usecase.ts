@@ -146,7 +146,7 @@ export class CreateNewContractUseCase implements ICreateNewContractUseCase {
       }
     } else if (request_type === "borrow") {
       if (isRentInput(data)) {
-        // console.log("datasss checking",data,isRentInput(data))
+        
         let purse = await this._purseRepository.findById(data.borrowerId);
 
         if (!purse) {

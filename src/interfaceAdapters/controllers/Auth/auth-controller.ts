@@ -88,7 +88,6 @@ export class AuthController implements IAuthController{
                 accessTokenName,
                 refreshTokenName
               )
-              console.log(user)
 
               res.status(HTTP_STATUS.OK).json({
                 success:true,
@@ -125,7 +124,7 @@ export class AuthController implements IAuthController{
             const data = req.body as LoginUserDTO;
              
             const validatedData = loginSchema.parse(data);
-            // console.log("login dataa",validatedData)
+            
             if (!validatedData) {
               res.status(HTTP_STATUS.BAD_REQUEST).json({
                 success: false,
@@ -186,7 +185,7 @@ export class AuthController implements IAuthController{
                 access_token: user.access_token,
                 refresh_token: user.refresh_token,
               }); 
-                 console.log("usersss",user)
+               
               if (!user.access_token || !user.refresh_token) {
                 throw new Error("Missing access or refresh token");
               }
@@ -274,7 +273,7 @@ export class AuthController implements IAuthController{
           async resetPassword(req: Request, res: Response): Promise<void> {
             try {
               const validatedData = resetPasswordValidationSchema.parse(req.body);
-              console.log("Validate Data",validatedData)
+              
               if (!validatedData) {
                 res.status(HTTP_STATUS.BAD_REQUEST).json({
                   success: false,
@@ -313,7 +312,7 @@ export class AuthController implements IAuthController{
               const { email, otp } = req.body;
               const validatedData = otpMailValidationSchema.parse({ email, otp });
               await this._verifyOtpUseCase.execute(validatedData);
-          console.log("verify",validatedData)
+         
               res.status(HTTP_STATUS.OK).json({
                 success: true,
                 message: SUCCESS_MESSAGES.VERIFICATION_SUCCESS,

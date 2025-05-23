@@ -40,7 +40,7 @@ export class SubmitContractRenewalRequestUseCase
       responded_at: new Date(),
     };
 
-    console.log("renewal details ", newRenewalDetail);
+    
 
     if (!rentalContract.renewal_details) {
       rentalContract.renewal_details = [];

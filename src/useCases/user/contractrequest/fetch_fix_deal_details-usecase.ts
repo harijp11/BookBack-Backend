@@ -13,7 +13,7 @@ export class FetchFixDealDetailsUseCase implements IFetchFixDealDetailsUseCase {
 
     async execute(conReqId: string): Promise<IContractRequestModel | null> {
         const request = await this._contractRequestRepository.findById(conReqId)
-         console.log("request details",request,conReqId)
+       
         if(!request){
             throw new CustomError("No request found",404)
         }

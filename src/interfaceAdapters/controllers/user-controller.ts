@@ -40,7 +40,7 @@ export class UserController implements IUserController{
       }
   
       const signatureData = this._cloudinarySignatureService.generateSignature(folder);
-      console.log("signature",signatureData)
+    
       res.status(200).json({
         success: true,
         data: signatureData,
@@ -59,7 +59,7 @@ export class UserController implements IUserController{
       const userId = (req as CustomRequest).user._id.toString();
       const profileData = req.body
       
-     console.log(profileData)
+
      const allowedFields:(keyof Partial<IUsersEntity>)[]=[
        "Name",
        "email",

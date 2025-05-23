@@ -44,7 +44,7 @@ export class ContractController implements IContractController {
       const userId = (req as CustomRequest).user._id.toString();
       const validatedData = otpMailValidationSchema.parse({ email, otp });
       await this._verifyOtpUseCase.execute({...validatedData,purpose:"create_contract",requesterId:userId});
-      console.log("verify", validatedData);
+     
       res.status(HTTP_STATUS.OK).json({
         success: true,
         message: SUCCESS_MESSAGES.VERIFICATION_SUCCESS,
@@ -59,7 +59,7 @@ export class ContractController implements IContractController {
       const { data } = req.body as {data: RentalInput | SaleInput};
       
       const {request_type,conReqId} = req.params as {request_type :string,conReqId:string}
-      console.log("req.body",req.body,request_type)
+     
       const result = await this._createNewContractUseCase.execute(
         data,
         request_type,

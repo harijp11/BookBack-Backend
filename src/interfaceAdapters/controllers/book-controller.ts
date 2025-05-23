@@ -100,7 +100,7 @@ export class BookController implements IBookController {
       };
       const Filter = typeof filter === "string" ? JSON.parse(filter) : filter;
        
-      // console.log("req.query of books",req.query,Filter)
+    
  
       if (!ownerId) {
         res.status(400).json({
@@ -261,7 +261,7 @@ async getAllAdminPaginatedBooks(req: Request, res: Response):Promise<void> {
            limit = 5
          } = req.query as {search?:string,filter?:string,page?:number,limit?:number}
          const Filter = typeof filter === 'string' ? JSON.parse(filter) : filter;
-      // console.log("queries",req.query)
+  
      
          const result = await this._getAllPaginatedBooks.execute(
            search,
@@ -269,7 +269,7 @@ async getAllAdminPaginatedBooks(req: Request, res: Response):Promise<void> {
            Number(page),
            Number(limit)
          );
-        //  console.log("resultsss",result)
+      
      
          const { 
            books,

@@ -35,7 +35,7 @@ export class PurseRepository implements IPurseRepository {
     tsId: string,
     status: 'pending' | 'completed' | 'failed'
   ): Promise<IPurseModel | null> {
-    console.log("status updating datas",userId,tsId,status)
+   
 
     const userObjectId = Types.ObjectId.isValid(userId) ? new Types.ObjectId(userId) : userId;
     
@@ -60,6 +60,6 @@ export class PurseRepository implements IPurseRepository {
       {$inc:{hold_amount:hold_amount}},
       {new:true}
      )
-     console.log("hold amount upfdation",purse)
+  
   }
 }

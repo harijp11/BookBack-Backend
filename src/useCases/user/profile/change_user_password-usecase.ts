@@ -16,18 +16,18 @@ export class changePasswordUseCase implements IChangePasswordUseCase{
 
       async execute(userId: string, password: string, newPassword: string): Promise<IUserEntity | void> {
           const user = await this._userRepository.findById(userId)
-                console.log("check daatas coming",userId,password,newPassword)
+              
           if(!user || !user?.password){
              throw new CustomError("User or user password is not available",404)
           }
-          console.log("user for password updation",user)
+          
          
          if(password && user?.password){
          const isCorrect = await this._passwordBcrypt.compare(
             password,
             user.password
          )
-         console.log("bcrypted is corect checking",isCorrect)
+         
         
          if(!isCorrect){
             throw new CustomError("password does not match to old password",400)

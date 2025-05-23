@@ -21,10 +21,10 @@ export class WebHookHandlingUseCase implements IWebhookHandlingUseCase {
     tsId?: string;
   }> {
     const result = await this.stripeService.handleWebhookEvent(event);
-    console.log("event from db",result.status)
+    
     
     if (result.status === 'success' && result.walletId && result.amount) {
-      console.log("result details",result.walletId, result.tsId, result.amount)
+      
       const purse = await this.purseRepository.updateTransactionStatus(result.walletId, result.tsId!, 'completed');
       if (!purse) {
         throw new Error('Failed to update transaction status');  

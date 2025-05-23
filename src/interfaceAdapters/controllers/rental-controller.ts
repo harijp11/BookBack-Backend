@@ -129,7 +129,7 @@ export class RentalController implements IRentalController {
   async getRentedOutBookDetails(req: Request, res: Response): Promise<void> {
     try {
       const { rentalId } = req.params as { rentalId: string };
-      console.log("req paramsss", req.params);
+     
       const rentedBooksContracts =
         await this._getRentedBookDetailsUseCase.execute(rentalId.toString());
 
@@ -167,7 +167,7 @@ export class RentalController implements IRentalController {
         purpose: "book_return",
         requesterId: userId,
       });
-      console.log("verify", validatedData);
+     
       res.status(HTTP_STATUS.OK).json({
         success: true,
         message: SUCCESS_MESSAGES.VERIFICATION_SUCCESS,

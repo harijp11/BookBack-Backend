@@ -80,7 +80,7 @@ const extractToken = (
 ): { access_token: string; refresh_token: string } | null => {
 	const userType = req.path.split("/")[1];
 	if (!userType) return null;
-   console.log("usertype",userType)
+
 	return {
 		access_token: req.cookies?.[`${userType}_access_token`] ?? null,
 		refresh_token: req.cookies?.[`${userType}_refresh_token`] ?? null,
@@ -100,7 +100,7 @@ const isBlacklisted = async (token: string): Promise<boolean> => {
 export const authorizeRole = (allowedRoles: string[]) => {
 	return (req: Request, res: Response, next: NextFunction) => {
 		const user = (req as CustomRequest).user;
-		console.log(user.role)
+	
 		if (!user || !allowedRoles.includes(user.role)) {
 			res.status(HTTP_STATUS.FORBIDDEN).json({
 				success: false,
@@ -136,7 +136,7 @@ export const decodeToken = async (
 		}
 
 		const user = tokenService.decodeAccessToken(token?.access_token);
-		// console.log("decoded", user);
+	
 		(req as CustomRequest).user = {
 			_id:user?._id,
 			id: user?.id,

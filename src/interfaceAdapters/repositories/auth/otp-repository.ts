@@ -16,7 +16,7 @@ export class OtpRepository implements IOtpRepository {
 		if (requesterId) {
 		  otpData.requesterId = requesterId;
 		}
-	    console.log("store otp query",otpData)
+	   
 		await OTPModel.create(otpData);
 	  }
 	  
@@ -30,7 +30,7 @@ export class OtpRepository implements IOtpRepository {
 		if (requesterId) {
 		  query.requesterId = requesterId;
 		}
-		console.log("verify otp query",query)
+	
 		const otpEntry = await OTPModel.find(query)
 		  .sort({ createdAt: -1 })
 		  .limit(1);

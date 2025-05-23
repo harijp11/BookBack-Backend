@@ -15,7 +15,7 @@ export class SaleRepository implements ISaleRepository{
       limit: number,
       skip: number
     ): Promise<PaginatedSoldBooksRepo | null> {
-           console.log("filter",filter)
+          
         const query: Record<string,any> = {
           ...filter
         };

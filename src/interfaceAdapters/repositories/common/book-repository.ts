@@ -132,7 +132,7 @@ return result;
     matchStage?: Record<string, any>, 
     transformedSort?: Record<string, any>
   ): Promise<PaginatedBooksRepo | null> {
-    // console.log("max distancee ",typeof maxDistance)
+  
     try {
       const pipeline: PipelineStage[] = [
         {
@@ -221,7 +221,7 @@ return result;
       const count = countResult.length > 0 ? countResult[0].total : 0;
   
       const books = await BookModel.aggregate(pipeline);
-      // console.log("books",books)
+
       return {
         getBooks: () => books,
         count
