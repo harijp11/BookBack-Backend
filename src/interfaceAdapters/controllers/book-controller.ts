@@ -240,9 +240,11 @@ export class BookController implements IBookController {
    try{
     const catId:string = req.params.catId;
 
-    const ownerId = (req as CustomRequest)?.user?._id.toString()
-     
-    const books = await this._getRelatedBooksUseCase.execute(catId,ownerId);
+    const userId = (req as CustomRequest)?.user?._id.toString();
+
+     console.log("ownerId in related books",(req as CustomRequest)?.user)
+
+    const books = await this._getRelatedBooksUseCase.execute(catId,userId);
     res.status(HTTP_STATUS.OK).json({
       success: true,
       message: "Related books fetched successfully",

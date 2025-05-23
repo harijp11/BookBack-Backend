@@ -4,6 +4,7 @@ import {
   authorizeRole,
   decodeToken,
   verifyAuth,
+  verifyAuthOptional,
 } from "../../../interfaceAdapters/middlewares/auth_middleware";
 import {
   blockStatusMiddleware,
@@ -151,7 +152,7 @@ export class UserRoutes extends BaseRoute {
       bookController.getUserBookDetails(req, res);
     });
 
-    router.get("/user/related-books/:catId", (req: Request, res: Response) => {
+    router.get("/user/related-books/:catId", verifyAuthOptional,(req: Request, res: Response) => {
       bookController.getRelatedBooks(req, res);
     });
 

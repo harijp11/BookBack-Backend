@@ -75,6 +75,49 @@ export const verifyAuth = async (
 	}
 };
 
+
+export const verifyAuthOptional = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		const token = extractToken(req);
+		console.log("Token extracted:", token);
+		
+			let user = null
+		if(token){
+			user = tokenService.verifyAccessToken(
+			token.access_token
+		) as CustomJwtPayload;
+	}
+	 
+		console.log("User after verification:", user);
+		if(token && user){
+		(req as CustomRequest).user = {
+			...user,
+			access_token: token.access_token,
+			refresh_token: token.refresh_token,
+		};
+	}
+		next();
+	} catch (error:unknown) {
+		if (error instanceof Error && error.name === "TokenExpiredError") {
+			console.log(error.name);
+			res.status(HTTP_STATUS.UNAUTHORIZED).json({
+				message: ERROR_MESSAGES.TOKEN_EXPIRED,
+			});
+			return;
+		}
+
+		console.log("Invalid token response sent");
+		res.status(HTTP_STATUS.UNAUTHORIZED).json({
+			message: ERROR_MESSAGES.INVALID_TOKEN,
+		});
+		return;
+	}
+};
+
 const extractToken = (
 	req: Request
 ): { access_token: string; refresh_token: string } | null => {
