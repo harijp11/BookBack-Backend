@@ -236,7 +236,7 @@ return result;
   }
 
    async findByIdFetchWholeDetails(bookId: string): Promise<IBookModel | null> {
-       return await BookModel.findById(bookId).populate('categoryId', 'name').populate('ownerId', 'Name').populate('dealTypeId','name')
+       return await BookModel.findById(bookId).populate('categoryId', 'name').populate('ownerId', 'Name profileImage').populate('dealTypeId','name')
   }
 
   async getRelatedBooks(catId: string,ownerId?:string): Promise<IBookModel[] | []> {
@@ -247,7 +247,7 @@ return result;
        query.filter = {ownerId:{$ne:ownerId}}
     }
 
-    console.log("ownerId",ownerId)
+   
     const books = await BookModel.find(query)
     return books 
   } 

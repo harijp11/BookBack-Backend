@@ -96,7 +96,7 @@ async function handleContractPenalties() {
 
       const newPenalty = penalty_amount + dailyPenalty;
       contract.penalty_amount = newPenalty;
-      await contract.save();
+      await contract.save(); 
 
       const tsId = generateUniqueTrsasactionId();
 

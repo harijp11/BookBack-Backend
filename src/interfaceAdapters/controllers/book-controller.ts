@@ -242,7 +242,6 @@ export class BookController implements IBookController {
 
     const userId = (req as CustomRequest)?.user?._id.toString();
 
-     console.log("ownerId in related books",(req as CustomRequest)?.user)
 
     const books = await this._getRelatedBooksUseCase.execute(catId,userId);
     res.status(HTTP_STATUS.OK).json({

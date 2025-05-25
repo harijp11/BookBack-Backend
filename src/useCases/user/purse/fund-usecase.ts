@@ -29,7 +29,7 @@ export class FundPurseUseCase implements IFundPurseUseCase {
         type: 'credit',
         amount: amount / 100,
         status: 'pending',
-        description: `Funding wallet with ${amount / 100} ${currency.toUpperCase()}`,
+        description: `Funding wallet with ${amount / 100} Rupee`,
       });
       
       const paymentIntent = await this.stripeService.createPaymentIntent(amount, currency, purse?.userId.toString(),tsId);
