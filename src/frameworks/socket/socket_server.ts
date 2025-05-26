@@ -44,7 +44,7 @@ export class SocketServer implements ISocketServer {
 
       socket.on('getMessages', async ({ senderId, receiverId }: { senderId: string; receiverId: string }) => {
         try {
-          console.log('Fetching messages:', { senderId, receiverId });
+         
           const messages = await this.receiveMessagesUseCase.execute({ senderId, receiverId });
           socket.emit('messageHistory', { messages });
         } catch (error) {
@@ -55,7 +55,7 @@ export class SocketServer implements ISocketServer {
 
       socket.on('sendMessage', async ({ senderId, receiverId, content, mediaUrl, messageType }: { senderId: string; receiverId: string; content?: string; mediaUrl?: string; messageType: 'text' | 'media' }) => {
         try {
-          console.log('Sending message:', { senderId, receiverId, content, mediaUrl, messageType });
+         
           const { chatId, message, isNewChat } = await this.sendMessageUseCase.execute({
             senderId,
             receiverId,
@@ -66,7 +66,7 @@ export class SocketServer implements ISocketServer {
 
           // Check if receiver is connected to set 'delivered' status
           if (this.connectedUsers.has(receiverId)) {
-            console.log('Receiver connected, setting delivered:', { messageId: message._id });
+           
             await this.updateMessageStatusUseCase.execute(message._id, 'delivered');
             message.status = 'delivered';
             this.io.to(senderId).emit('messageStatusUpdated', { messageId: message._id, status: 'delivered' });
@@ -111,18 +111,24 @@ export class SocketServer implements ISocketServer {
       });
 
       socket.on('messageSent', ({ senderId, receiverId }: { senderId: string; receiverId: string }) => {
-        console.log('Message sent event:', { senderId, receiverId });
+      
         this.io.to(senderId).emit('messageSent', { senderId, receiverId });
         this.io.to(receiverId).emit('messageSent', { senderId, receiverId });
       });
 
+      // Added: Handle typing event
+      socket.on('typing', ({ senderId, receiverId, isTyping }: { senderId: string; receiverId: string; isTyping: boolean }) => {
+     
+        this.io.to(receiverId).emit('typingStatus', { senderId, isTyping });
+      });
+
       socket.on('updateMessageStatus', async ({ messageId, status }: { messageId: string; status: 'delivered' | 'read'; userId?: string }) => {
         try {
-          console.log('Updating message status:', { messageId, status });
+        
           await this.updateMessageStatusUseCase.execute(messageId, status);
           const message = await this.getMessageById(messageId);
           if (message) {
-            console.log('Emitting messageStatusUpdated:', { messageId, status, senderId: message.senderId, receiverId: message.receiverId });
+          
             this.io.to(message.senderId.toString()).emit('messageStatusUpdated', { messageId: message._id, status });
             this.io.to(message.receiverId.toString()).emit('messageStatusUpdated', { messageId: message._id, status });
           } else {
@@ -150,6 +156,3 @@ export class SocketServer implements ISocketServer {
     return await this.getMessageUseCase.execute(messageId);
   }
 }
-
-
-
