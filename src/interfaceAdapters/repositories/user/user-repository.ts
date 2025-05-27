@@ -117,7 +117,7 @@ async findSenderAndReceiver(
 async findByIdAndChangeOnlineStatus(userId: string, status: string): Promise<IUserModel | null> {
     return await  UserModel.findByIdAndUpdate(
         {_id:userId},
-        {$set:{onlineStatus:status}},
+        {$set:{onlineStatus:status,lastStatusUpdated:new Date()}},
         {new:true}
     )
 }
