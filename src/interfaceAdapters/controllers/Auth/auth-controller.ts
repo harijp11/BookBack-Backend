@@ -156,7 +156,7 @@ export class AuthController implements IAuthController{
             );
 
             await this._changeOnlineStatusUseCase.execute(user?._id.toString(),"online")
-            
+        
             res.status(HTTP_STATUS.OK).json({
               success: true,
               message: SUCCESS_MESSAGES.LOGIN_SUCCESS,

@@ -9,8 +9,8 @@ export class ChangeOnlineStatusUseCase implements IChangeOnlineStatusUseCase{
     @inject("IUserRepository")
     private _userRepository:IUserRepository
   ){}
-
   async execute(userId: string, status: string): Promise<void> {
-     await this._userRepository.findByIdAndChangeOnlineStatus(userId,status) 
+    await this._userRepository.findByIdAndChangeOnlineStatus(userId,status) 
+     
   }
 }
