@@ -30,7 +30,7 @@ export class WebHookHandlingUseCase implements IWebhookHandlingUseCase {
      
      await this.purseRepository.updateBalance(result.walletId, result.amount / 100); 
      console.log("balance updated")
-    } else if (result.status === 'failed' && result.walletId && result.paymentIntentId) {
+    } else if (result.status === 'unhandled' && result.walletId && result.paymentIntentId) {
       await this.purseRepository.updateTransactionStatus(result.walletId, result.paymentIntentId, 'failed');
     }
     return {
