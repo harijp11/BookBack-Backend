@@ -2,6 +2,7 @@ import { injectable } from 'tsyringe';
 import { IPurseRepository } from '../../../entities/repositoryInterface/user/purse_repository-interface';
 import { IPurseModel,PurseModel } from '../../../frameworks/database/models/purse_model';
 import { Types } from 'mongoose';
+import user from '../../../frameworks/cache/redis_client';
 
 @injectable()
 export class PurseRepository implements IPurseRepository {
@@ -36,7 +37,7 @@ export class PurseRepository implements IPurseRepository {
     status: 'pending' | 'completed' | 'failed'
   ): Promise<IPurseModel | null> {
    
-
+    console.log("updating datas",userId,tsId,status)
     const userObjectId = Types.ObjectId.isValid(userId) ? new Types.ObjectId(userId) : userId;
     
     return await PurseModel.findOneAndUpdate(
