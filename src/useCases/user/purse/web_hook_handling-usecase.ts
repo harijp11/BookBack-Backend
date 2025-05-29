@@ -20,7 +20,6 @@ export class WebHookHandlingUseCase implements IWebhookHandlingUseCase {
   }> {
     const result = await this.stripeService.handleWebhookEvent(event);
     
-    console.log("stripe status",result)
     if (result.status === 'success' && result.walletId && result.amount) {
       
       const purse = await this.purseRepository.updateTransactionStatus(result.walletId, result.tsId!, 'completed');
@@ -29,14 +28,12 @@ export class WebHookHandlingUseCase implements IWebhookHandlingUseCase {
       }
      
      await this.purseRepository.updateBalance(result.walletId, result.amount / 100); 
-     console.log("balance updated")
     } else if (result.status === 'failed' && result.walletId && result.paymentIntentId) {
       await this.purseRepository.updateTransactionStatus(result.walletId, result.tsId!, 'failed');
-      console.log("failed status getting")
     }
     return {
       ...result,
-      paymentIntentId: result.paymentIntentId, // Use paymentIntentId as tsId for webhook correlation
+      paymentIntentId: result.paymentIntentId,
     };
   }
 }

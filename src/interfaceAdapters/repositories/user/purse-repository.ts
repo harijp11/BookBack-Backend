@@ -36,8 +36,6 @@ export class PurseRepository implements IPurseRepository {
     tsId: string,
     status: 'pending' | 'completed' | 'failed'
   ): Promise<IPurseModel | null> {
-   
-    console.log("updating datas",userId,tsId,status)
     const userObjectId = Types.ObjectId.isValid(userId) ? new Types.ObjectId(userId) : userId;
     
     return await PurseModel.findOneAndUpdate(

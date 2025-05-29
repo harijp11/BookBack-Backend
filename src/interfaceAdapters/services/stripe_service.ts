@@ -33,7 +33,6 @@ export class StripeService implements IStripeService {
 
   async handleWebhookEvent(event: any): Promise<{ status: string; paymentIntentId?:string,tsId?:string, walletId?: string; amount?: number; eventType?: string }> {
     try {
-      console.log("eventttttttttttttttttttttttttttttttttttt",event.type)
       switch (event.type) {
         case 'payment_intent.succeeded':
           const paymentIntent = event.data.object;
