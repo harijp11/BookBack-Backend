@@ -22,7 +22,7 @@ export class WebHookHandlingUseCase implements IWebhookHandlingUseCase {
   }> {
     const result = await this.stripeService.handleWebhookEvent(event);
     
-    
+    console.log("stripe status",result.status)
     if (result.status === 'success' && result.walletId && result.amount) {
       
       const purse = await this.purseRepository.updateTransactionStatus(result.walletId, result.tsId!, 'completed');
