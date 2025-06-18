@@ -2,16 +2,20 @@ import { injectable } from "tsyringe";
 import { IRentRepository, PaginatedRentedBooksRepo } from "../../../entities/repositoryInterface/common/rent_repository-interface";
 import { RentalInput } from "../../../entities/models/contract_input_entity";
 import { IRentModel, RentModel } from "../../../frameworks/database/models/rent_model";
+import { BaseRepository } from "../baseRepo/base_repository";
 
 @injectable()
-export class RentRepository implements IRentRepository {
+export class RentRepository extends BaseRepository<IRentModel,RentalInput> implements IRentRepository {
+  constructor(){
+    super(RentModel)
+  }
 
   async findById(rentalId: string): Promise<IRentModel | null> {
     return RentModel.findOne({_id:rentalId})
   }
-   async createNewRent(data: RentalInput): Promise<void> {
-       await RentModel.create(data)
-   }
+  //  async createNewRent(data: RentalInput): Promise<void> {
+  //      await RentModel.create(data)
+  //  }
 
     async findRentedBooksContracts(
          ownerId: string = "",

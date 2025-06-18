@@ -1,15 +1,16 @@
 import { IContractRequestModel } from "../../../frameworks/database/models/contract_request-model";
 import { ContractRequestInput } from "../../../shared/constants";
 import { IContractRequestEntity } from "../../models/contract_request-entity";
+import { IBaseRepository } from "../baseRepo/base_repository-interface";
 
 export interface PaginatedRequestsRepo {
   getRequests(): IContractRequestModel[];
   count: number;
 }
 
-export interface IContractRequestRepository {
+export interface IContractRequestRepository extends IBaseRepository<IContractRequestModel,ContractRequestInput> {
   findById(conReqId: string): Promise<IContractRequestModel | null>
-  create(data:ContractRequestInput):Promise<void>
+  // create(data:ContractRequestInput):Promise<void>
   checkExist(requesterId:string,bookId:string):Promise<IContractRequestEntity | null>
   FindByOwnerId(ownerId:string):Promise<IContractRequestModel[] | null>
   FindByRequesterId(requesterId:string,limit:number,filter:object,skip:number):Promise<PaginatedRequestsRepo | null>

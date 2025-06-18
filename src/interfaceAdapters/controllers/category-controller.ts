@@ -44,7 +44,7 @@ export class CategoryController implements ICategoryController {
     try {
       const { name, description } = req.body as {
         name: string;
-        description?: string;
+        description: string;
       };
       await this._createNewCategoryUseCase.execute(name, description);
       res.status(HTTP_STATUS.CREATED).json({

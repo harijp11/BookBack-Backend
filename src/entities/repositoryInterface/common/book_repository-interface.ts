@@ -2,17 +2,18 @@ import { SortOrder } from "mongoose";
 import { IBookModel } from "../../../frameworks/database/models/book_model";
 import { IBookEntity } from "../../models/book_entity";
 import { INewBookInput } from "../../useCaseInterfaces/user/book/create_new_book_usecase-interface";
+import { IBaseRepository } from "../baseRepo/base_repository-interface";
 
 export interface PaginatedBooksRepo {
   getBooks(): IBookModel[];
   count: number;
 }
 
-export interface IBookRepository {
-  createNewCategory(data: INewBookInput): Promise<IBookModel | null>;
+export interface IBookRepository extends IBaseRepository<IBookModel,INewBookInput> {
+  // createNewCategory(data: INewBookInput): Promise<IBookModel | null>;
   getAllPaginatedOwnerBooks(
     ownerId?: string,
-    search?: string,
+    search?: string, 
     filter?: object,
     limit?: number,
     skip?: number

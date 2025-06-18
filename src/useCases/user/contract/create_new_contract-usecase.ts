@@ -73,7 +73,7 @@ export class CreateNewContractUseCase implements ICreateNewContractUseCase {
             success: false,
           };
         }
-        await this._saleRepository.createNewSale(data);
+        await this._saleRepository.create(data);
 
         const tsId = generateUniqueTrsasactionId();
 
@@ -182,7 +182,7 @@ export class CreateNewContractUseCase implements ICreateNewContractUseCase {
           };
         }
 
-        await this._rentRepository.createNewRent(data);
+        await this._rentRepository.create(data);
 
         await this._bookRepository.findByIdAndUpdateLiveStatus(
           data.bookId,

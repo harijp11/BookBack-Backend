@@ -12,6 +12,6 @@ export class CreateNewBookUseCase implements ICreateNewBookUseCase{
         private _bookRepository:IBookRepository
     ){}
     async execute(bookData: INewBookInput): Promise<IBookModel | null> {
-      return await this._bookRepository.createNewCategory(bookData)
+      return await this._bookRepository.create(bookData)
     }
 }

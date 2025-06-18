@@ -1,17 +1,26 @@
 import { injectable } from "tsyringe";
 import { IChatRepository } from "../../../entities/repositoryInterface/user/chat_repository-interface";
 import { ChatModel, IChatModel } from "../../../frameworks/database/models/chat_model";
+import { BaseRepository } from "../baseRepo/base_repository";
 
 @injectable()
-export class ChatRepository implements IChatRepository {
-  async createChat(chat: {
+export class ChatRepository extends BaseRepository<IChatModel,{
     chatId: string;
     userId1: string;
     userId2: string;
     last_message?: string;
-  }): Promise<IChatModel> {
-    return await ChatModel.create(chat);
-  }
+  }> implements IChatRepository {
+    constructor() {
+      super(ChatModel);
+    }
+  // async createChat(chat: {
+  //   chatId: string;
+  //   userId1: string;
+  //   userId2: string;
+  //   last_message?: string;
+  // }): Promise<IChatModel> {
+  //   return await ChatModel.create(chat);
+  // }
 
   async findChatByParticipants(
     userId1: string,

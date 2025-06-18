@@ -2,12 +2,16 @@ import { injectable } from "tsyringe";
 import { ISaleRepository, PaginatedSoldBooksRepo } from "../../../entities/repositoryInterface/common/sale_repository-interface";
 import { SaleInput } from "../../../entities/models/contract_input_entity";
 import { ISaleModel, SaleModel } from "../../../frameworks/database/models/sale_model";
+import { BaseRepository } from "../baseRepo/base_repository";
 
 @injectable()
-export class SaleRepository implements ISaleRepository{
-  async createNewSale(data: SaleInput): Promise<void> {
-      await SaleModel.create(data)
+export class SaleRepository extends BaseRepository<ISaleModel,SaleInput> implements ISaleRepository{
+  constructor(){
+    super(SaleModel)
   }
+  // async createNewSale(data: SaleInput): Promise<void> {
+  //     await SaleModel.create(data)
+  // }
 
   async fetchSoldBooksContracts(
       ownerId: string = "",

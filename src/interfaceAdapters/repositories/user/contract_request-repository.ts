@@ -3,12 +3,16 @@ import { IContractRequestRepository, PaginatedRequestsRepo } from "../../../enti
 import { ContractRequestInput } from "../../../shared/constants";
 import { ContractRequestModel, IContractRequestModel } from "../../../frameworks/database/models/contract_request-model";
 import { IContractRequestEntity } from "../../../entities/models/contract_request-entity";
+import { BaseRepository } from "../baseRepo/base_repository";
 
 @injectable()
-export class ContractRequestRepository implements IContractRequestRepository{
-   async  create(data: ContractRequestInput): Promise<void> {
-        await ContractRequestModel.create(data)
+export class ContractRequestRepository extends BaseRepository<IContractRequestModel,ContractRequestInput> implements IContractRequestRepository{
+    constructor(){
+        super(ContractRequestModel);
     }
+//    async  create(data: ContractRequestInput): Promise<void> {
+//         await ContractRequestModel.create(data)
+//     }
 
     async checkExist(requesterId: string, bookId: string): Promise<IContractRequestEntity | null> {
         return await ContractRequestModel.findOne({requesterId,bookId})

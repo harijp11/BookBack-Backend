@@ -13,7 +13,7 @@ export class CreateNewCategoryUseCase implements IcreateNewCategoryUseCase {
         private _categoryRepository:ICategoryRepository
     ){}
 
-    async execute(name: string, description?: string): Promise<void> {
+    async execute(name: string, description: string): Promise<void> {
         
         const isCategoryExists = await this._categoryRepository.findByName(name)
 
@@ -21,6 +21,6 @@ export class CreateNewCategoryUseCase implements IcreateNewCategoryUseCase {
             throw new CustomError("category already existing",400)
         }
 
-        await this._categoryRepository.save(name,description)
+        await this._categoryRepository.create({name,description})
     }
 }

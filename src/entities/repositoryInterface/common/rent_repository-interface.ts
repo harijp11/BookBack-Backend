@@ -1,15 +1,16 @@
 import { IRentModel } from "../../../frameworks/database/models/rent_model";
 import { RentalInput } from "../../models/contract_input_entity";
+import { IBaseRepository } from "../baseRepo/base_repository-interface";
 
 export interface PaginatedRentedBooksRepo {
   getRentedBooksContracts(): IRentModel[];
   count: number;
 }
 
-export interface IRentRepository {
+export interface IRentRepository extends IBaseRepository<IRentModel,RentalInput> {
 
   findById(rentalId:string):Promise<IRentModel | null >
-  createNewRent(data: RentalInput): Promise<void>;
+  // createNewRent(data: RentalInput): Promise<void>;
   findRentedBooksContracts(
     ownerId: string,
     filter: object,

@@ -20,7 +20,7 @@ export class UpdateCategoryStatusUseCase implements IUpdateCategoryStatus{
     throw new CustomError(ERROR_MESSAGES.CATEGORY_NOT_FOUND, HTTP_STATUS.NOT_FOUND);
    }
    const active = !cat.isActive
-  //  if(active)
+  
    await this._categoryRepository.findByIdAndUpdateStatus(_id,active)
   }
 

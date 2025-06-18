@@ -157,7 +157,7 @@ import { ChangeOnlineStatusUseCase } from "../../useCases/user/chat/change_onlin
 import { IUpdateMessageStatusUseCase } from "../../entities/useCaseInterfaces/user/chat/update_message_status_usecase-interface";
 import { UpdateMessageStatusUseCase } from "../../useCases/user/chat/update_message_status-usecase";
 import { IGetMessageUseCase } from "../../entities/useCaseInterfaces/user/chat/get_message_usecase-interface";
-import { GetMessageUseCase } from "../../interfaceAdapters/repositories/user/get_message-usecase";
+import { GetMessageUseCase } from "../../useCases/user/chat/get_message-usecase";
 import { IGetChatAndNotificationUpdatesUseCase } from "../../entities/useCaseInterfaces/user/notification/get_chat_and_notification_updates_usecase-interface";
 import { GetChatAndNotificationUpdatesUseCase } from "../../useCases/user/notification/get_chat_and_notification_updates-usecase";
 

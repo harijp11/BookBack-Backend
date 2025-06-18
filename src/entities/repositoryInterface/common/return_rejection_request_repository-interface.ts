@@ -1,8 +1,9 @@
 import { Schema } from "mongoose";
 import { IReturnRejectionRequestModel } from "../../../frameworks/database/models/return_rejection_request_model";
 import { IReturnRejectionRequestcreateDTO } from "../../models/return_rejection_request_input_data_entity";
+import { IBaseRepository } from "../baseRepo/base_repository-interface";
 
-export interface IReturnRejectionRequestRepository{
+export interface IReturnRejectionRequestRepository extends IBaseRepository<IReturnRejectionRequestModel,IReturnRejectionRequestcreateDTO>{
      
     findById(retRejId: string):Promise<IReturnRejectionRequestModel | null> 
     create(data:IReturnRejectionRequestcreateDTO):Promise<IReturnRejectionRequestModel | null>

@@ -3,17 +3,21 @@ import { IReturnRejectionRequestRepository } from "../../../entities/repositoryI
 import { IReturnRejectionRequestcreateDTO } from "../../../entities/models/return_rejection_request_input_data_entity";
 import { IReturnRejectionRequestModel, ReturnRejectionRequestModel } from "../../../frameworks/database/models/return_rejection_request_model";
 import { Schema } from "mongoose";
+import { BaseRepository } from "../baseRepo/base_repository";
 
 @injectable()
-export class ReturnRejectionRequestRepository implements IReturnRejectionRequestRepository {
+export class ReturnRejectionRequestRepository extends BaseRepository<IReturnRejectionRequestModel,IReturnRejectionRequestcreateDTO> implements IReturnRejectionRequestRepository {
+  constructor(){
+    super(ReturnRejectionRequestModel); 
+  }
    
  async findById(retRejId: string): Promise<IReturnRejectionRequestModel | null> {
     return  await ReturnRejectionRequestModel.findOne({_id:retRejId})
   }
 
-  async create(data: IReturnRejectionRequestcreateDTO): Promise<IReturnRejectionRequestModel | null> {
-      return await ReturnRejectionRequestModel.create(data)
-  }
+  // async create(data: IReturnRejectionRequestcreateDTO): Promise<IReturnRejectionRequestModel | null> {
+  //     return await ReturnRejectionRequestModel.create(data)
+  // }
 
   async findAllReturnRejectionRequestAnalysis(baseFilter: object, skip: number, limit: number): Promise<{
     returnRejectionRequest: IReturnRejectionRequestModel[];

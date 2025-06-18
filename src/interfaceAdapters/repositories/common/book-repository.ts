@@ -4,13 +4,18 @@ import { INewBookInput } from "../../../entities/useCaseInterfaces/user/book/cre
 import { BookModel, IBookModel } from "../../../frameworks/database/models/book_model";
 import { IBookEntity } from "../../../entities/models/book_entity";
 import { PipelineStage, Types } from "mongoose";
+import { BaseRepository } from "../baseRepo/base_repository";
 
 
 @injectable()
-export class BookRepository implements IBookRepository{
-  async createNewCategory(bookdata: INewBookInput): Promise<IBookModel | null> {
-      return await BookModel.create(bookdata)
+export class BookRepository extends BaseRepository<IBookModel,INewBookInput> implements IBookRepository{
+  constructor(){
+    super(BookModel)
   }
+
+  // async createNewCategory(bookdata: INewBookInput): Promise<IBookModel | null> {
+  //     return await BookModel.create(bookdata)
+  // }
 
   async getAllPaginatedOwnerBooks(
     ownerId: string = "",
@@ -55,11 +60,8 @@ export class BookRepository implements IBookRepository{
       getBooks: () => books, 
       count
     };
-    
-    return result;
-    
+    return result;    
   }
-
 
  async getAllPaginatedAdminBooks(search: string, filter: object, limit: number, skip: number): Promise<PaginatedBooksRepo | null> {
 

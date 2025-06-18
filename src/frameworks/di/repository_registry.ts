@@ -35,6 +35,9 @@ import { NotificationRepository } from "../../interfaceAdapters/repositories/use
 
 export class RepositoryRegistry {
   static registerRepositories(): void {
+
+   
+
     container.register<IUserRepository>("IClientRepository", {
       useClass: UserRepository,
     });

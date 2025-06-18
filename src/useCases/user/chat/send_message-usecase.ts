@@ -73,7 +73,7 @@ export class SendMessageUseCase implements ISendMessageUseCase {
     let isNewChat = false;
 
     if (!chat) {
-      chat = await this.chatRepository.createChat({
+      chat = await this.chatRepository.create({
         chatId: uuidv4(),
         userId1: data.senderId,
         userId2: data.receiverId,
@@ -89,7 +89,7 @@ export class SendMessageUseCase implements ISendMessageUseCase {
     }
 
     // Create message
-    const message = await this.messageRepository.saveMessage({
+    const message = await this.messageRepository.create({
       messageId: uuidv4(),
       chatId: chat._id.toString(),
       senderId: data.senderId,
@@ -109,9 +109,9 @@ export class SendMessageUseCase implements ISendMessageUseCase {
     return {
       chatId: chat.chatId,
       message: {
-        _id:message._id,
-        messageId: message.messageId.toString(),
-        chatId: message.chatId.toString(),
+        _id:message!._id,
+        messageId: message!.messageId.toString(),
+        chatId: message!.chatId.toString(),
         senderId: {
           _id: sender._id.toString(),
           Name: sender.Name || "",
@@ -122,12 +122,12 @@ export class SendMessageUseCase implements ISendMessageUseCase {
           Name: receiver.Name || "",
           profileImage: receiver.profileImage,
         },
-        content: message.content ?? "",
-        mediaUrl: message.mediaUrl || '',
-        messageType: message.messageType,
-        status: message.status,
-        created_at: message.created_at.toISOString(),
-        updated_at: message.updated_at.toISOString(),
+        content: message!.content ?? "",
+        mediaUrl: message!.mediaUrl || '',
+        messageType: message!.messageType,
+        status: message!.status,
+        created_at: message!.created_at.toISOString(),
+        updated_at: message!.updated_at.toISOString(),
       },
       isNewChat,
     };

@@ -1,13 +1,14 @@
 import { ISaleModel } from "../../../frameworks/database/models/sale_model";
 import { RentalInput, SaleInput } from "../../models/contract_input_entity";
+import { IBaseRepository } from "../baseRepo/base_repository-interface";
 
 export interface PaginatedSoldBooksRepo {
     getSoldBooksContracts(): ISaleModel[];
     count: number;
 }
 
-export interface ISaleRepository {
-    createNewSale(data:SaleInput):Promise<void>
+export interface ISaleRepository extends IBaseRepository<ISaleModel,SaleInput> {
+    // createNewSale(data:SaleInput):Promise<void>
     fetchSoldBooksContracts(ownerId: string,
         filter: object,
         limit: number,

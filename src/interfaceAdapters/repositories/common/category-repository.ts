@@ -1,21 +1,27 @@
 import { injectable } from "tsyringe";
  import { ICategoryEntity } from "../../../entities/models/category_entity";
-import { categoryModel } from "../../../frameworks/database/models/category_model";
+import { categoryModel, ICategoryModel } from "../../../frameworks/database/models/category_model";
 import { ICategoryRepository } from "../../../entities/repositoryInterface/common/category_repository-interface";
 import { PaginatedCategories } from "../../../entities/models/paginated_category_entity";
+import { BaseRepository } from "../baseRepo/base_repository";
 
+interface categoryCreateDTO{name:string 
+  description:string}
 
 @injectable()
-export class CategoryRepository implements ICategoryRepository{
+export class CategoryRepository extends BaseRepository<ICategoryModel,categoryCreateDTO> implements ICategoryRepository{
+  constructor(){
+    super(categoryModel)
+  }
     async  findByName(name:string):Promise<ICategoryEntity | null>{   
    return await  categoryModel.findOne({
     name:{$regex:new RegExp(`^${name.trim()}$`,"i")},
    })
     }
 
-    async save(name:string,description:string):Promise <ICategoryEntity>{
-      return await categoryModel.create({name,description}) 
-    }
+    // async save(name:string,description:string):Promise <ICategoryEntity>{
+    //   return await categoryModel.create({name,description}) 
+    // }
     
     async findPaginatedCategory(
       filter: object, 
