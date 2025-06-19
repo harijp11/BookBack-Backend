@@ -13,10 +13,7 @@ export class RentRepository extends BaseRepository<IRentModel,RentalInput> imple
   async findById(rentalId: string): Promise<IRentModel | null> {
     return RentModel.findOne({_id:rentalId})
   }
-  //  async createNewRent(data: RentalInput): Promise<void> {
-  //      await RentModel.create(data)
-  //  }
-
+  
     async findRentedBooksContracts(
          ownerId: string = "",
          filter: object = {},

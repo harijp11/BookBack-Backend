@@ -10,9 +10,7 @@ export class ContractRequestRepository extends BaseRepository<IContractRequestMo
     constructor(){
         super(ContractRequestModel);
     }
-//    async  create(data: ContractRequestInput): Promise<void> {
-//         await ContractRequestModel.create(data)
-//     }
+
 
     async checkExist(requesterId: string, bookId: string): Promise<IContractRequestEntity | null> {
         return await ContractRequestModel.findOne({requesterId,bookId})

@@ -13,14 +13,7 @@ export class ChatRepository extends BaseRepository<IChatModel,{
     constructor() {
       super(ChatModel);
     }
-  // async createChat(chat: {
-  //   chatId: string;
-  //   userId1: string;
-  //   userId2: string;
-  //   last_message?: string;
-  // }): Promise<IChatModel> {
-  //   return await ChatModel.create(chat);
-  // }
+
 
   async findChatByParticipants(
     userId1: string,

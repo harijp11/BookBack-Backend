@@ -45,7 +45,7 @@ export class CreateNewContractUseCase implements ICreateNewContractUseCase {
         let purse = await this._purseRepository.findById(data.buyerId);
 
         if (!purse) {
-          purse = await this._purseRepository.create(data.buyerId);
+          purse = await this._purseRepository.create({userId:data.buyerId});
         }
         if ((purse?.balance ?? 0) < data.price) {
           return {
@@ -88,7 +88,7 @@ export class CreateNewContractUseCase implements ICreateNewContractUseCase {
         });
 
         await this._purseRepository.updateBalance(data.buyerId, -data.price);
-        await this._notitficationRepository.setNotitfication({
+        await this._notitficationRepository.create({
           userId: data.buyerId,
           title: "Update your balance",
           message:
@@ -102,7 +102,7 @@ export class CreateNewContractUseCase implements ICreateNewContractUseCase {
         let ownerPurse = await this._purseRepository.findById(data.ownerId);
 
         if (!ownerPurse) {
-          ownerPurse = await this._purseRepository.create(data.ownerId);
+          ownerPurse = await this._purseRepository.create({userId:data.ownerId});
         }
 
         await this._purseRepository.addTransaction(data.ownerId, {
@@ -123,7 +123,7 @@ export class CreateNewContractUseCase implements ICreateNewContractUseCase {
 
         await this._contractRepository.deleteRequest(conReqId);
 
-        await this._notitficationRepository.setNotitfication({
+        await this._notitficationRepository.create({
           userId: data.buyerId,
           title: "Sold Out",
           message: `You have purchased the book titled "${book.name}" for ₹${book.originalAmount}.`,
@@ -131,7 +131,7 @@ export class CreateNewContractUseCase implements ICreateNewContractUseCase {
           navlink: "/bought-books",
         });
 
-        await this._notitficationRepository.setNotitfication({
+        await this._notitficationRepository.create({
           userId: data.ownerId,
           title: "Book Sold",
           message: `Your book titled "${book.name}" has been sold for ₹${book.originalAmount}.`,
@@ -150,7 +150,7 @@ export class CreateNewContractUseCase implements ICreateNewContractUseCase {
         let purse = await this._purseRepository.findById(data.borrowerId);
 
         if (!purse) {
-          purse = await this._purseRepository.create(data.borrowerId);
+          purse = await this._purseRepository.create({userId:data.borrowerId});
         }
         if ((purse?.balance ?? 0) < data.original_amount) {
           return {
@@ -194,7 +194,7 @@ export class CreateNewContractUseCase implements ICreateNewContractUseCase {
           data.original_amount
         );
 
-        await this._notitficationRepository.setNotitfication({
+        await this._notitficationRepository.create({
           userId: data.borrowerId,
           title: "Hold Amount Placed",
           message: `An amount of ₹${data.original_amount} has been held for renting the book "${book?.name}".`,
@@ -204,7 +204,7 @@ export class CreateNewContractUseCase implements ICreateNewContractUseCase {
 
         await this._contractRepository.deleteRequest(conReqId);
 
-        await this._notitficationRepository.setNotitfication({
+        await this._notitficationRepository.create({
           userId: data.ownerId,
           title: "Book Borrowed",
           message: `Your book "${book?.name}" has been rented out for ₹${data.original_amount}.`,
@@ -212,7 +212,7 @@ export class CreateNewContractUseCase implements ICreateNewContractUseCase {
           navlink: "/rented-books",
         });
 
-        await this._notitficationRepository.setNotitfication({
+        await this._notitficationRepository.create({
           userId: data.borrowerId,
           title: "Book Rented",
           message: `You have successfully rented the book "${book?.name}" by holding ₹${data.original_amount}.`,

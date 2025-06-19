@@ -9,9 +9,7 @@ export class SaleRepository extends BaseRepository<ISaleModel,SaleInput> impleme
   constructor(){
     super(SaleModel)
   }
-  // async createNewSale(data: SaleInput): Promise<void> {
-  //     await SaleModel.create(data)
-  // }
+ 
 
   async fetchSoldBooksContracts(
       ownerId: string = "",

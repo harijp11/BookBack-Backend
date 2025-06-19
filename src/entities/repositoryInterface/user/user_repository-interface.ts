@@ -1,6 +1,7 @@
 import { ObjectId } from "mongoose";
 import { IUserEntity } from "../../models/user_entity";
 import { IUserModel } from "../../../frameworks/database/models/User_model";
+import { IBaseRepository } from "../baseRepo/base_repository-interface";
 
 
 
@@ -12,7 +13,7 @@ export interface IUserBasicInfo {
 
 
 
-export interface IUserRepository {
+export interface IUserRepository extends IBaseRepository<IUserModel> {
  findSenderAndReceiver (
   senderId: string,
   receiverId: string

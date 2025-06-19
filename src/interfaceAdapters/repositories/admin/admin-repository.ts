@@ -1,12 +1,13 @@
 import { injectable } from "tsyringe";
 import { IAdminEntity } from "../../../entities/models/admin_entity";
 import { IAdminRepository } from "../../../entities/repositoryInterface/admin/admin_repository-interface";
-import { AdminModel } from "../../../frameworks/database/models/admin_model";
+import { AdminModel, IAdminModel } from "../../../frameworks/database/models/admin_model";
+import { BaseRepository } from "../baseRepo/base_repository";
 
 @injectable()
-export class AdminRepository implements IAdminRepository {
-  async save(data: Partial<IAdminEntity>): Promise<IAdminEntity> {
-    return await AdminModel.create(data);
+export class AdminRepository extends BaseRepository<IAdminModel> implements IAdminRepository {
+  constructor(){
+    super(AdminModel);
   }
 
   async findByEmail(email: string): Promise<IAdminEntity | null> {

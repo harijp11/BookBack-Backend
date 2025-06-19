@@ -19,18 +19,7 @@ export class MessageRepository extends BaseRepository<IMessageModel,{
       super(MessageModel);
     }
     
-  // async saveMessage(message: {
-  //   messageId: string;
-  //   chatId: ObjectId | string;
-  //   senderId: ObjectId | string;
-  //   receiverId: ObjectId | string;
-  //   messageType: "text" | "media";
-  //   content: string;
-  //   mediaUrl?: string;
-  //   status: "sent" | "delivered" | "read";
-  // }): Promise<IMessageModel> {
-  //   return await MessageModel.create(message);
-  // }
+
 
   async getMessagesByChatId(chatId: string): Promise<IMessageModel[]> {
     return await MessageModel.find({ chatId })

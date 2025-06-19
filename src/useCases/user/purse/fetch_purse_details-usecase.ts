@@ -19,7 +19,7 @@ export class FetchPurseDetailsUseCase implements IFetchPurseDetailsUseCase{
         const purse =  await this._purseRepository.findById(userId)
 
         if(!purse){
-          return await this._purseRepository.create(userId)
+          return await this._purseRepository.create({userId})
         }
 
         return purse

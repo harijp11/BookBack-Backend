@@ -6,6 +6,7 @@ import { IPurseRepository } from "../../../entities/repositoryInterface/user/pur
 import { IBookRepository } from "../../../entities/repositoryInterface/common/book_repository-interface";
 import { CustomError } from "../../../entities/utils/custom_error";
 import { generateUniqueTrsasactionId } from "../../../frameworks/security/uniqueid_bcrypt";
+import { IPurseModel } from "../../../frameworks/database/models/purse_model";
 
 @injectable()
 export class UpdateReturnRejectionRequestStatusUseCase implements IUpdateReturnRejectionRequestStatusUseCase{
@@ -37,9 +38,8 @@ if(!rentalContract){
                   const tsId = generateUniqueTrsasactionId()
          
                     let borrowerPurse = await this._purseRepository.findById(rentalContract.borrowerId.toString())
-         
                     if(!borrowerPurse){
-                     borrowerPurse = await this._purseRepository.create(rentalContract.borrowerId.toString())
+                     borrowerPurse = await this._purseRepository.create({userId:rentalContract.borrowerId.toString()}) 
                    }
          
                    await this._purseRepository.addTransaction(rentalContract.borrowerId.toString(), {
@@ -59,7 +59,7 @@ if(!rentalContract){
                     let ownerPurse = await this._purseRepository.findById(rentalContract.ownerId.toString())
          
                     if(!ownerPurse){
-                     ownerPurse = await this._purseRepository.create(rentalContract.ownerId.toString())
+                     ownerPurse = await this._purseRepository.create({userId:rentalContract.ownerId.toString()})
                    }
          
                    await this._purseRepository.addTransaction(rentalContract.ownerId.toString(), {
@@ -88,7 +88,7 @@ if(!rentalContract){
         let borrowerPurse = await this._purseRepository.findById(rentalContract.borrowerId.toString())
 
         if(!borrowerPurse){
-            borrowerPurse = await this._purseRepository.create(rentalContract.borrowerId.toString())
+            borrowerPurse = await this._purseRepository.create({userId:rentalContract.borrowerId.toString()})
           }
 
           await this._purseRepository.addTransaction(rentalContract.borrowerId.toString(), {
@@ -109,7 +109,7 @@ if(!rentalContract){
          let ownerPurse = await this._purseRepository.findById(rentalContract.ownerId.toString())
          
          if(!ownerPurse){
-          ownerPurse = await this._purseRepository.create(rentalContract.ownerId.toString())
+          ownerPurse = await this._purseRepository.create({userId:rentalContract.ownerId.toString()})
         }
 
         await this._purseRepository.addTransaction(rentalContract.ownerId.toString(), {

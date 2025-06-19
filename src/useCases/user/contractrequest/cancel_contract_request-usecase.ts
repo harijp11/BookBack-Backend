@@ -30,7 +30,7 @@ export class CancelContractRequest implements ICancelContractRequestUseCase {
 
     const book = await this._bookRepository.findByOwnerId(request.ownerId.toString())
 
-    await this._notificationRepository.setNotitfication({
+    await this._notificationRepository.create({
       userId: request.ownerId.toString(),
       title: "Contract Request Cancelled",
       message: `Your ${request.request_type} request for the book "${book!.name}" has been cancelled by requester.`,

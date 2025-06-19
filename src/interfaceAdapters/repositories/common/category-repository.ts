@@ -19,11 +19,7 @@ export class CategoryRepository extends BaseRepository<ICategoryModel,categoryCr
    })
     }
 
-    // async save(name:string,description:string):Promise <ICategoryEntity>{
-    //   return await categoryModel.create({name,description}) 
-    // }
-    
-    async findPaginatedCategory(
+     async findPaginatedCategory(
       filter: object, 
       skip: number,
       limit: number

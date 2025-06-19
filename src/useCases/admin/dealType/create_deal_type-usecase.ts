@@ -17,6 +17,6 @@ export class CreateDealTypeUseCase implements ICreateDealTypeUseCase {
     if(isDealTypeExists){
         throw new CustomError("Deal type already existing",400)
     }
-    await this._dealtyperepository.save(name,description)
+    await this._dealtyperepository.create({name,description})
    }
 }

@@ -32,7 +32,7 @@ export class CreateNewContractRequest
     const book = await this._bookRepository.findByOwnerId(data.ownerId);
 
     if (!book || !book.isActive || book.status !== "Available") {
-      await this._notitficationRepository.setNotitfication({
+      await this._notitficationRepository.create({
         userId: data.requesterId,
         message: `Your book "${book?.name ?? "Unknown"}" for deal "${
           data.request_type
@@ -43,7 +43,7 @@ export class CreateNewContractRequest
       throw new CustomError("Book not Available now", 404);
     }
 
-    await this._notitficationRepository.setNotitfication({
+    await this._notitficationRepository.create({
       userId: data.ownerId,
       title: "New Book Request",
       message: `You have received a ${data.request_type} request for your book "${book.name}".`,

@@ -21,7 +21,7 @@ export class ContractRequestUpdateStatus implements IContractRequestStatusUpdate
             throw new CustomError("No Contract Request found",404)
         }
         if(status === "accepted"){
-           await this._notificationRepository.setNotitfication({
+           await this._notificationRepository.create({
           userId: request.requesterId.toString(),
           message:
             "Your book rental request accepted by owner",
@@ -29,7 +29,7 @@ export class ContractRequestUpdateStatus implements IContractRequestStatusUpdate
           navlink: "/contract-requests",
         });
         }else if(status === "rejected"){
-           await this._notificationRepository.setNotitfication({
+           await this._notificationRepository.create({
           userId: request.requesterId.toString(),
           message:
             "Your book rental request rejected by owner",

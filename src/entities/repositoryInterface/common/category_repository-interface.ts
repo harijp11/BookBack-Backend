@@ -7,7 +7,7 @@ import { ICategoryModel } from "../../../frameworks/database/models/category_mod
 
 export interface ICategoryRepository extends BaseRepository<ICategoryModel,{name:string,description:string}> {
     findByName(name:string):Promise<ICategoryEntity | null>
-    // save(name:string,description?:string):Promise<ICategoryEntity>
+
     findPaginatedCategory(filter:object,skip:number,limit:number):Promise<PaginatedCategories>
     findByIdAndUpdateStatus(catId:string,active:boolean):Promise<ICategoryEntity | null>
     findById(catId:string):Promise<ICategoryEntity | null>

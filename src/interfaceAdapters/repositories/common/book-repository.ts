@@ -13,10 +13,6 @@ export class BookRepository extends BaseRepository<IBookModel,INewBookInput> imp
     super(BookModel)
   }
 
-  // async createNewCategory(bookdata: INewBookInput): Promise<IBookModel | null> {
-  //     return await BookModel.create(bookdata)
-  // }
-
   async getAllPaginatedOwnerBooks(
     ownerId: string = "",
     search: string,
@@ -39,7 +35,6 @@ export class BookRepository extends BaseRepository<IBookModel,INewBookInput> imp
         ...searchQuery
       };
     
-      // Conditionally add ownerId if it's defined and not empty
       if (ownerId !== "") {
         query.ownerId = ownerId;
       }

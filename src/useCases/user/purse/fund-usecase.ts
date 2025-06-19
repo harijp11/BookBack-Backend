@@ -16,7 +16,7 @@ export class FundPurseUseCase implements IFundPurseUseCase {
  }> {
     let purse = await this.purseRepository.findById(userId);
     if (!purse) {
-      purse = await this.purseRepository.create(userId);
+      purse = await this.purseRepository.create({userId});
       if (!purse) {
         throw new Error('Failed to create purse');
       }

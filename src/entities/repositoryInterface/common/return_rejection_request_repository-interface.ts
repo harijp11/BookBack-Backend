@@ -6,7 +6,7 @@ import { IBaseRepository } from "../baseRepo/base_repository-interface";
 export interface IReturnRejectionRequestRepository extends IBaseRepository<IReturnRejectionRequestModel,IReturnRejectionRequestcreateDTO>{
      
     findById(retRejId: string):Promise<IReturnRejectionRequestModel | null> 
-    create(data:IReturnRejectionRequestcreateDTO):Promise<IReturnRejectionRequestModel | null>
+   
 
     findAllReturnRejectionRequestAnalysis(baseFilter:object,skip:number,limit:number):Promise<{
         returnRejectionRequest: IReturnRejectionRequestModel[];

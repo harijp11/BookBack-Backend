@@ -2,10 +2,14 @@ import { injectable } from "tsyringe";
 import {IUserBasicInfo, IUserRepository } from "../../../entities/repositoryInterface/user/user_repository-interface";
 import { IUserModel, UserModel } from "../../../frameworks/database/models/User_model";
 import { IUserEntity } from "../../../entities/models/user_entity";
+import { BaseRepository } from "../baseRepo/base_repository";
 
 
 @injectable()
-export class UserRepository implements IUserRepository {
+export class UserRepository extends BaseRepository<IUserModel> implements IUserRepository {
+    constructor(){
+        super(UserModel);
+    }
     async save(data: Partial<IUserEntity>): Promise<IUserEntity> {
         return await UserModel.create(data);
     }

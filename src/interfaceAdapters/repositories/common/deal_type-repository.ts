@@ -1,12 +1,16 @@
 import { injectable } from "tsyringe";
 import { IDealTypeRepository } from "../../../entities/repositoryInterface/common/deal_type_repository-interface";
 import { IDealTypeEntity } from "../../../entities/models/deal_type_entity";
-import { DealTypeModel } from "../../../frameworks/database/models/deal_type_model";
+import { DealTypeModel, IDealTypeModel } from "../../../frameworks/database/models/deal_type_model";
 import { PaginatedDealTypes } from "../../../entities/models/paginated_deal_type_entity";
+import { BaseRepository } from "../baseRepo/base_repository";
 
 
 injectable()
-export class DealTypeRepository implements IDealTypeRepository{
+export class DealTypeRepository extends BaseRepository<IDealTypeModel,{name:string,description:string}> implements IDealTypeRepository{
+     constructor(){
+         super(DealTypeModel)
+       }
 
     async findById(dealTypeId:string):Promise<IDealTypeEntity | null>{
         return await DealTypeModel.findOne({_id:dealTypeId})
@@ -16,9 +20,6 @@ export class DealTypeRepository implements IDealTypeRepository{
        return await DealTypeModel.findOne({
           name:{$regex:new RegExp(`^${name.trim()}$`,"i")}
          })
-   }
-   async save(name:string,description:string):Promise<IDealTypeEntity | void>{
-    return await DealTypeModel.create({name,description})
    }
 
    async findPaginatedDealType(

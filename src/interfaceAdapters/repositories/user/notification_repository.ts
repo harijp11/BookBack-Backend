@@ -1,13 +1,15 @@
 import {  injectable } from "tsyringe";
-import { INotificationRepository, PaginatedNotificationRepo } from "../../../entities/repositoryInterface/user/notification_repository-interface";
-import { NotificationModel } from "../../../frameworks/database/models/notification_model";
+import { INotificationRepository, InputNotification, PaginatedNotificationRepo } from "../../../entities/repositoryInterface/user/notification_repository-interface";
+import { INotificationModel, NotificationModel } from "../../../frameworks/database/models/notification_model";
+import { BaseRepository } from "../baseRepo/base_repository";
 
 
 @injectable()
-export class NotificationRepository implements INotificationRepository{
-   async setNotitfication(data: { userId: string; title?: string; message: string; type: "warning" | "info" | "fault" | "good" | "normal"; navlink?: string; }): Promise<void> {
-       await NotificationModel.create(data)
-   }
+export class NotificationRepository extends BaseRepository<INotificationModel,InputNotification> implements INotificationRepository{
+   constructor(){
+      super(NotificationModel)
+    }
+
 
    async findNotificationByUserId(userId: string, filter: object, limit: number, skip: number): Promise<PaginatedNotificationRepo | null> {
 

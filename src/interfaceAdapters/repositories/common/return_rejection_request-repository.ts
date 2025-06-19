@@ -15,9 +15,7 @@ export class ReturnRejectionRequestRepository extends BaseRepository<IReturnReje
     return  await ReturnRejectionRequestModel.findOne({_id:retRejId})
   }
 
-  // async create(data: IReturnRejectionRequestcreateDTO): Promise<IReturnRejectionRequestModel | null> {
-  //     return await ReturnRejectionRequestModel.create(data)
-  // }
+ 
 
   async findAllReturnRejectionRequestAnalysis(baseFilter: object, skip: number, limit: number): Promise<{
     returnRejectionRequest: IReturnRejectionRequestModel[];

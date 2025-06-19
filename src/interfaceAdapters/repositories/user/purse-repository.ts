@@ -2,17 +2,20 @@ import { injectable } from 'tsyringe';
 import { IPurseRepository } from '../../../entities/repositoryInterface/user/purse_repository-interface';
 import { IPurseModel,PurseModel } from '../../../frameworks/database/models/purse_model';
 import { Types } from 'mongoose';
-import user from '../../../frameworks/cache/redis_client';
+import { BaseRepository } from '../baseRepo/base_repository';
+
 
 @injectable()
-export class PurseRepository implements IPurseRepository {
+export class PurseRepository extends BaseRepository<IPurseModel,{userId: string}> implements IPurseRepository {
+  constructor(){
+    super(PurseModel)
+  }
+
   async findById(userId: string): Promise<IPurseModel | null> {
     return await PurseModel.findOne({ userId });
   }
 
-  async create(userId: string): Promise<IPurseModel | null> {
-    return await PurseModel.create({ userId, balance: 0, transactions: [] });
-  }
+  
 
   async addTransaction(
     userId: string,

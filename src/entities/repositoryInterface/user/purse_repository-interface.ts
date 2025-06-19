@@ -1,8 +1,8 @@
 import { IPurseModel } from '../../../frameworks/database/models/purse_model';
+import { IBaseRepository } from '../baseRepo/base_repository-interface';
 
-export interface IPurseRepository {
+export interface IPurseRepository extends IBaseRepository<IPurseModel,{userId: string}>  {
   findById(userId: string): Promise<IPurseModel | null>;
-  create(userId: string): Promise<IPurseModel | null>;
   addTransaction(userId: string, transaction: {
     tsId:string
     type: 'credit' | 'debit';

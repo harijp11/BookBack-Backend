@@ -40,7 +40,7 @@ export class UpdateRentalContractStatusUseCase implements IUpdateRentalContractS
            let borrowerPurse = await this._purseRepository.findById(rentalContract.borrowerId.toString())
 
            if(!borrowerPurse){
-            borrowerPurse = await this._purseRepository.create(rentalContract.borrowerId.toString())
+            borrowerPurse = await this._purseRepository.create({userId:rentalContract.borrowerId.toString()})
           }
 
           await this._purseRepository.addTransaction(rentalContract.borrowerId.toString(), {
@@ -60,7 +60,7 @@ export class UpdateRentalContractStatusUseCase implements IUpdateRentalContractS
            let ownerPurse = await this._purseRepository.findById(rentalContract.ownerId.toString())
 
            if(!ownerPurse){
-            ownerPurse = await this._purseRepository.create(rentalContract.ownerId.toString())
+            ownerPurse = await this._purseRepository.create({userId:rentalContract.ownerId.toString()})
           }
 
           await this._purseRepository.addTransaction(rentalContract.ownerId.toString(), {
