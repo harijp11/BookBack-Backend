@@ -27,7 +27,7 @@ export class AdminRegisterStrategy implements IRegisterStrategy {
 
       const hashedPassword = await this.passwordBcrypt.hash(password);
 
-      const admin = await this.adminRepository.save({
+      const admin = await this.adminRepository.create({
         email,
         password: hashedPassword,
         role: "admin",
