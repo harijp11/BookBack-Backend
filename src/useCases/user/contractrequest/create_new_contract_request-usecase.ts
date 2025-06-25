@@ -29,7 +29,7 @@ export class CreateNewContractRequest
       throw new CustomError("please check the datas", 400);
     }
 
-    const book = await this._bookRepository.findByOwnerId(data.ownerId);
+    const book = await this._bookRepository.findById(data.bookId);
 
     if (!book || !book.isActive || book.status !== "Available") {
       await this._notitficationRepository.create({

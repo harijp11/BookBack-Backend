@@ -29,7 +29,7 @@ export class EmailService implements IEmailService {
     purpose: string
   ): Promise<void> {
     let mailOptions = {};
-    if (purpose === "create_contract") {
+    if (purpose === "buy" || purpose === "borrow") {
       mailOptions = {
         from: `"BookBack" <${config.nodemailer.EMAIL_USER}>`,
         to,

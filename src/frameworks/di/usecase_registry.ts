@@ -160,6 +160,8 @@ import { IGetMessageUseCase } from "../../entities/useCaseInterfaces/user/chat/g
 import { GetMessageUseCase } from "../../useCases/user/chat/get_message-usecase";
 import { IGetChatAndNotificationUpdatesUseCase } from "../../entities/useCaseInterfaces/user/notification/get_chat_and_notification_updates_usecase-interface";
 import { GetChatAndNotificationUpdatesUseCase } from "../../useCases/user/notification/get_chat_and_notification_updates-usecase";
+import { IAddUserNotifyForBook } from "../../entities/useCaseInterfaces/user/book/add_user_notify_for_book_usecase-interface";
+import { AddUserNotifyForBookUseCase } from "../../useCases/user/book/add_user_notify_for_book-usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -394,7 +396,10 @@ export class UseCaseRegistry {
     container.register<IRelatedBooksUseCase>("IRelatedBooksUseCase", {
       useClass: GetRelatedBooksUseCase,
     });
-
+     
+    container.register<IAddUserNotifyForBook>("IAddUserNotifyForBookUseCase",{
+      useClass:AddUserNotifyForBookUseCase
+    })
     //contract request
 
     container.register<ICreateNewContractRequestUseCase>(

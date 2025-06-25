@@ -254,4 +254,8 @@ return result;
     return await BookModel.findOne({ownerId})
   }
 
+  async save(data:IBookModel):Promise<void>{
+     await data.save()
+  }
+
 }

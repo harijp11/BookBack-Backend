@@ -6,7 +6,8 @@ export enum OtpPurpose {
 	LOGIN = "login",
 	SIGNUP = "signup",
 	PASSWORD_RESET = "password_reset",
-  CREATE_CONTRACT = "create_contract",
+  BUY_CONTRACT = "buy",
+  RENT_CONTRACT ="borrow",
   BOOK_RETURN = "book_return"
   }
 
@@ -135,6 +136,7 @@ export const ERROR_MESSAGES = {
 	UNSUPPORTED_FILE_TYPE: "Unsupported file type",
 	FILE_SIZE_EXCEEDED: "File size is too large",
 	RATE_LIMIT_EXCEEDED: "Too many requests try again later",
+  INVALID_OTP:"Invalid OTP"
 } as const;
 
 export const VERIFICATION_MAIL_CONTENT = (otp: string) => `

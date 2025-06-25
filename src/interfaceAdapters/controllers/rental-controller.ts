@@ -145,9 +145,9 @@ export class RentalController implements IRentalController {
 
   async sendOtpEmail(req: Request, res: Response): Promise<void> {
     try {
-      const { email } = req.body;
+      const { email,bookId } = req.body;
       const userId = (req as CustomRequest).user._id.toString();
-      await this._sendOtpEmailUseCase.execute(email, "book_return", userId);
+      await this._sendOtpEmailUseCase.execute(email, "book_return", userId,bookId);
       res.status(HTTP_STATUS.OK).json({
         message: SUCCESS_MESSAGES.OTP_SEND_SUCCESS,
         success: true,
@@ -159,13 +159,15 @@ export class RentalController implements IRentalController {
 
   async verifyOtp(req: Request, res: Response): Promise<void> {
     try {
-      const { email, otp } = req.body;
+      const { email, otp,bookId } = req.body;
+      console.log("return body",req.body)
       const userId = (req as CustomRequest).user._id.toString();
       const validatedData = otpMailValidationSchema.parse({ email, otp });
       await this._verifyOtpUseCase.execute({
         ...validatedData,
         purpose: "book_return",
         requesterId: userId,
+        bookId
       });
      
       res.status(HTTP_STATUS.OK).json({

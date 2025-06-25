@@ -156,6 +156,15 @@ export class UserRoutes extends BaseRoute {
       bookController.getRelatedBooks(req, res);
     });
 
+    router.patch("/user/books/:bookId/notify-users",
+      verifyAuth,
+      authorizeRole(["user"]),
+      blockStatusMiddleware.checkUserStatus as RequestHandler,
+      (req: Request, res: Response) => {
+        bookController.addUserNotifyForBook(req,res)
+      }
+    )
+
     //contract request routes
 
     router.get(

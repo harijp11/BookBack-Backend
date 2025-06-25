@@ -7,4 +7,5 @@ export interface IOtpEntity {
     purpose:OtpPurpose
     expiresAt: Date;
     requesterId?:ObjectId
+    bookId?:ObjectId
  }

@@ -10,11 +10,13 @@ export class OtpRepository implements IOtpRepository {
 		otp: string,
 		expiresAt: Date,
 		purpose: string,
-		requesterId?: string
+		requesterId?: string,
+		bookId?:string
 	  ): Promise<void> {
 		const otpData: any = { email, otp, expiresAt, purpose };
 		if (requesterId) {
 		  otpData.requesterId = requesterId;
+		  otpData.bookId = bookId;
 		}
 	   
 		await OTPModel.create(otpData);
@@ -24,17 +26,19 @@ export class OtpRepository implements IOtpRepository {
 	  async findOtp(
 		email: string,
 		purpose: string = "login",
-		requesterId?: string
+		requesterId?: string,
+		bookId?:string
 	  ): Promise<IOtpEntity | null> {
 		const query: any = { email, purpose };
 		if (requesterId) {
 		  query.requesterId = requesterId;
+		  query.bookId = bookId
 		}
-	
+	     console.log("otps,,",await OTPModel.find(query))
 		const otpEntry = await OTPModel.find(query)
 		  .sort({ createdAt: -1 })
 		  .limit(1);
-	  
+	
 		return otpEntry.length > 0 ? otpEntry[0] : null;
 	  }
 	  

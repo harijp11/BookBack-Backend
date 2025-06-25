@@ -15,6 +15,9 @@ export interface IBookEntity {
       type: 'Point';
       coordinates: [number, number];
     };
+    numberOfPages:number;
+    avgReadingTime:string;
+    notifyUsers:string[];
     locationName: string;
     createdAt?: Date;
     updatedAt?: Date;

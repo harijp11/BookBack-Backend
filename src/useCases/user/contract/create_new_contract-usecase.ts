@@ -17,6 +17,7 @@ import { IBookRepository } from "../../../entities/repositoryInterface/common/bo
 import { IContractRequestRepository } from "../../../entities/repositoryInterface/user/contract_request_repository-interface";
 import { INotificationRepository } from "../../../entities/repositoryInterface/user/notification_repository-interface";
 import { title } from "process";
+import { CustomError } from "../../../entities/utils/custom_error";
 
 @injectable()
 export class CreateNewContractUseCase implements ICreateNewContractUseCase {
@@ -40,7 +41,12 @@ export class CreateNewContractUseCase implements ICreateNewContractUseCase {
     request_type: string,
     conReqId: string
   ): Promise<ContractResponse | void> {
-    if (request_type === "buy") {
+    const conReq = await this._contractRepository.findById(conReqId)
+    if(!conReq || conReq.status !== "accepted"){
+      
+       throw new CustomError("Request not available or Cancelled",400)
+
+    }else if (request_type === "buy") {
       if (isSaleInput(data)) {
         let purse = await this._purseRepository.findById(data.buyerId);
 

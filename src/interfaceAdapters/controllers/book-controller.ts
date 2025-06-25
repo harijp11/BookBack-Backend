@@ -19,6 +19,7 @@ import { IGetUserBookDetailsUseCase } from "../../entities/useCaseInterfaces/use
 import { IRelatedBooksUseCase } from "../../entities/useCaseInterfaces/user/book/get_related_book_usecase-interface";
 import { IGetAllAdminPaginatedBooksUseCase } from "../../entities/useCaseInterfaces/admin/book/get_all_paginated_books_usecase-interface";
 import { CustomRequest } from "../middlewares/auth_middleware";
+import { IAddUserNotifyForBook } from "../../entities/useCaseInterfaces/user/book/add_user_notify_for_book_usecase-interface";
 
 @injectable()
 export class BookController implements IBookController {
@@ -39,7 +40,8 @@ export class BookController implements IBookController {
     private _getUserBookDetailsUseCase:IGetUserBookDetailsUseCase,
     @inject("IRelatedBooksUseCase")
     private _getRelatedBooksUseCase:IRelatedBooksUseCase,
-    
+    @inject("IAddUserNotifyForBookUseCase")
+    private _addUserNotifyForBook:IAddUserNotifyForBook,
 
     @inject("IGetAllPaginatedBooksUseCase")
     private _getAllPaginatedBooks:IGetAllAdminPaginatedBooksUseCase
@@ -303,6 +305,27 @@ async getAllAdminPaginatedBooks(req: Request, res: Response):Promise<void> {
          });
        }
 }
+ 
+async addUserNotifyForBook(req: Request, res: Response): Promise<void> {
+  try{
+    const {bookId} = req.params as {bookId:string}
+    const userId = (req as CustomRequest)?.user?._id.toString();
 
+    const message = await this._addUserNotifyForBook.execute(bookId,userId)
+      if(message === "You successfully added to the book's notify list"){
+        res.status(HTTP_STATUS.OK).json({
+           success: true,
+           message,
+         });
+      }else{
+        res.status(HTTP_STATUS.OK).json({
+           success: false,
+           message,
+         });
+      }
+  }catch(error){
+    handleErrorResponse(res,error)
+  }
+}
 
 }

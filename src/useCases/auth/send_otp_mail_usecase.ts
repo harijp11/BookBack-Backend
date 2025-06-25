@@ -16,7 +16,7 @@ export class SendOtpEmailUseCase implements ISendOtpEmailUseCase {
 		private _userExistenceService: IUserExistenceService,
 		@inject("IOtpBcrypt") private _otpBcrypt: IBcrypt
 	) {}
-	async execute(email: string,purpose:string = "login", requesterId?: string): Promise<void> {
+	async execute(email: string,purpose:string = "login", requesterId?: string,bookId?:string): Promise<void> {
 		if(purpose === "login"){
 		const emailExists = await this._userExistenceService.emailExists(email);
 		if (emailExists) {
@@ -30,7 +30,7 @@ export class SendOtpEmailUseCase implements ISendOtpEmailUseCase {
 		const otp = this._otpService.generateOtp();
 		console.log(`OTP:${otp} `);
 		const hashedOtp = await this._otpBcrypt.hash(otp);
-		await this._otpService.storeOtp(email, hashedOtp,purpose,requesterId);
+		await this._otpService.storeOtp(email, hashedOtp,purpose,requesterId,bookId);
 		await this._emailService.sendOtpEmail(
 			email,
 			"BookBack - Verify Your Email",

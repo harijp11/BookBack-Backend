@@ -22,6 +22,7 @@ export interface IBookController {
     getAllAvailableUserBooks(req:Request,res:Response):Promise<void>
     getUserBookDetails(req:Request,res:Response):Promise<void>
     getRelatedBooks(req:Request,res:Response):Promise<void>
+    addUserNotifyForBook(req:Request,res:Response):Promise<void>
 
     //admin
     getAllAdminPaginatedBooks(req:Request,res:Response):Promise<void>

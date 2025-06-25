@@ -178,7 +178,8 @@ export class ContractRequestController implements IContractRequestController {
   }
 
   async fetchFixDealDetails(req: Request, res: Response): Promise<void> {
-       const {conReqId} = req.query as {conReqId:string}
+      try{
+         const {conReqId} = req.query as {conReqId:string}
 
        const request = await this._fetchFixDealDetailsUseCase.execute(conReqId)
 
@@ -187,6 +188,9 @@ export class ContractRequestController implements IContractRequestController {
         message:"Request details fetched successfully",
         request
        })
+      }catch(error){
+        handleErrorResponse(res,error)
+      }
 
   }
 }

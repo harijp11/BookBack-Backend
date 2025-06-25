@@ -8,7 +8,8 @@ export interface IOTPModel extends Document {
   email: string;
   purpose:OtpPurpose;
   expiresAt: Date;
-  requesterId:ObjectId
+  requesterId:ObjectId;
+  bookId:ObjectId;
 }
 
 export const OTPModel = model<IOTPModel>("OTP", OTPSchema);

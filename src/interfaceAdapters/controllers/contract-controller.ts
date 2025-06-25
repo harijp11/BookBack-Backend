@@ -26,9 +26,10 @@ export class ContractController implements IContractController {
 
   async sendOtpEmail(req: Request, res: Response): Promise<void> {
     try {
-      const { email } = req.body;
+      const { email,purpose,bookId } = req.body;
+     
       const userId = (req as CustomRequest).user._id.toString();
-      await this._sendOtpEmailUseCase.execute(email,"create_contract",userId);
+      await this._sendOtpEmailUseCase.execute(email,purpose,userId,bookId);
       res.status(HTTP_STATUS.OK).json({
         message: SUCCESS_MESSAGES.OTP_SEND_SUCCESS,
         success: true,
@@ -40,10 +41,11 @@ export class ContractController implements IContractController {
 
   async verifyOtp(req: Request, res: Response): Promise<void> {
     try {
-      const { email, otp } = req.body;
+      const { email, otp , purpose,bookId } = req.body as { email :string, otp:number , purpose:string,bookId:string } 
+       console.log("email verify body",req.body)
       const userId = (req as CustomRequest).user._id.toString();
       const validatedData = otpMailValidationSchema.parse({ email, otp });
-      await this._verifyOtpUseCase.execute({...validatedData,purpose:"create_contract",requesterId:userId});
+      await this._verifyOtpUseCase.execute({...validatedData,purpose,requesterId:userId,bookId});
      
       res.status(HTTP_STATUS.OK).json({
         success: true,

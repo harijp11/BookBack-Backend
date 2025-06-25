@@ -16,18 +16,15 @@ export class OtpService implements IOtpService {
 		return (Math.floor(Math.random() * 9000) + 1000).toString();
 	}
 
-	async storeOtp(email: string, otp: string,purpose:string, requesterId?: string): Promise<void> {
+	async storeOtp(email: string, otp: string,purpose:string, requesterId?: string,bookId?:string): Promise<void> {
 		let expiresAt = new Date(
 			Date.now() + Number(config.OtpExpiry) * 60 * 1000
 		);
-		const existOtp = await this.otpRepository.findOtp(email,purpose)
-		if(existOtp?.purpose ===  "create_contract"){ 
-			
-		}
-		await this.otpRepository.saveOtp(email, otp, expiresAt,purpose,requesterId);
+		await this.otpRepository.saveOtp(email, otp, expiresAt,purpose,requesterId,bookId);
 	}
-	async verifyOtp(email: string, otp: string,purpose:string, requesterId?: string): Promise<Boolean> {
-		const otpEntry = await this.otpRepository.findOtp(email,purpose,requesterId);
+
+	async verifyOtp(email: string, otp: string,purpose:string, requesterId?: string,bookId?:string): Promise<Boolean> {
+		const otpEntry = await this.otpRepository.findOtp(email,purpose,requesterId,bookId);
 		if (!otpEntry) return false;
 		if (
 			new Date() > otpEntry.expiresAt ||
