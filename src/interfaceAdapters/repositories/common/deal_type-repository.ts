@@ -12,9 +12,9 @@ export class DealTypeRepository extends BaseRepository<IDealTypeModel,{name:stri
          super(DealTypeModel)
        }
 
-    async findById(dealTypeId:string):Promise<IDealTypeEntity | null>{
-        return await DealTypeModel.findOne({_id:dealTypeId})
-    }
+    // async findById(dealTypeId:string):Promise<IDealTypeEntity | null>{
+    //     return await DealTypeModel.findOne({_id:dealTypeId})
+    // }
 
    async findByName(name:string):Promise<IDealTypeEntity | null>{
        return await DealTypeModel.findOne({

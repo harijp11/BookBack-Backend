@@ -33,13 +33,13 @@ export class MessageRepository extends BaseRepository<IMessageModel,{
     return await MessageModel.findById({_id:messageId})
   }
   
-  async updateStatus(messageId: string, status: string): Promise<void> {
-    await MessageModel.findByIdAndUpdate(
-      {_id:messageId},
-      {$set:{status}},
-      {new:true}
-    )
-  }
+  // async updateStatus(messageId: string, status: string): Promise<void> {
+  //   await MessageModel.findByIdAndUpdate(
+  //     {_id:messageId},
+  //     {$set:{status}},
+  //     {new:true}
+  //   )
+  // }
 
   async findUnReadMessagesCount(userId: string): Promise<number> {
      return await MessageModel.countDocuments({receiverId:userId,status:{$ne:"read"}})

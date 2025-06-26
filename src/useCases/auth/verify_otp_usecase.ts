@@ -23,7 +23,7 @@ export class VerifyOtpUseCase implements IVerifyOtpUseCase {
 		bookId?:string
 	}): Promise<void> {
 		const isOtpValid = await this._otpService.verifyOtp(email, otp, purpose,requesterId,bookId);
-
+      
 		if (!isOtpValid)
 			throw new CustomError(ERROR_MESSAGES.INVALID_OTP, HTTP_STATUS.BAD_REQUEST);
 	}

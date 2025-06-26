@@ -23,7 +23,7 @@ export interface IUserRepository extends IBaseRepository<IUserModel> {
 }>
 
 
-  save(data: Partial<IUserEntity>): Promise<IUserEntity>;
+  // save(data: Partial<IUserEntity>): Promise<IUserEntity>;
 
   findByEmail(email: string): Promise<IUserEntity | null>;
 
@@ -33,7 +33,7 @@ export interface IUserRepository extends IBaseRepository<IUserModel> {
     limit: number
   ): Promise<{ user:IUserEntity[] | []; total: number }>;
 
-  findById(userId: string): Promise<IUserEntity | null>;
+  // findById(userId: string): Promise<IUserEntity | null>;
   updateByEmail(
     email: string,
     updates: Partial<IUserEntity>

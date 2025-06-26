@@ -44,5 +44,5 @@ export interface IBookRepository extends IBaseRepository<IBookModel,INewBookInpu
   findByIdFetchWholeDetails(bookId: string): Promise<IBookModel | null>;
   getRelatedBooks(catId: string,ownerId?:string): Promise<IBookModel[] | []>;
   findByOwnerId(ownerId:string):Promise<IBookModel | null>
-  save(data:IBookModel):Promise<void>
+  // save(data:IBookModel):Promise<void>
 }

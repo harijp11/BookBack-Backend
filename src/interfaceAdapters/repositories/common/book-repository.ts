@@ -117,9 +117,6 @@ return result;
     )
   }
   
-
-  
-
   async findLocationBasedFilteredBooks(
     latitude: number,
     longitude: number, 
@@ -254,8 +251,8 @@ return result;
     return await BookModel.findOne({ownerId})
   }
 
-  async save(data:IBookModel):Promise<void>{
-     await data.save()
-  }
+  // async save(data:IBookModel):Promise<void>{
+  //    await data.save()
+  // }
 
 }

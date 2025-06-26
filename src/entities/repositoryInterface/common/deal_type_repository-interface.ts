@@ -8,7 +8,7 @@ export interface IDealTypeRepository extends IBaseRepository<IDealTypeModel,{nam
        findByName(name:string):Promise<IDealTypeEntity | null>
        findPaginatedDealType(filter:object,skip:number,limit:number):Promise<PaginatedDealTypes>
        findByIdAndUpdateStatus(dealTypeId:string,status:boolean):Promise<IDealTypeEntity | null>
-       findById(dealTypeId:string):Promise<IDealTypeEntity | null>
+       // findById(dealTypeId:string):Promise<IDealTypeEntity | null>
        findByIdAndUpdateDealType(_id:string,name:string,description:string):Promise<IDealTypeEntity | null>
        getAllDealTypes():Promise<IDealTypeEntity[] | []>
 }

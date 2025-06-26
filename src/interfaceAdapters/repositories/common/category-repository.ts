@@ -40,9 +40,9 @@ export class CategoryRepository extends BaseRepository<ICategoryModel,categoryCr
       };
     }
 
-    async findById(_id:string):Promise<ICategoryEntity | null>{
-     return await categoryModel.findOne({_id})
-    }
+    // async findById(_id:string):Promise<ICategoryEntity | null>{
+    //  return await categoryModel.findOne({_id})
+    // }
 
     async findByIdAndUpdateStatus(_id:string,active:boolean): Promise<ICategoryEntity | null> {
          return await categoryModel.findByIdAndUpdate(

@@ -24,6 +24,6 @@ export interface IMessageRepository extends IBaseRepository<IMessageModel,{
     //   }): Promise<IMessageModel>;
     getMessagesByChatId(chatId: string): Promise<IMessageModel[]>;
     findById(messageId:string):Promise<IMessageModel | null>
-    updateStatus(messageId:string,status:string):Promise<void>
+    // updateStatus(messageId:string,status:string):Promise<void>
     findUnReadMessagesCount(userId:string):Promise<number>
 }

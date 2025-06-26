@@ -6,7 +6,8 @@ import { IBcrypt } from "../../../frameworks/security/bcrypt_interface";
 import { CustomError } from "../../../entities/utils/custom_error";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../../shared/constants";
 import { generateUniqueId } from "../../../frameworks/security/uniqueid_bcrypt";
-import { IUserEntity } from "../../../entities/models/user_entity";
+
+import { IUserModel } from "../../../frameworks/database/models/User_model";
 
 @injectable()
 export class UserRegisterStrategy implements IRegisterStrategy {
@@ -15,7 +16,7 @@ export class UserRegisterStrategy implements IRegisterStrategy {
     @inject("IPasswordBcrypt") private passwordBcrypt: IBcrypt,
   ) {}
 
-  async register(user: UserDTO): Promise<IUserEntity | void> {
+  async register(user: UserDTO): Promise<IUserModel | void | null> {
     if (user.role === "user") {
       const existingUser = await this.userRepository.findByEmail(
         user.email
@@ -38,7 +39,7 @@ export class UserRegisterStrategy implements IRegisterStrategy {
 
       const userId = generateUniqueId();
 
-      const newUser = await this.userRepository.save({
+      const newUser = await this.userRepository.create({
         Name,
         phoneNumber,
         email,
@@ -46,7 +47,7 @@ export class UserRegisterStrategy implements IRegisterStrategy {
         userId,
         role: "user",
       });
-      return newUser;
+      return newUser 
     } else {
       throw new CustomError(
         "Invalid role for client registration",

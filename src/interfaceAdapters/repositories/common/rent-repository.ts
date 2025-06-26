@@ -121,9 +121,9 @@ export class RentRepository extends BaseRepository<IRentModel,RentalInput> imple
           )
       }
 
-     async save(rentalContract:IRentModel):Promise<void>{
-       await rentalContract.save()
-     }
+    //  async save(rentalContract:IRentModel):Promise<void>{
+    //    await rentalContract.save()
+    //  }
 
      async count(filter: object): Promise<number> {
         return await RentModel.countDocuments(filter);

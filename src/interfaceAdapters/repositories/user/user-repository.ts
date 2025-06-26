@@ -10,9 +10,9 @@ export class UserRepository extends BaseRepository<IUserModel> implements IUserR
     constructor(){
         super(UserModel);
     }
-    async save(data: Partial<IUserEntity>): Promise<IUserEntity> {
-        return await UserModel.create(data);
-    }
+    // async save(data: Partial<IUserEntity>): Promise<IUserEntity> {
+    //     return await UserModel.create(data);
+    // }
 
     async findByEmail(email: string): Promise<IUserEntity | null> {
         const User = await UserModel.findOne({ email }).lean();
@@ -24,15 +24,15 @@ export class UserRepository extends BaseRepository<IUserModel> implements IUserR
         } as IUserEntity;
     }
   
-    async findById(userId: string): Promise<IUserEntity | null> {
-        const User = await UserModel.findById(userId).lean();
-        if (!User) return null;
+    // async findById(userId: string): Promise<IUserEntity | null> {
+    //     const User = await UserModel.findById(userId).lean();
+    //     if (!User) return null;
 
-        return {
-            ...User,
-            id: User._id.toString(),
-        } as IUserEntity;
-    }
+    //     return {
+    //         ...User,
+    //         id: User._id.toString(),
+    //     } as IUserEntity;
+    // }
 
     async find(
         filter: Object,

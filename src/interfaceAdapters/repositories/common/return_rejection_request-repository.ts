@@ -138,11 +138,11 @@ export class ReturnRejectionRequestRepository extends BaseRepository<IReturnReje
 
 
 
-  async updateStatus(retRejId: string, status: string): Promise<void> {
-    await ReturnRejectionRequestModel.findByIdAndUpdate(
-      {_id:retRejId},
-      {$set:{status}},
-      {new:true}
-    )
-  }
+  // async updateStatus(retRejId: string, status: string): Promise<void> {
+  //   await ReturnRejectionRequestModel.findByIdAndUpdate(
+  //     {_id:retRejId},
+  //     {$set:{status}},
+  //     {new:true}
+  //   )
+  // }
 }

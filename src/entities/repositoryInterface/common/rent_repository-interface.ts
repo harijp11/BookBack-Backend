@@ -35,7 +35,7 @@ export interface IRentRepository extends IBaseRepository<IRentModel,RentalInput>
 
   findByIdAndUpdateStatus(rentalId: string,status:string):Promise<IRentModel | null>
 
- save(rentalContract:IRentModel):Promise<void>
+//  save(rentalContract:IRentModel):Promise<void>
 
  count(filter: object): Promise<number>;
   aggregate(pipeline: any[]): Promise<any[]>;

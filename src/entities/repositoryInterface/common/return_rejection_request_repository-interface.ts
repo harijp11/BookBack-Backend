@@ -31,5 +31,5 @@ export interface IReturnRejectionRequestRepository extends IBaseRepository<IRetu
         currentPage: number;
       }>
 
-      updateStatus(retRejId:string,status:string):Promise<void>
+      // updateStatus(retRejId:string,status:string):Promise<void>
 }

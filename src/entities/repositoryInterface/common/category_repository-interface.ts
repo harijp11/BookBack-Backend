@@ -10,7 +10,7 @@ export interface ICategoryRepository extends BaseRepository<ICategoryModel,{name
 
     findPaginatedCategory(filter:object,skip:number,limit:number):Promise<PaginatedCategories>
     findByIdAndUpdateStatus(catId:string,active:boolean):Promise<ICategoryEntity | null>
-    findById(catId:string):Promise<ICategoryEntity | null>
+    // findById(catId:string):Promise<ICategoryEntity | null>
     updateCategory(catId:String,name:String,description:String):Promise<ICategoryEntity | void>
     getAllCategories():Promise<ICategoryEntity[] | []>
 }
