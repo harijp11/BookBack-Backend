@@ -234,15 +234,18 @@ return result;
   }
 
   async getRelatedBooks(catId: string,ownerId?:string): Promise<IBookModel[] | []> {
-    const query:{categoryId:string,filter?:object} = {
-      categoryId: catId
+    const query:{categoryId:string,ownerId?:object,isActive:boolean,status:object} = {
+      categoryId: catId,
+      isActive: true,
+    status: { $ne: "Sold Out" }
     }
     if(ownerId){
-       query.filter = {ownerId:{$ne:ownerId}}
+       query.ownerId = {$ne:ownerId}
     }
 
-   
+      console.log("query filter",query)
     const books = await BookModel.find(query)
+    console.log("related books",books)
     return books 
   } 
 
