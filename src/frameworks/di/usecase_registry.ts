@@ -162,6 +162,10 @@ import { IGetChatAndNotificationUpdatesUseCase } from "../../entities/useCaseInt
 import { GetChatAndNotificationUpdatesUseCase } from "../../useCases/user/notification/get_chat_and_notification_updates-usecase";
 import { IAddUserNotifyForBook } from "../../entities/useCaseInterfaces/user/book/add_user_notify_for_book_usecase-interface";
 import { AddUserNotifyForBookUseCase } from "../../useCases/user/book/add_user_notify_for_book-usecase";
+import { IClearAllNotificationsUseCase } from "../../entities/useCaseInterfaces/user/notification/clear_all_notifications_usecase-interface";
+import { ClearAllNotificationsUseCase } from "../../useCases/user/notification/clear_all_notifications-usecase";
+import { IClearSingleNotificationUseCase } from "../../entities/useCaseInterfaces/user/notification/clear_single_notification_usecase-interface";
+import { ClearSingleNotificationUseCase } from "../../useCases/user/notification/clear_single_notification-usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -609,6 +613,14 @@ export class UseCaseRegistry {
 
     container.register<IGetChatAndNotificationUpdatesUseCase>("IGetChatAndNotificationUpdatesUseCase", {
       useClass: GetChatAndNotificationUpdatesUseCase
+    })
+
+    container.register<IClearAllNotificationsUseCase>("IClearAllNotificationUseCase",{
+      useClass: ClearAllNotificationsUseCase
+    })
+    
+    container.register<IClearSingleNotificationUseCase>("IClearSingleNotificationUseCase",{
+      useClass: ClearSingleNotificationUseCase
     })
 
   }

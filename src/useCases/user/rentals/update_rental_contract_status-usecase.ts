@@ -34,10 +34,20 @@ export class UpdateRentalContractStatusUseCase
       throw new CustomError("No rental contract available", 404);
     }
 
+    const book = await this._bookRepository.findById(rentalContract.bookId.toString());
+
     if (status === "Return Requested") {
       rentalContract.return_requested_at = new Date();
 
       await this._rentRepository.save(rentalContract);
+
+      await this._notificationRepository.create({
+          userId: rentalContract.ownerId.toString() || "",
+          title: "Return Requested",
+          message:`The borrower has requested to return the book "${book?.name ?? "unknown"}".`,
+          type: "good",
+          navlink: `/rentedout-book/details/${rentalId}`,
+        });
     } else if (status === "Returned") {
       //borrower side
       const tsId = generateUniqueTrsasactionId();
@@ -110,7 +120,7 @@ export class UpdateRentalContractStatusUseCase
         "Available"
       );
 
-      const book = await this._bookRepository.findById(rentalContract.bookId.toString());
+      
     
       while (book && book.notifyUsers && book?.notifyUsers.length) {
         console.log("repeating removing",book.notifyUsers)

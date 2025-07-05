@@ -41,7 +41,7 @@ export class FetchAllUserNotificationUseCase
     const notifications = getNotifications();
 
     const totalPages = Math.ceil(count / limit);
-
+    
     await this._notificationRepository.UpdateReadStatus(userId);
 
     return {

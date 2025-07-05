@@ -93,6 +93,8 @@ export const SUCCESS_MESSAGES = {
 	FILE_UPLOADED: "File uploaded successfully",
 	PROFILE_UPDATED: "Profile updated",
 	SESSION_EXTENDED: "Session extended",
+  NOTIFICATIONS_CLEARED_SUCCESS: "Cleared all notifications successfully.",
+  SINGLE_NOTIFICATION_CLEARED :"The notification has been successfully deleted."
 } as const;
 
 export const ERROR_MESSAGES = {
@@ -116,11 +118,6 @@ export const ERROR_MESSAGES = {
 	UNAUTHORIZED_ACCESS: "Not authorized",
 	SERVER_ERROR: "Something went wrong try again later",
 	VALIDATION_ERROR: "Check your inputs and try again",
-	SHOP_NOT_FOUND: "Shop not found",
-	SHOP_UNDER_VERIFICATION:
-		"Shop request submitted waiting for admin approval",
-	SHOP_EXISTS: "You already have a registered shop",
-	SHOP_BLOCKED: "This shop is blocked by admin",
 	MISSING_PARAMETERS: "Some details are missing",
 	WRONG_CURRENT_PASSWORD: "Current password is incorrect",
 	SAME_CURR_NEW_PASSWORD:
@@ -136,7 +133,10 @@ export const ERROR_MESSAGES = {
 	UNSUPPORTED_FILE_TYPE: "Unsupported file type",
 	FILE_SIZE_EXCEEDED: "File size is too large",
 	RATE_LIMIT_EXCEEDED: "Too many requests try again later",
-  INVALID_OTP:"Invalid OTP"
+  INVALID_OTP:"Invalid OTP",
+  USER_ID_NOT_AVAILABLE:"User ID is currently not available. Please check and try again.",
+  NOTIFICATION_ID_NOT_AVAILABLE:"Notification ID is currently not available. Please check and try again."
+  
 } as const;
 
 export const VERIFICATION_MAIL_CONTENT = (otp: string) => `

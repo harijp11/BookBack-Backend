@@ -7,6 +7,8 @@ import {
   renewal_details,
 } from "../../../entities/models/rent_entity";
 import { IRentModel } from "../../../frameworks/database/models/rent_model";
+import { INotificationRepository } from "../../../entities/repositoryInterface/user/notification_repository-interface";
+import { IBookRepository } from "../../../entities/repositoryInterface/common/book_repository-interface";
 
 
 @injectable()
@@ -15,7 +17,11 @@ export class SubmitContractRenewalRequestUseCase
 {
   constructor(
     @inject("IRentRepository")
-    private _rentRepository: IRentRepository
+    private _rentRepository: IRentRepository,
+    @inject("INotificationRepository")
+    private _notificationRepository: INotificationRepository,
+    @inject("IBookRepository")
+    private _bookRepository : IBookRepository
   ) {}
 
   async execute(
@@ -32,6 +38,8 @@ export class SubmitContractRenewalRequestUseCase
       throw new CustomError("No rental contract found", 404);
     }
 
+    let book = await this._bookRepository.findById(rentalContract.bookId.toString())
+
     const newRenewalDetail: IRentModel["renewal_details"][0] = {
       days: renewal_details.days,
       amount: renewal_details.amount,
@@ -39,7 +47,7 @@ export class SubmitContractRenewalRequestUseCase
       response: "Pending",
       responded_at: new Date(),
     };
-
+    
     
 
     if (!rentalContract.renewal_details) {
@@ -50,14 +58,39 @@ export class SubmitContractRenewalRequestUseCase
 
     if(renewal_details.response === "Accepted"){
        renewal_status = "Renewed"
+
+        await this._notificationRepository.create({
+          userId: rentalContract.borrowerId.toString() || "",
+          title: "Renewed",
+          message:`The rental contract for the book "${book?.name ?? "unknown"}" has been successfully renewed.`,
+          type: "good",
+          navlink: `/borrowed-book/details/${rentalId}`,
+        });
+
     }else if(renewal_details.response === "Rejected"){
       renewal_status = "Renewal Rejected"
+
+       await this._notificationRepository.create({
+          userId: rentalContract.borrowerId.toString() || "",
+          title: "Renewed",
+          message: `The renewal request for the book "${book?.name ?? "unknown"}" has been rejected.`,
+          type: "good",
+          navlink: `/borrowed-book/details/${rentalId}`,
+        });
     }else{
       renewal_status = "Renewal Requested"
     }
 
     if (renewal_status === "Renewal Requested") {
       rentalContract.renewal_details.push(newRenewalDetail);
+
+       await this._notificationRepository.create({
+          userId: rentalContract.ownerId.toString() || "",
+          title: "Renewal Requested",
+          message:`The borrower has requested to renewal the book "${book?.name ?? "unknown"}".`,
+          type: "good",
+          navlink: `/rentedout-book/details/${rentalId}`,
+        });
     }
 
 

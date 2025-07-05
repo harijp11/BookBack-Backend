@@ -31,4 +31,7 @@ export interface INotificationRepository
   }>;
 
   findUnReadCountByUserId(userId: string): Promise<number>;
+
+  findByUserIdAndDelete(userId:string):Promise<void>
+  findByIdAndDelete(notificationId:string):Promise<void>
 }

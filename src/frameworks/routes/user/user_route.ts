@@ -25,7 +25,6 @@ import {
 
 import { BaseRoute } from "../base_route";
 
-
 export class UserRoutes extends BaseRoute {
   constructor() {
     super();
@@ -152,18 +151,23 @@ export class UserRoutes extends BaseRoute {
       bookController.getUserBookDetails(req, res);
     });
 
-    router.get("/user/related-books/:catId", verifyAuthOptional,(req: Request, res: Response) => {
-      bookController.getRelatedBooks(req, res);
-    });
+    router.get(
+      "/user/related-books/:catId",
+      verifyAuthOptional,
+      (req: Request, res: Response) => {
+        bookController.getRelatedBooks(req, res);
+      }
+    );
 
-    router.patch("/user/books/:bookId/notify-users",
+    router.patch(
+      "/user/books/:bookId/notify-users",
       verifyAuth,
       authorizeRole(["user"]),
       blockStatusMiddleware.checkUserStatus as RequestHandler,
       (req: Request, res: Response) => {
-        bookController.addUserNotifyForBook(req,res)
+        bookController.addUserNotifyForBook(req, res);
       }
-    )
+    );
 
     //contract request routes
 
@@ -486,18 +490,36 @@ export class UserRoutes extends BaseRoute {
 
     //notification
 
-    router.get(
-      "/user/notifications",
+    router
+      .route("/user/notifications")
+      .get(
+        verifyAuth,
+        authorizeRole(["user"]),
+        blockStatusMiddleware.checkUserStatus as RequestHandler,
+        (req: Request, res: Response) => {
+          notificationController.fetchAllUserNotifications(req, res);
+        }
+      )
+      .delete(
+        verifyAuth,
+        authorizeRole(["user"]),
+        blockStatusMiddleware.checkUserStatus as RequestHandler,
+        (req: Request, res: Response) => {
+          notificationController.clearAllUserNotifications(req, res);
+        }
+      );
+
+    router.delete(
+      "/user/notifications/:notificationId",
       verifyAuth,
       authorizeRole(["user"]),
       blockStatusMiddleware.checkUserStatus as RequestHandler,
       (req: Request, res: Response) => {
-        notificationController.fetchAllUserNotifications(req, res);
+        notificationController.clearSingleNotification(req, res);
       }
     );
 
-
-     router.get(
+    router.get(
       "/user/chat-notifications/unread-count",
       verifyAuth,
       authorizeRole(["user"]),

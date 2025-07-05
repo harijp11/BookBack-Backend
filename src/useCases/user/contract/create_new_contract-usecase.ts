@@ -16,7 +16,6 @@ import { generateUniqueTrsasactionId } from "../../../frameworks/security/unique
 import { IBookRepository } from "../../../entities/repositoryInterface/common/book_repository-interface";
 import { IContractRequestRepository } from "../../../entities/repositoryInterface/user/contract_request_repository-interface";
 import { INotificationRepository } from "../../../entities/repositoryInterface/user/notification_repository-interface";
-import { title } from "process";
 import { CustomError } from "../../../entities/utils/custom_error";
 
 @injectable()
