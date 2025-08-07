@@ -9,6 +9,7 @@ import {
 import { IRentModel } from "../../../frameworks/database/models/rent_model";
 import { INotificationRepository } from "../../../entities/repositoryInterface/user/notification_repository-interface";
 import { IBookRepository } from "../../../entities/repositoryInterface/common/book_repository-interface";
+import { RENTAL_ERROR } from "../../../shared/constants";
 
 
 @injectable()
@@ -30,12 +31,12 @@ export class SubmitContractRenewalRequestUseCase
     // renewal_status: IRentEntity["renewal_status"]
   ): Promise<void> {
     if (!renewal_details.days || !renewal_details.amount) {
-      throw new CustomError("Missing of renewal Datas", 400);
+      throw new CustomError(RENTAL_ERROR.RENEWAL_DEATILS_MISSING, 400);
     }
     const rentalContract = await this._rentRepository.findById(rentalId);
 
     if (!rentalContract) {
-      throw new CustomError("No rental contract found", 404);
+      throw new CustomError(RENTAL_ERROR.CONTRACT_NOT_FOUND, 404);
     }
 
     let book = await this._bookRepository.findById(rentalContract.bookId.toString())

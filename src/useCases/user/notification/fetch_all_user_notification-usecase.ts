@@ -3,6 +3,7 @@ import { IFetchAllUserNoticationUseCase } from "../../../entities/useCaseInterfa
 import { INotificationRepository } from "../../../entities/repositoryInterface/user/notification_repository-interface";
 import { Paginatednotifications } from "../../../entities/models/paginated_notification_entity";
 import { CustomError } from "../../../entities/utils/custom_error";
+import { BOOK_ERROR_RESPONSES, ERROR_MESSAGES, HTTP_STATUS } from "../../../shared/constants";
 
 @injectable()
 export class FetchAllUserNotificationUseCase
@@ -20,7 +21,7 @@ export class FetchAllUserNotificationUseCase
     limit: number
   ): Promise<Paginatednotifications> {
     if (!userId) {
-      throw new CustomError("No user found", 404);
+      throw new CustomError(ERROR_MESSAGES.USER_NOT_FOUND, HTTP_STATUS.NOT_FOUND);
     }
 
     const skip = (page - 1) * limit;
@@ -33,7 +34,7 @@ export class FetchAllUserNotificationUseCase
     );
 
     if (!result) {
-      throw new CustomError("No books found", 404);
+      throw new CustomError(BOOK_ERROR_RESPONSES.BOOKS_NOT_FOUND, HTTP_STATUS.NOT_FOUND);
     }
 
     const { getNotifications, count } = result;

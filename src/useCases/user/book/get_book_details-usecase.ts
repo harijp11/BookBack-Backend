@@ -3,6 +3,7 @@ import { IGetUserBookDetailsUseCase } from "../../../entities/useCaseInterfaces/
 import { IBookModel } from "../../../frameworks/database/models/book_model";
 import { CustomError } from "../../../entities/utils/custom_error";
 import { IBookRepository } from "../../../entities/repositoryInterface/common/book_repository-interface";
+import { BOOK_ERROR_RESPONSES, HTTP_STATUS } from "../../../shared/constants";
 
 
 @injectable()
@@ -17,11 +18,11 @@ export class GetUserBookDetailsUseCase implements IGetUserBookDetailsUseCase{
     const book = await this._bookRepository.findByIdFetchWholeDetails(bookId);
 
     if(!book){
-        throw new CustomError("Book not found",404)
+        throw new CustomError(BOOK_ERROR_RESPONSES.BOOKS_NOT_FOUND,HTTP_STATUS.NOT_FOUND)
     }
 
     if(!book.isActive){
-        throw new CustomError("book is not available now",400)
+        throw new CustomError(BOOK_ERROR_RESPONSES.BOOK_NOT_AVAILABLE,HTTP_STATUS.BAD_REQUEST)
     }
 
     return book

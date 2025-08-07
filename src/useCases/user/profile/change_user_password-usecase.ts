@@ -4,6 +4,7 @@ import { IUserRepository } from "../../../entities/repositoryInterface/user/user
 import { IUserEntity } from "../../../entities/models/user_entity";
 import { IBcrypt } from "../../../frameworks/security/bcrypt_interface";
 import { CustomError } from "../../../entities/utils/custom_error";
+import { ERROR_MESSAGES, HTTP_STATUS, USER_MESSAGES } from "../../../shared/constants";
 
 @injectable()
 export class changePasswordUseCase implements IChangePasswordUseCase{
@@ -18,7 +19,7 @@ export class changePasswordUseCase implements IChangePasswordUseCase{
           const user = await this._userRepository.findById(userId)
               
           if(!user || !user?.password){
-             throw new CustomError("User or user password is not available",404)
+             throw new CustomError(USER_MESSAGES.USER_NOT_AVAILABLE,HTTP_STATUS.NOT_FOUND)
           }
           
          
@@ -30,7 +31,7 @@ export class changePasswordUseCase implements IChangePasswordUseCase{
          
         
          if(!isCorrect){
-            throw new CustomError("password does not match to old password",400)
+            throw new CustomError(ERROR_MESSAGES.WRONG_CURRENT_PASSWORD,HTTP_STATUS.BAD_REQUEST)
          }
         }
            const bcryptedNewPassword = await this._passwordBcrypt.hash(newPassword)

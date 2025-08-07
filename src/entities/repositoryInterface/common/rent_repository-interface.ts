@@ -1,9 +1,10 @@
 import { IRentModel } from "../../../frameworks/database/models/rent_model";
 import { RentalInput } from "../../models/contract_input_entity";
+import { IRentPopulated } from "../../types/IRentMapPopulated";
 import { IBaseRepository } from "../baseRepo/base_repository-interface";
 
 export interface PaginatedRentedBooksRepo {
-  getRentedBooksContracts(): IRentModel[];
+  getRentedBooksContracts(): IRentPopulated[];
   count: number;
 }
 

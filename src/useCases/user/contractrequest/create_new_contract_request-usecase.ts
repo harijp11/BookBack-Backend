@@ -1,6 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import { ICreateNewContractRequestUseCase } from "../../../entities/useCaseInterfaces/user/contractrequest/create_new_contract_request_usecase-interface";
-import { ContractRequestInput } from "../../../shared/constants";
+import { BOOK_ERROR_RESPONSES, ContractRequestInput } from "../../../shared/constants";
 import { IContractRequestRepository } from "../../../entities/repositoryInterface/user/contract_request_repository-interface";
 import { CustomError } from "../../../entities/utils/custom_error";
 import { IBookRepository } from "../../../entities/repositoryInterface/common/book_repository-interface";
@@ -40,7 +40,7 @@ export class CreateNewContractRequest
         type: "info",
       });
 
-      throw new CustomError("Book not Available now", 404);
+      throw new CustomError(BOOK_ERROR_RESPONSES.BOOKS_NOT_FOUND, 404);
     }
 
     await this._notitficationRepository.create({

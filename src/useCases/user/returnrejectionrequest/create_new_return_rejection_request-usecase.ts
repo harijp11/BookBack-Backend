@@ -4,6 +4,7 @@ import { IReturnRejectionRequestcreateDTO } from "../../../entities/models/retur
 import { IReturnRejectionRequestModel } from "../../../frameworks/database/models/return_rejection_request_model";
 import { CustomError } from "../../../entities/utils/custom_error";
 import { IReturnRejectionRequestRepository } from "../../../entities/repositoryInterface/common/return_rejection_request_repository-interface";
+import { ERROR_MESSAGES, HTTP_STATUS, RETURN_REJECTION_REQUEST_ERROR } from "../../../shared/constants";
 
 
 @injectable()
@@ -15,13 +16,13 @@ export class CreateNewReturnRejectionRequestUseCase implements ICreateNewReturnR
 
   async execute(data: IReturnRejectionRequestcreateDTO): Promise<IReturnRejectionRequestModel | null> {
       if(!data.borrowerId || !data.ownerId || !data.reason || !data.rentId){
-        throw new CustomError("Missingg of details",400)    
+        throw new CustomError(ERROR_MESSAGES.MISSING_OF_DETAILS,HTTP_STATUS.BAD_REQUEST)    
       }
 
       const returnRejection = await this._returnRejectionRequestRepository.create(data)
 
       if(!returnRejection){
-        throw new CustomError("There is issue in creating ReturnRejectionRequest",404)
+        throw new CustomError(RETURN_REJECTION_REQUEST_ERROR.CREATION_FAILED,HTTP_STATUS.BAD_REQUEST)
       }
 
     

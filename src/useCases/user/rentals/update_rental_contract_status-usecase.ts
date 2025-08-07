@@ -8,6 +8,7 @@ import { generateUniqueTrsasactionId } from "../../../frameworks/security/unique
 import { IBookRepository } from "../../../entities/repositoryInterface/common/book_repository-interface";
 import { stat } from "fs";
 import { INotificationRepository } from "../../../entities/repositoryInterface/user/notification_repository-interface";
+import { RENTAL_ERROR } from "../../../shared/constants";
 
 @injectable()
 export class UpdateRentalContractStatusUseCase
@@ -31,7 +32,7 @@ export class UpdateRentalContractStatusUseCase
     );
 
     if (!rentalContract) {
-      throw new CustomError("No rental contract available", 404);
+      throw new CustomError(RENTAL_ERROR.CONTRACT_NOT_FOUND, 404);
     }
 
     const book = await this._bookRepository.findById(rentalContract.bookId.toString());

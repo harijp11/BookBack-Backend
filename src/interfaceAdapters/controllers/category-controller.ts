@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import { ICategoryController } from "../../entities/controllersInterfaces/category_controller-interface";
 import { Request, Response } from "express";
-import { HTTP_STATUS, SUCCESS_MESSAGES } from "../../shared/constants";
+import { CATEGORY_ERROR, CATEGORY_SUCCESS, HTTP_STATUS, SUCCESS_MESSAGES } from "../../shared/constants";
 import { IGetAllCategoriesUseCase } from "../../entities/useCaseInterfaces/user/category/get_all_categories_usecase-interface";
 import { IcreateNewCategoryUseCase } from "../../entities/useCaseInterfaces/admin/category/create_category_usecase-interface";
 import { IGetAllPaginatedCategoryUseCase } from "../../entities/useCaseInterfaces/admin/category/get_all_paginated_categories_usecase-interface";
@@ -30,7 +30,7 @@ export class CategoryController implements ICategoryController {
       const categories = await this._getAllCategories.execute();
       res.status(HTTP_STATUS.OK).json({
         success: true,
-        message: "categoires fetched successfully",
+        message: CATEGORY_SUCCESS.CATEGORIES_FETCHED,
         categories,
       });
     } catch (error) {
@@ -58,7 +58,7 @@ export class CategoryController implements ICategoryController {
       ) {
         res.status(HTTP_STATUS.CONFLICT).json({
           success: false,
-          message: "A category with this name already exists",
+          message: CATEGORY_ERROR.CATEGORY_NAME_EXIST,
           error: "DUPLICATE_CATEGORY",
         });
         return;

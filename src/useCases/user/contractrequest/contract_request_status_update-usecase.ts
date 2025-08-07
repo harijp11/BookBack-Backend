@@ -4,6 +4,7 @@ import { IContractRequestRepository } from "../../../entities/repositoryInterfac
 import { CustomError } from "../../../entities/utils/custom_error";
 import { IContractRequestModel } from "../../../frameworks/database/models/contract_request-model";
 import { INotificationRepository } from "../../../entities/repositoryInterface/user/notification_repository-interface";
+import { CONTRACT_REQUEST_ERROR, HTTP_STATUS } from "../../../shared/constants";
 
 @injectable()
 export class ContractRequestUpdateStatus implements IContractRequestStatusUpdateUseCase{
@@ -18,7 +19,7 @@ export class ContractRequestUpdateStatus implements IContractRequestStatusUpdate
         const request = await this._contractRequestRepository.findByIdAndUpdateStatus(conReqId,status)
 
         if(!request){
-            throw new CustomError("No Contract Request found",404)
+            throw new CustomError(CONTRACT_REQUEST_ERROR.REQUEST_NOT_FOUND,HTTP_STATUS.NOT_FOUND)
         }
         if(status === "accepted"){
            await this._notificationRepository.create({

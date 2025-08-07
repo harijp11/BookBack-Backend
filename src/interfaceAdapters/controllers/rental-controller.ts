@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { IRentalController } from "../../entities/controllersInterfaces/rental_controller-interface";
 import { CustomRequest } from "../middlewares/auth_middleware";
 import { IRentModel } from "../../frameworks/database/models/rent_model";
-import { HTTP_STATUS, SUCCESS_MESSAGES } from "../../shared/constants";
+import { HTTP_STATUS, RENTAL_SUCCESS, SUCCESS_MESSAGES } from "../../shared/constants";
 import { handleErrorResponse } from "../../shared/utils/errorHandler";
 import { Request, Response } from "express";
 import { IGetRentedOutBooksContractUseCase } from "../../entities/useCaseInterfaces/user/rental/get_rented_out_books_contracts_usecase-interface";
@@ -15,6 +15,8 @@ import { IVerifyOtpUseCase } from "../../entities/useCaseInterfaces/auth/verify_
 import { otpMailValidationSchema } from "./AuthValidation/otp_mail_validation_schema";
 import { ISubmitContractRenewalRequestUseCase } from "../../entities/useCaseInterfaces/user/rental/submit_contract_renewal_request_usecase-interface";
 import { IRentEntity, renewal_details } from "../../entities/models/rent_entity";
+import { IPopulatedBookModel } from "../../entities/types/IBookMapModel";
+import { RentDTO } from "../../shared/dto/IRentDto";
 
 @injectable()
 export class RentalController implements IRentalController {
@@ -63,7 +65,7 @@ export class RentalController implements IRentalController {
         totalPages,
         currentPage,
       } = result as {
-        rentedBooksContracts: IRentModel[];
+        rentedBooksContracts: RentDTO[];
         totalRentedContracts: number;
         totalPages: number;
         currentPage: number;
@@ -71,7 +73,7 @@ export class RentalController implements IRentalController {
 
       res.status(HTTP_STATUS.OK).json({
         success: true,
-        message: "contracts fetched successfully",
+        message: RENTAL_SUCCESS.CONTRACTS_FETCHED,
         rentedBooksContracts,
         totalRentedContracts,
         totalPages,
@@ -107,7 +109,7 @@ export class RentalController implements IRentalController {
         totalPages,
         currentPage,
       } = result as {
-        rentedBooksContracts: IRentModel[];
+        rentedBooksContracts: RentDTO[];
         totalRentedContracts: number;
         totalPages: number;
         currentPage: number;
@@ -115,7 +117,7 @@ export class RentalController implements IRentalController {
 
       res.status(HTTP_STATUS.OK).json({
         success: true,
-        message: "contracts fetched successfully",
+        message: RENTAL_SUCCESS.BORROWED_CONTRACTS_FETCHED,
         borrowedBooksContract: rentedBooksContracts,
         totalBorrowedContracts: totalRentedContracts,
         totalPages,
@@ -135,7 +137,7 @@ export class RentalController implements IRentalController {
 
       res.status(HTTP_STATUS.OK).json({
         success: true,
-        message: "Rental Contract details fetched successfully",
+        message:RENTAL_SUCCESS.RENTED_BOOK_DETAILS_FETCHED,
         rentedBooksContracts,
       });
     } catch (error) {
@@ -160,7 +162,6 @@ export class RentalController implements IRentalController {
   async verifyOtp(req: Request, res: Response): Promise<void> {
     try {
       const { email, otp,bookId } = req.body;
-      console.log("return body",req.body)
       const userId = (req as CustomRequest).user._id.toString();
       const validatedData = otpMailValidationSchema.parse({ email, otp });
       await this._verifyOtpUseCase.execute({
@@ -207,7 +208,7 @@ export class RentalController implements IRentalController {
      
     res.status(HTTP_STATUS.OK).json({
       success:true,
-      message:"Renewal of Rental Contract Requested successfully"
+      message:RENTAL_SUCCESS.RENEWAL_REQUESTED,
     })
 
     }catch(error){
@@ -226,7 +227,7 @@ export class RentalController implements IRentalController {
      
     res.status(HTTP_STATUS.OK).json({
       success:true,
-      message:"Responded to New Renewal Successfully"
+      message:RENTAL_SUCCESS.RENEWAL_RESPONDED,
     })
     }catch(error){
       handleErrorResponse(res,error)
@@ -263,7 +264,7 @@ export class RentalController implements IRentalController {
         totalPages,
         currentPage,
       } = result as {
-        rentedBooksContracts: IRentModel[];
+        rentedBooksContracts: RentDTO[];
         totalRentedContracts: number;
         totalPages: number;
         currentPage: number;
@@ -271,7 +272,7 @@ export class RentalController implements IRentalController {
 
       res.status(HTTP_STATUS.OK).json({
         success: true,
-        message: "contracts fetched successfully",
+        message:  RENTAL_SUCCESS.CONTRACTS_FETCHED,
         rentedBooksContracts,
         totalRentedContracts,
         totalPages,

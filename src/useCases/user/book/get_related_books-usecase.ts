@@ -3,6 +3,7 @@ import { IRelatedBooksUseCase } from "../../../entities/useCaseInterfaces/user/b
 import { IBookRepository } from "../../../entities/repositoryInterface/common/book_repository-interface";
 import { IBookModel } from "../../../frameworks/database/models/book_model";
 import { CustomError } from "../../../entities/utils/custom_error";
+import { BOOK_ERROR_RESPONSES, HTTP_STATUS } from "../../../shared/constants";
 
 @injectable()
 export class GetRelatedBooksUseCase implements IRelatedBooksUseCase{
@@ -15,7 +16,7 @@ export class GetRelatedBooksUseCase implements IRelatedBooksUseCase{
       const relatedBooks = await this._bookRepository.getRelatedBooks(catId,ownerId);
       
       if(!relatedBooks){
-        throw new CustomError("No Related Books Found",404)
+        throw new CustomError(BOOK_ERROR_RESPONSES.RELATED_BOOKS_NOT_AVAILABLE,HTTP_STATUS.NOT_FOUND)
       }
       return relatedBooks;
   }

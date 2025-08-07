@@ -94,8 +94,149 @@ export const SUCCESS_MESSAGES = {
 	PROFILE_UPDATED: "Profile updated",
 	SESSION_EXTENDED: "Session extended",
   NOTIFICATIONS_CLEARED_SUCCESS: "Cleared all notifications successfully.",
-  SINGLE_NOTIFICATION_CLEARED :"The notification has been successfully deleted."
+  SINGLE_NOTIFICATION_CLEARED :"The notification has been successfully deleted.",
+  DASHBOARD_DETAILS_FETCHED:"Dashboard details fetched successfully"
 } as const;
+
+
+export const USER_MESSAGES = {
+  PROFILE_UPDATED: "User profile updated successfully",
+  PASSWORD_UPDATED: "Password updated successfully",
+  USERS_FETCHED: "Users fetched successfully",
+  MISSING_PARAMETERS: "Missing parameters",
+  INVALID_ROLE: "Invalid user role",
+  USER_NOT_AVAILABLE:"User or user password is not available",
+};
+
+
+export const BOOK_SUCCESS_RESPONSES ={
+  BOOK_FETCHED :"Book details updated successfully",
+  BOOK_UPDATED:"Book status updated successfully",
+  RELATED_BOOKS_FETCHED:"Related books are fetched successfully",
+  BOOK_CREATED:"New book created successfully"
+} as const
+
+export const  BOOK_ERROR_RESPONSES ={
+  BOOKS_NOT_FOUND:"Books are not available now",
+  BOOK_NOT_AVAILABLE:"book is not available now",
+  RELATED_BOOKS_NOT_AVAILABLE:"No Related Books Found",
+} as const
+
+export const CATEGORY_SUCCESS={
+ CATEGORIES_FETCHED:"categoires fetched successfully",
+} as const
+
+export const CATEGORY_ERROR = {
+  CATEGORY_NAME_EXIST:"A category with this name already exists",
+  CATEGORIES_NOT_AVAILABLE:"No categories available now",
+} as const
+
+
+export const CONTRACT_REQUEST_SUCCESS = {
+  CONTRACT_CREATED: "Contract request created successfully",
+  NOT_EXIST: "No existing contract request found",
+  REQUEST_ALREADY_EXISTING: "A contract request already exists for this book",
+  OWNER_REQUESTS_FETCHED: "Requests fetched successfully",
+  REQUEST_UPDATED: "Contract request updated successfully",
+  REQUESTER_REQUESTS_FETCHED: "Requests fetched successfully",
+  NO_REQUESTS_FOUND: "No requests found",
+  REQUEST_CANCELLED: "Request cancelled successfully",
+  FIX_DEAL_DETAILS_FETCHED: "Request details fetched successfully",
+} as const;
+
+export const CONTRACT_REQUEST_ERROR = {
+  INVALID_REQUEST_ID: "Invalid contract request ID",
+  REQUEST_NOT_FOUND: "Contract request not found",
+  UNAUTHORIZED: "You are not authorized to perform this action",
+  REQUEST_ALREADY_CANCELLED: "Contract request is already cancelled",
+  SOMETHING_WENT_WRONG: "Something went wrong while processing contract request",
+} as const;
+
+
+
+export const DEAL_TYPE_SUCCESS = {
+  DEAL_TYPES_FETCHED: "Deal types fetched successfully",
+  DEAL_TYPE_CREATED: "Deal type created successfully",
+  DEAL_TYPE_UPDATED: "Deal type updated successfully",
+} as const;
+
+export const DEAL_TYPE_ERROR = {
+  DEAL_TYPE_NOT_FOUND: "Deal type not found",
+  DEAL_TYPE_ALREADY_EXISTS: "A deal type with this name already exists",
+  INVALID_DEAL_TYPE_ID: "Invalid deal type ID",
+} as const;
+
+
+export const NOTIFICATION_SUCCESS = {
+  NOTIFICATIONS_FETCHED: "Notifications fetched successfully",
+  COUNT_FETCHED: "Notification count fetched successfully",
+  NOTIFICATIONS_CLEARED: "Cleared all notifications successfully",
+  SINGLE_NOTIFICATION_CLEARED: "The notification has been successfully deleted",
+} as const;
+
+export const NOTIFICATION_ERROR = {
+  NOTIFICATION_NOT_FOUND: "Notification not found",
+  INVALID_NOTIFICATION_ID: "Notification ID is invalid",
+} as const;
+
+
+export const PURSE_SUCCESS = {
+  PURSE_FETCHED: "Purse found successfully",
+  PAYMENT_INTENT_CREATED: "PaymentIntent created successfully",
+  WEBHOOK_PROCESSED: "Webhook processed successfully",
+} as const;
+
+export const PURSE_ERROR = {
+  PURSE_NOT_AVAILABLE: "Purse not available",
+  INVALID_AMOUNT: "Invalid amount",
+  MISSING_CURRENCY: "Currency is required",
+} as const;
+
+export const RENTAL_SUCCESS = {
+  CONTRACTS_FETCHED: "Contracts fetched successfully",
+  BORROWED_CONTRACTS_FETCHED: "Borrowed contracts fetched successfully",
+  RENTED_BOOK_DETAILS_FETCHED: "Rental Contract details fetched successfully",
+  RENTAL_STATUS_UPDATED: "Rental status updated successfully",
+  OTP_SENT: "OTP sent successfully",
+  VERIFICATION_SUCCESS: "OTP verification successful",
+  RENEWAL_REQUESTED: "Renewal of Rental Contract requested successfully",
+  RENEWAL_RESPONDED: "Responded to new renewal successfully",
+} as const;
+
+export const RENTAL_ERROR = {
+  CONTRACT_NOT_FOUND: "Rental contract not found",
+  INVALID_RENTAL_ID: "Invalid rental ID",
+  RENTAL_UPDATE_FAILED: "Failed to update rental contract",
+  OTP_FAILED: "Failed to send OTP",
+  OTP_VERIFICATION_FAILED: "OTP verification failed",
+  RENEWAL_FAILED: "Contract renewal request failed",
+  RENTAL_ID_NOT_AVAILABLE:"Rental Id is required",
+  RENEWAL_DEATILS_MISSING:"Missing of renewal Datas",
+} as const;
+
+export const RETURN_REJECTION_REQUEST_SUCCESS = {
+  REQUEST_CREATED: "Return rejection requested successfully",
+  REQUESTS_FETCHED: "Return rejection requests fetched successfully",
+  NO_REQUESTS_FOUND: "No return rejection requests found",
+  STATUS_UPDATED: (status: string) => `Return rejection request ${status} successfully`,
+} as const;
+
+export const RETURN_REJECTION_REQUEST_ERROR = {
+  CREATION_FAILED: "Failed to create return rejection request",
+  FETCH_FAILED: "Failed to fetch return rejection requests",
+  STATUS_UPDATE_FAILED: "Failed to update request status",
+} as const;
+
+
+export const SALE_MESSAGES = {
+  CONTRACTS_FETCHED: "Sale contracts fetched successfully",
+  CONTRACT_DETAILS_FETCHED: "Sale contract successfully fetched",
+};
+export const SALE_ERROR_RESPONSES ={
+  SALE_CONTRACT_NOT_FOUND:"No sale contract available",
+} as const
+
+
 
 export const ERROR_MESSAGES = {
 	WRONG_ID: "Invalid ID",
@@ -135,8 +276,12 @@ export const ERROR_MESSAGES = {
 	RATE_LIMIT_EXCEEDED: "Too many requests try again later",
   INVALID_OTP:"Invalid OTP",
   USER_ID_NOT_AVAILABLE:"User ID is currently not available. Please check and try again.",
-  NOTIFICATION_ID_NOT_AVAILABLE:"Notification ID is currently not available. Please check and try again."
-  
+  NOTIFICATION_ID_NOT_AVAILABLE:"Notification ID is currently not available. Please check and try again.",
+  RECEIVER_NOT_FOUND:"Receiver is not found",
+  MESSAGE_NOT_FOUND:"Message not found",
+  MISSING_OF_DETAILS:"Missingg of details",
+  USER_NOT_FOUND_IN_REQUEST:"Unauthorized: No user found in request",
+  ACCOUNT_INACTIVE:"Access denied: Your account is inactive",
 } as const;
 
 export const VERIFICATION_MAIL_CONTENT = (otp: string) => `

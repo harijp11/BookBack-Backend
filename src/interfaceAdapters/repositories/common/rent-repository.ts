@@ -3,6 +3,7 @@ import { IRentRepository, PaginatedRentedBooksRepo } from "../../../entities/rep
 import { RentalInput } from "../../../entities/models/contract_input_entity";
 import { IRentModel, RentModel } from "../../../frameworks/database/models/rent_model";
 import { BaseRepository } from "../baseRepo/base_repository";
+import { IRentPopulated } from "../../../entities/types/IRentMapPopulated";
 
 @injectable()
 export class RentRepository extends BaseRepository<IRentModel,RentalInput> implements IRentRepository {
@@ -36,7 +37,8 @@ export class RentRepository extends BaseRepository<IRentModel,RentalInput> imple
            .sort({ created_at: -1 })
            .populate('borrowerId') 
            .populate('ownerId')    
-           .populate('bookId'),
+           .populate('bookId')
+            .lean() as unknown as IRentPopulated[],
            RentModel.countDocuments(query)
          ])
      
@@ -65,7 +67,8 @@ export class RentRepository extends BaseRepository<IRentModel,RentalInput> imple
           .sort({ created_at: -1 })
           .populate('borrowerId') 
           .populate('ownerId')    
-          .populate('bookId'),
+          .populate('bookId')
+          .lean() as unknown as IRentPopulated[],
           RentModel.countDocuments(query)
         ])
     
@@ -97,7 +100,8 @@ export class RentRepository extends BaseRepository<IRentModel,RentalInput> imple
           .sort({ created_at: -1 })
           .populate('borrowerId') 
           .populate('ownerId')    
-          .populate('bookId'),
+          .populate('bookId')
+          .lean() as unknown as IRentPopulated[],
           RentModel.countDocuments(query)
         ])
     
@@ -132,6 +136,5 @@ export class RentRepository extends BaseRepository<IRentModel,RentalInput> imple
     async aggregate(pipeline: any[]): Promise<any[]> {
         return await RentModel.aggregate(pipeline);
     }
-
 
 }

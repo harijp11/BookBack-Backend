@@ -3,6 +3,8 @@ import { IGetAllPaginatedOwnerBookUseCase } from "../../../entities/useCaseInter
 import { IBookRepository } from "../../../entities/repositoryInterface/common/book_repository-interface";
 import { PaginatedBooks } from "../../../entities/models/paginated_books_entity";
 import { CustomError } from "../../../entities/utils/custom_error";
+import { BOOK_ERROR_RESPONSES, HTTP_STATUS } from "../../../shared/constants";
+import { Mapper } from "../../../shared/utils/mappers/bookMapper";
 
 @injectable()
 export class GetAllPaginatedOwnerBooks implements IGetAllPaginatedOwnerBookUseCase{
@@ -31,11 +33,11 @@ async execute(ownerId: string, search: string, filter: object, page: number, lim
       const books = getBooks();
 
     if(!books){
-        throw new CustomError("No books found ", 404);
+        throw new CustomError(BOOK_ERROR_RESPONSES.BOOKS_NOT_FOUND, HTTP_STATUS.NOT_FOUND);
     }    
     const totalPages = Math.ceil(count / limit);
     return{ 
-        books:books || [],
+        books:Mapper.toBookEntityList(books),
         totalBooks:count,
         totalPages,
         currentPage:page

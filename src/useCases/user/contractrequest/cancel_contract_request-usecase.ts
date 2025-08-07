@@ -5,6 +5,7 @@ import { IContractRequestModel } from "../../../frameworks/database/models/contr
 import { CustomError } from "../../../entities/utils/custom_error";
 import { INotificationRepository } from "../../../entities/repositoryInterface/user/notification_repository-interface";
 import { IBookRepository } from "../../../entities/repositoryInterface/common/book_repository-interface";
+import { CONTRACT_REQUEST_ERROR, HTTP_STATUS } from "../../../shared/constants";
 
 @injectable()
 export class CancelContractRequest implements ICancelContractRequestUseCase {
@@ -25,7 +26,7 @@ export class CancelContractRequest implements ICancelContractRequestUseCase {
       );
 
     if (!request) {
-      throw new CustomError("No request found", 404);
+      throw new CustomError(CONTRACT_REQUEST_ERROR.REQUEST_NOT_FOUND, HTTP_STATUS.NOT_FOUND);
     }
 
     const book = await this._bookRepository.findByOwnerId(request.ownerId.toString())

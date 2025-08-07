@@ -1,7 +1,8 @@
-import { IBookModel } from "../../frameworks/database/models/book_model";
+import { IMapBookEntity } from "../types/IBookMapEnitity";
+import { IBookEntity } from "./book_entity";
 
 export interface PaginatedBooks {
-    books: IBookModel[];
+    books: IMapBookEntity[];
     totalBooks: number;
     totalPages: number;
     currentPage: number;

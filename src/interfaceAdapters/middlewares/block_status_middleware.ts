@@ -6,6 +6,7 @@ import { IBlackListTokenUseCase } from "../../entities/useCaseInterfaces/auth/bl
 import { IRevokeRefreshTokenUseCase } from "../../entities/useCaseInterfaces/auth/revoke_refresh_token_usecase-interface";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 import { clearAuthCookies } from "../../shared/utils/cookie_helper";
+import { handleErrorResponse } from "../../shared/utils/errorHandler";
 
 @injectable()
 export class BlockStatusMiddleware {
@@ -27,7 +28,7 @@ export class BlockStatusMiddleware {
       if (!req.user) {
         return res.status(HTTP_STATUS.UNAUTHORIZED).json({
           success: false,
-          message: "Unauthorized: No user found in request",
+          message: ERROR_MESSAGES.USER_NOT_FOUND_IN_REQUEST,
         });
       }
 
@@ -53,17 +54,13 @@ export class BlockStatusMiddleware {
 
         return res.status(HTTP_STATUS.FORBIDDEN).json({
           success: false,
-          message: "Access denied: Your account is inactive",
+          message: ERROR_MESSAGES.ACCOUNT_INACTIVE,
         });
       }
 
       next();
     } catch (error) {
-      console.error("Block Status Middleware Error: ", error);
-      return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
-        success: false,
-        message: "Internal server error while checking user status",
-      });
+      handleErrorResponse(res,error)
     }
   };
 }

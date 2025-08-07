@@ -44,7 +44,7 @@ export class GetAllUsersUseCase implements IGetAllUsersUseCase {
     }
 
     throw new CustomError(
-      "Invalid user type. Expected 'client' or 'trainer'.",
+      "Invalid user type. Expected 'client'",
       HTTP_STATUS.BAD_REQUEST
     );
   }

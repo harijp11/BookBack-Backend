@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { IAddUserNotifyForBook } from "../../../entities/useCaseInterfaces/user/book/add_user_notify_for_book_usecase-interface";
 import { IBookRepository } from "../../../entities/repositoryInterface/common/book_repository-interface";
 import { CustomError } from "../../../entities/utils/custom_error";
-import { HTTP_STATUS } from "../../../shared/constants";
+import { BOOK_ERROR_RESPONSES, HTTP_STATUS } from "../../../shared/constants";
 
 
 @injectable()
@@ -16,7 +16,7 @@ export class AddUserNotifyForBookUseCase implements IAddUserNotifyForBook{
         let book  = await this._bookRepository.findById(bookId)
 
         if(!book){
-            throw new CustomError("Book not found",HTTP_STATUS.BAD_REQUEST)
+            throw new CustomError(BOOK_ERROR_RESPONSES.BOOKS_NOT_FOUND,HTTP_STATUS.BAD_REQUEST)
         }
 
         if(book.notifyUsers.includes(userId)){

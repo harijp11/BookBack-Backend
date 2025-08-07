@@ -3,9 +3,10 @@ import { IBookModel } from "../../../frameworks/database/models/book_model";
 import { IBookEntity } from "../../models/book_entity";
 import { INewBookInput } from "../../useCaseInterfaces/user/book/create_new_book_usecase-interface";
 import { IBaseRepository } from "../baseRepo/base_repository-interface";
+import { IPopulatedBookModel } from "../../types/IBookMapModel";
 
 export interface PaginatedBooksRepo {
-  getBooks(): IBookModel[];
+  getBooks(): IPopulatedBookModel[];
   count: number;
 }
 

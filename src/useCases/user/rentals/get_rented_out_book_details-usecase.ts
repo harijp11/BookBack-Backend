@@ -3,6 +3,7 @@ import { IGetRentedOutBookDetailsUseCase } from "../../../entities/useCaseInterf
 import { IRentRepository } from "../../../entities/repositoryInterface/common/rent_repository-interface";
 import { IRentModel, RentModel } from "../../../frameworks/database/models/rent_model";
 import { CustomError } from "../../../entities/utils/custom_error";
+import { HTTP_STATUS, RENTAL_ERROR } from "../../../shared/constants";
 
 @injectable()
 export class GetRentedOutBookDetailsUseCase implements IGetRentedOutBookDetailsUseCase {
@@ -14,13 +15,13 @@ export class GetRentedOutBookDetailsUseCase implements IGetRentedOutBookDetailsU
     async execute(rentalId: string): Promise<IRentModel | null> {
 
         if(!rentalId){
-            throw new CustomError("Rental Id is required",400)
+            throw new CustomError(RENTAL_ERROR.RENTAL_ID_NOT_AVAILABLE,HTTP_STATUS.BAD_REQUEST)
         }
 
         const rentedContract = await this._rentRepository.findRentedOutBookDetails(rentalId)
 
         if(!rentedContract){
-            throw new CustomError("Rental contract not Found",404)
+            throw new CustomError(RENTAL_ERROR.CONTRACT_NOT_FOUND,HTTP_STATUS.NOT_FOUND)
         }
 
         return rentedContract

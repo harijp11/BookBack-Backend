@@ -3,6 +3,7 @@ import { IFetchFixDealDetailsUseCase } from "../../../entities/useCaseInterfaces
 import { IContractRequestModel } from "../../../frameworks/database/models/contract_request-model";
 import { IContractRequestRepository } from "../../../entities/repositoryInterface/user/contract_request_repository-interface";
 import { CustomError } from "../../../entities/utils/custom_error";
+import { CONTRACT_REQUEST_ERROR, HTTP_STATUS } from "../../../shared/constants";
 
 @injectable()
 export class FetchFixDealDetailsUseCase implements IFetchFixDealDetailsUseCase {
@@ -15,7 +16,7 @@ export class FetchFixDealDetailsUseCase implements IFetchFixDealDetailsUseCase {
         const request = await this._contractRequestRepository.findById(conReqId)
        
         if(!request){
-            throw new CustomError("No request found",404)
+            throw new CustomError(CONTRACT_REQUEST_ERROR.REQUEST_NOT_FOUND,HTTP_STATUS.NOT_FOUND)
         }
         return request
     }

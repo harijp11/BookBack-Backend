@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { INotificationController } from "../../entities/controllersInterfaces/notification_controller-interface";
 import { Request, Response } from "express";
 import { CustomRequest } from "../middlewares/auth_middleware";
-import { HTTP_STATUS, SUCCESS_MESSAGES } from "../../shared/constants";
+import { HTTP_STATUS, NOTIFICATION_SUCCESS, SUCCESS_MESSAGES } from "../../shared/constants";
 import { handleErrorResponse } from "../../shared/utils/errorHandler";
 import { IFetchAllUserNoticationUseCase } from "../../entities/useCaseInterfaces/user/notification/fetch_all_user_notification_usecase-interface";
 import { IGetChatAndNotificationUpdatesUseCase } from "../../entities/useCaseInterfaces/user/notification/get_chat_and_notification_updates_usecase-interface";
@@ -35,13 +35,12 @@ export class NotificationController implements INotificationController {
        
          res.status(HTTP_STATUS.OK).json({
                         success: true,
-                        message: "contracts fetched successfully",
+                        message: NOTIFICATION_SUCCESS.NOTIFICATIONS_FETCHED,
                         notifications,
                         totalnotifications,
                         totalPages,
                         currentPage,
                       }); 
-
       }catch(error){
         handleErrorResponse(res,error)
       }
@@ -55,7 +54,7 @@ export class NotificationController implements INotificationController {
      
       res.status(HTTP_STATUS.OK).json({
         success:true,
-        message:"Notification Count fetched successfully",
+        message:NOTIFICATION_SUCCESS.COUNT_FETCHED,
         unReadMessagesCount,
         unReadNotificationsCount,
       })
@@ -74,7 +73,7 @@ export class NotificationController implements INotificationController {
 
       res.status(HTTP_STATUS.OK).json({
         success:true,
-        message:SUCCESS_MESSAGES.NOTIFICATIONS_CLEARED_SUCCESS,
+        message: NOTIFICATION_SUCCESS.NOTIFICATIONS_CLEARED,
       })
 
     }catch(error){
@@ -90,7 +89,7 @@ export class NotificationController implements INotificationController {
        
        res.status(HTTP_STATUS.OK).json({
         success:true,
-        message:SUCCESS_MESSAGES.SINGLE_NOTIFICATION_CLEARED
+        message: NOTIFICATION_SUCCESS.SINGLE_NOTIFICATION_CLEARED
        })
   
     }catch(error){

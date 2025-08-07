@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { IContractRequestController } from "../../entities/controllersInterfaces/contract_request_controller-interface";
 import { handleErrorResponse } from "../../shared/utils/errorHandler";
 import { Request, Response } from "express";
-import { ContractRequestInput, HTTP_STATUS, SUCCESS_MESSAGES } from "../../shared/constants";
+import { CONTRACT_REQUEST_ERROR,CONTRACT_REQUEST_SUCCESS, ContractRequestInput, HTTP_STATUS, SUCCESS_MESSAGES } from "../../shared/constants";
 import { ICreateNewContractRequestUseCase } from "../../entities/useCaseInterfaces/user/contractrequest/create_new_contract_request_usecase-interface";
 import { ICheckBookRequestExistUseCase } from "../../entities/useCaseInterfaces/user/contractrequest/check_book_request_exist_usecase-interface";
 import { IFetchAllOwnerRequestsUseCase } from "../../entities/useCaseInterfaces/user/contractrequest/fetch_all_owner_contract_requests_usecase-entity";
@@ -37,10 +37,10 @@ export class ContractRequestController implements IContractRequestController {
       const data: ContractRequestInput = req.body;
       await this._createNewContractRequestUseCase.execute(data);
       res
-        .status(201)
+        .status(HTTP_STATUS.CREATED)
         .json({
-          success: SUCCESS_MESSAGES.CREATED,
-          message: "Contract request created successfully",
+          success: true,
+          message: CONTRACT_REQUEST_SUCCESS.CONTRACT_CREATED,
         });
     } catch (error) {
       handleErrorResponse(res, error);
@@ -61,17 +61,17 @@ export class ContractRequestController implements IContractRequestController {
      
 
       if (!request) {
-        res.status(200).json({
+        res.status(HTTP_STATUS.OK).json({
           success: false,
-          message: "User not requested yet",
+          message: CONTRACT_REQUEST_SUCCESS.NOT_EXIST,
           
         });
         return;
       }
 
-      res.status(200).json({
+      res.status(HTTP_STATUS.OK).json({
         success: true,
-        message: "Already requested for contract",
+        message: CONTRACT_REQUEST_SUCCESS.REQUEST_ALREADY_EXISTING,
         request
       });
     } catch (error) {
@@ -93,14 +93,14 @@ export class ContractRequestController implements IContractRequestController {
       if (!requests || requests.length=== 0) {
         res.status(200).json({
           success: false,
-          message: "No Requests found for contract",
+          message: CONTRACT_REQUEST_SUCCESS.NO_REQUESTS_FOUND,
         });
         return;
       }
 
-      res.status(200).json({
+      res.status(HTTP_STATUS.OK).json({
         success: true,
-        message: "Requestes fetched successfully",
+        message: CONTRACT_REQUEST_SUCCESS.OWNER_REQUESTS_FETCHED,
         requests
       });
     } catch (error) {
@@ -114,9 +114,9 @@ export class ContractRequestController implements IContractRequestController {
       
       const request = await this._contractRequestStatusUpdateUseCase.execute(conReqId,status)
         
-      res.status(200).json({
+      res.status(HTTP_STATUS.OK).json({
         success:true,
-        message:"Contract request updated successfully",
+        message:CONTRACT_REQUEST_SUCCESS.REQUEST_UPDATED,
         request
       })
     }catch(error){
@@ -140,16 +140,16 @@ export class ContractRequestController implements IContractRequestController {
             };
     
       if(requests?.length === 0){
-         res.status(200).json({
+         res.status(HTTP_STATUS.OK).json({
           success:false,
-          message:"No requests found"
+          message:CONTRACT_REQUEST_SUCCESS.NO_REQUESTS_FOUND,
          })
          return 
       }
 
-      res.status(200).json({
+      res.status(HTTP_STATUS.OK).json({
         success:true,
-        message:"Requests Fetched successfully",
+        message:CONTRACT_REQUEST_SUCCESS.REQUESTER_REQUESTS_FETCHED,
         requests,
         totalRequests,
         totalPages,
@@ -168,7 +168,7 @@ export class ContractRequestController implements IContractRequestController {
      
     res.status(HTTP_STATUS.OK).json({
       success:true,
-      message:"Request Cancelled Successfully",
+      message:CONTRACT_REQUEST_SUCCESS.REQUEST_CANCELLED,
       request
     })
     }catch(error){
@@ -185,7 +185,7 @@ export class ContractRequestController implements IContractRequestController {
 
        res.status(HTTP_STATUS.OK).json({
         success:true,
-        message:"Request details fetched successfully",
+        message:CONTRACT_REQUEST_SUCCESS.FIX_DEAL_DETAILS_FETCHED,
         request
        })
       }catch(error){

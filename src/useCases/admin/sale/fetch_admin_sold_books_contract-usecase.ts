@@ -3,6 +3,7 @@ import { IFetchAdminSoldBooksContractUseCase } from "../../../entities/useCaseIn
 import { ISaleRepository } from "../../../entities/repositoryInterface/common/sale_repository-interface";
 import { CustomError } from "../../../entities/utils/custom_error";
 import { PaginatedSoldBooksContracts } from "../../../entities/models/paginated_sale_books_contract_entity";
+import { BOOK_ERROR_RESPONSES, HTTP_STATUS } from "../../../shared/constants";
 
 @injectable()
 export class FetchAdminSoldBooksContractUseCase implements IFetchAdminSoldBooksContractUseCase{
@@ -17,7 +18,7 @@ export class FetchAdminSoldBooksContractUseCase implements IFetchAdminSoldBooksC
 
 
      if (!soldBooksContract) {
-        throw new CustomError("No books found", 404);
+        throw new CustomError(BOOK_ERROR_RESPONSES.BOOKS_NOT_FOUND, HTTP_STATUS.NOT_FOUND);
       }
 
      const { getSoldBooksContracts, count } = soldBooksContract;

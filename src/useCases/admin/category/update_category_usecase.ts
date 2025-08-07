@@ -3,7 +3,7 @@ import { inject, injectable } from "tsyringe";
 import { IUpdateCategoryUseCase } from "../../../entities/useCaseInterfaces/admin/category/update_category_usecase-interface";
 import { ICategoryRepository } from "../../../entities/repositoryInterface/common/category_repository-interface";
 import { CustomError } from "../../../entities/utils/custom_error";
-import { ERROR_MESSAGES, HTTP_STATUS } from "../../../shared/constants";
+import { CATEGORY_ERROR, ERROR_MESSAGES, HTTP_STATUS } from "../../../shared/constants";
 
 @injectable()
 export class UpdateCategoryUseCase implements IUpdateCategoryUseCase{
@@ -19,7 +19,7 @@ export class UpdateCategoryUseCase implements IUpdateCategoryUseCase{
     }
      const catNameExist = await this._categoryRepository.findByName(name)
      if(catNameExist){
-      throw new CustomError("category name already existing",400)
+      throw new CustomError(ERROR_MESSAGES.CATEGORY_EXISTS,400)
      }
 
     await this._categoryRepository.updateCategory(id, name, description);

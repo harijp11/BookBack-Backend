@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import { IDealTypeController } from "../../entities/controllersInterfaces/deal_type_controller-interface";
 import { Request, Response } from "express";
-import { HTTP_STATUS, SUCCESS_MESSAGES } from "../../shared/constants";
+import { DEAL_TYPE_SUCCESS, HTTP_STATUS, SUCCESS_MESSAGES } from "../../shared/constants";
 import { IGetAllDealTypesUseCase } from "../../entities/useCaseInterfaces/user/dealtype/get_all_deal_tyoe_usecase.interface";
 import { ICreateDealTypeUseCase } from "../../entities/useCaseInterfaces/admin/dealType/create_deal_type_usecase-interface";
 import { IGetAllPaginatedDealTypesUseCase } from "../../entities/useCaseInterfaces/admin/dealType/get_all_paginated_deal_type_usecase-interface";
@@ -30,7 +30,7 @@ export class DealTypeController implements IDealTypeController {
     const dealtypes = await this._getAllDealTypes.execute();
     res.status(HTTP_STATUS.OK).json({
       success: true,
-      message: "Dealtypes fetched successfully",
+      message: DEAL_TYPE_SUCCESS.DEAL_TYPES_FETCHED,
       dealtypes,
     });
   }
@@ -47,7 +47,7 @@ export class DealTypeController implements IDealTypeController {
       await this._createDealTypeUseCase.execute(name, description);
       res.status(HTTP_STATUS.OK).json({
         success: true,
-        message: SUCCESS_MESSAGES.CREATED,
+        message: DEAL_TYPE_SUCCESS.DEAL_TYPE_CREATED,
       });
     } catch (err) {
       handleErrorResponse(res, err);
@@ -69,7 +69,7 @@ export class DealTypeController implements IDealTypeController {
 
       res.status(HTTP_STATUS.OK).json({
         success: true,
-        message: "deal types fetched successfully",
+        message: DEAL_TYPE_SUCCESS.DEAL_TYPES_FETCHED,
         dealTypes,
         totalPages: total,
         currentPage: pageNumber,
@@ -87,7 +87,7 @@ export class DealTypeController implements IDealTypeController {
       await this._updateDealTypeStatusUseCase.execute(_id);
       res.status(HTTP_STATUS.OK).json({
         success: true,
-        message: "deal type updated successfully",
+        message: DEAL_TYPE_SUCCESS.DEAL_TYPE_UPDATED,
       });
     } catch (err) {
       handleErrorResponse(res, err);
@@ -105,7 +105,7 @@ export class DealTypeController implements IDealTypeController {
       await this._updateDealTypeUsecase.execute(_id, name, description);
       res.status(HTTP_STATUS.OK).json({
         success: true,
-        message: "deal type updated successfully",
+        message: DEAL_TYPE_SUCCESS.DEAL_TYPE_UPDATED,
       });
     } catch (err) {
       handleErrorResponse(res, err);

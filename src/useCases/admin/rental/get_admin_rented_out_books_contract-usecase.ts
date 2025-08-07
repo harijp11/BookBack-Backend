@@ -3,6 +3,8 @@ import { IGetAdminRentedOutBooksContractUseCase } from "../../../entities/useCas
 import { IRentRepository } from "../../../entities/repositoryInterface/common/rent_repository-interface";
 import { CustomError } from "../../../entities/utils/custom_error";
 import { PaginatedRentedBooksContracts } from "../../../entities/models/paginated_rental_contracts_entity";
+import { BOOK_ERROR_RESPONSES } from "../../../shared/constants";
+import { RentMapper } from "../../../shared/utils/mappers/rentalMappers";
 
 @injectable()
 export class GetAdminRentedOutBooksContractUseCase implements IGetAdminRentedOutBooksContractUseCase {
@@ -17,7 +19,7 @@ export class GetAdminRentedOutBooksContractUseCase implements IGetAdminRentedOut
        
        
             if (!RentedBooksContract) {
-               throw new CustomError("No books found", 404);
+               throw new CustomError(BOOK_ERROR_RESPONSES.BOOKS_NOT_FOUND, 404);
              }
        
             const { getRentedBooksContracts, count } = RentedBooksContract;
@@ -28,7 +30,7 @@ export class GetAdminRentedOutBooksContractUseCase implements IGetAdminRentedOut
                 const totalPages = Math.ceil(count / limit);
        
                 return{ 
-                   rentedBooksContracts:rentedBooksContract || [],
+                   rentedBooksContracts:rentedBooksContract.map(RentMapper) || [],
                    totalRentedContracts:count,
                     totalPages,
                     currentPage:page

@@ -5,6 +5,7 @@ import { BookModel, IBookModel } from "../../../frameworks/database/models/book_
 import { IBookEntity } from "../../../entities/models/book_entity";
 import { PipelineStage, Types } from "mongoose";
 import { BaseRepository } from "../baseRepo/base_repository";
+import { IPopulatedBookModel } from "../../../entities/types/IBookMapModel";
 
 
 @injectable()
@@ -46,7 +47,9 @@ export class BookRepository extends BaseRepository<IBookModel,INewBookInput> imp
       .sort({ createdAt: -1 })
       .populate('categoryId', 'name') 
       .populate('ownerId', 'Name')    
-      .populate('dealTypeId', 'name'),
+      .populate('dealTypeId', 'name')
+      .lean() 
+      .exec().then(res => res as unknown as IPopulatedBookModel[]),
       BookModel.countDocuments(query)
     ])
 
@@ -75,14 +78,16 @@ export class BookRepository extends BaseRepository<IBookModel,INewBookInput> imp
   };
 
 
-const [books,count] = await Promise.all([
+const [books,count]:[IPopulatedBookModel[], number] = await Promise.all([
  BookModel.find(query)
   .skip(skip)
   .limit(limit)
   .sort({ createdAt: -1 })
   .populate('categoryId', 'name') 
   .populate('ownerId', 'Name')    
-  .populate('dealTypeId', 'name'),
+  .populate('dealTypeId', 'name')
+  .lean() 
+  .exec().then(res => res as unknown as IPopulatedBookModel[]),
   BookModel.countDocuments(query)
 ])
 const result: PaginatedBooksRepo = {
@@ -213,7 +218,7 @@ return result;
   
       const countResult = await BookModel.aggregate(countPipeline);
       const count = countResult.length > 0 ? countResult[0].total : 0;
-  
+     
       const books = await BookModel.aggregate(pipeline);
 
       return {

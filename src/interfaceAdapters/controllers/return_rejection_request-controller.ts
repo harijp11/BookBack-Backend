@@ -3,7 +3,7 @@ import { IReturnRejectionRequestController } from "../../entities/controllersInt
 import { Request, Response } from "express";
 import { IReturnRejectionRequestcreateDTO } from "../../entities/models/return_rejection_request_input_data_entity";
 import { ICreateNewReturnRejectionRequestUseCase } from "../../entities/useCaseInterfaces/user/return_rejection_request_usecase-interface/create_new_return_rejection_request_usecase-interface";
-import { HTTP_STATUS } from "../../shared/constants";
+import { HTTP_STATUS, RETURN_REJECTION_REQUEST_SUCCESS } from "../../shared/constants";
 import { handleErrorResponse } from "../../shared/utils/errorHandler";
 import { IFetchAllPaginatedReturnRejectionRequestUseCase } from "../../entities/useCaseInterfaces/admin/returnrejectionrequest/fetch_all_paginated_return_rejection_request_usecase-interface";
 import { IUpdateReturnRejectionRequestStatusUseCase } from "../../entities/useCaseInterfaces/admin/returnrejectionrequest/update_return_rejection_request_status_usecase-interface";
@@ -30,7 +30,7 @@ export class ReturnRejectionRequestController implements IReturnRejectionRequest
 
         res.status(HTTP_STATUS.CREATED).json({
             success:true,
-            message:"Return rejection Requested successfully"
+            message:RETURN_REJECTION_REQUEST_SUCCESS.REQUEST_CREATED,
         })
        }catch(error){
         handleErrorResponse(res,error)
@@ -59,14 +59,14 @@ export class ReturnRejectionRequestController implements IReturnRejectionRequest
         if(!returnRejectionRequest){
             res.status(HTTP_STATUS.OK).json({
                 success:false,
-                message:"No Requests Found"
+                message: RETURN_REJECTION_REQUEST_SUCCESS.NO_REQUESTS_FOUND,
             })
             return
         }
 
         res.status(HTTP_STATUS.OK).json({
             success:true,
-            message:"Return Rejection Request Found Fetched successfully",
+            message:RETURN_REJECTION_REQUEST_SUCCESS.REQUESTS_FETCHED,
             topFiveMostComplaintedBy:topFiveMostComplainted,
             topFiveMostComplaintedAgainst:topFiveMostComplaintedTo,
             returnRejectionRequest,
@@ -90,15 +90,13 @@ export class ReturnRejectionRequestController implements IReturnRejectionRequest
 
             res.status(HTTP_STATUS.OK).json({
                 success:true,
-                message:`Return Rejection Request ${status} successfully`
+                message:RETURN_REJECTION_REQUEST_SUCCESS.STATUS_UPDATED(status),
             })
 
         }catch(error){
             handleErrorResponse(res,error)
         }
     }
-
-
 
 
 }

@@ -6,6 +6,7 @@ import { IFundPurseUseCase } from '../../entities/useCaseInterfaces/user/purse/f
 import { handleErrorResponse } from '../../shared/utils/errorHandler';
 import { CustomRequest } from '../middlewares/auth_middleware';
 import { IWebhookHandlingUseCase } from '../../entities/useCaseInterfaces/user/purse/web_hook_handling_usecase-interface';
+import { HTTP_STATUS, PURSE_ERROR, PURSE_SUCCESS } from '../../shared/constants';
 
 @injectable()
 export class PurseController implements IPurseController {
@@ -21,16 +22,16 @@ export class PurseController implements IPurseController {
       const purse = await this._fetchPurseDetailsUseCase.execute(userId);
 
       if (!purse) {
-        res.status(200).json({
+        res.status(HTTP_STATUS.NOT_FOUND).json({
           success: false,
-          message: 'Purse not available',
+          message: PURSE_ERROR.PURSE_NOT_AVAILABLE,
         });
         return;
       }
 
       res.status(200).json({
         success: true,
-        message: 'Purse found successfully',
+        message: PURSE_SUCCESS.PURSE_FETCHED,
         purse,
       });
     } catch (error: any) {
@@ -52,9 +53,9 @@ export class PurseController implements IPurseController {
 
       const paymentIntent = await this.fundPurseUseCase.execute(userId, amount, currency);
 
-      res.status(200).json({
+      res.status(HTTP_STATUS.OK).json({
         success: true,
-        message: 'PaymentIntent created successfully',
+        message:  PURSE_SUCCESS.PAYMENT_INTENT_CREATED,
         clientSecret: paymentIntent.clientSecret,
         paymentIntentId: paymentIntent.paymentIntentId,
         tsId: paymentIntent.tsId,
@@ -69,9 +70,9 @@ export class PurseController implements IPurseController {
       const event = req.body;
       const result = await this._webHookHandlingUseCase.handleWebhookEvent(event);
 
-      res.status(200).json({
+      res.status(HTTP_STATUS.OK).json({
         success: true,
-        message: 'Webhook processed successfully',
+        message: PURSE_SUCCESS.WEBHOOK_PROCESSED,
         result,
       });
     } catch (error: any) {   

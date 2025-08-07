@@ -4,6 +4,7 @@ import { IUserRepository } from "../../../entities/repositoryInterface/user/user
 import { IUserModel } from "../../../frameworks/database/models/User_model";
 import { IUserEntity } from "../../../entities/models/user_entity";
 import { CustomError } from "../../../entities/utils/custom_error";
+import { ERROR_MESSAGES, HTTP_STATUS } from "../../../shared/constants";
 
 
 @injectable()
@@ -17,7 +18,7 @@ export class FetchReceiverDetailsUseCase implements IFetchReceiverDetailsUseCase
         const receiverDetails = await this._userRepository.findById(receiverId)
 
         if(!receiverDetails){
-            throw new CustomError("Receiver not found", 404)
+            throw new CustomError(ERROR_MESSAGES.RECEIVER_NOT_FOUND, HTTP_STATUS.NOT_FOUND)
         }
 
         return receiverDetails

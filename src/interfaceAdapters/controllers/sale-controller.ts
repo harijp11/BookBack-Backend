@@ -3,7 +3,7 @@ import { ISaleController } from "../../entities/controllersInterfaces/sale_contr
 import { Request, Response } from "express";
 import { CustomRequest } from "../middlewares/auth_middleware";
 import { ISaleModel } from "../../frameworks/database/models/sale_model";
-import { HTTP_STATUS } from "../../shared/constants";
+import { HTTP_STATUS, SALE_MESSAGES } from "../../shared/constants";
 import { IFetchSoldBooksContractUseCase } from "../../entities/useCaseInterfaces/user/sales/fetch_sold_books_usecase-interface";
 import { IFetchBoughtBooksContractsUseCase } from "../../entities/useCaseInterfaces/user/sales/fetch_bought_books_usecase-interface";
 import { handleErrorResponse } from "../../shared/utils/errorHandler";
@@ -45,7 +45,7 @@ export class SaleController implements ISaleController{
         
               res.status(HTTP_STATUS.OK).json({
                 success: true,
-                message: "contracts fetched successfully",
+                message: SALE_MESSAGES.CONTRACTS_FETCHED,
                 saleBooksContracts,
                 totalSoldContracts,
                 totalPages,
@@ -76,7 +76,7 @@ export class SaleController implements ISaleController{
     
           res.status(HTTP_STATUS.OK).json({
             success: true,
-            message: "contracts fetched successfully",
+            message: SALE_MESSAGES.CONTRACTS_FETCHED,
             boughtBooksContract:saleBooksContracts,
             totalBoughtContracts:totalSoldContracts,
             totalPages,
@@ -96,7 +96,7 @@ async fetchSoldBookDetails(req: Request, res: Response): Promise<void> {
 
     res.status(HTTP_STATUS.OK).json({
       success:true,
-      message:"Sale contract successfully fetched",
+      message:SALE_MESSAGES.CONTRACT_DETAILS_FETCHED,
       saleBooksContracts:saleContract
     })
 
@@ -129,7 +129,7 @@ async fetchAdminSoldBooksContract(req: Request, res: Response): Promise<void> {
      
            res.status(HTTP_STATUS.OK).json({
              success: true,
-             message: "contracts fetched successfully",
+             message: SALE_MESSAGES.CONTRACTS_FETCHED,
              saleBooksContracts,
              totalSoldContracts,
              totalPages,
@@ -139,9 +139,6 @@ async fetchAdminSoldBooksContract(req: Request, res: Response): Promise<void> {
      handleErrorResponse(res,error)
   }
 }
-
-
-
 
 
 }

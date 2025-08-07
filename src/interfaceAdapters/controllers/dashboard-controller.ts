@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { IDashboardController } from "../../entities/controllersInterfaces/dashboard-controller-interface";
 import { Request, Response } from "express";
 import { handleErrorResponse } from "../../shared/utils/errorHandler";
-import { HTTP_STATUS } from "../../shared/constants";
+import { HTTP_STATUS, SUCCESS_MESSAGES } from "../../shared/constants";
 import { DashboardData, DashboardQuery, SalesData } from "../../entities/models/dashboard_entities";
 import { IFetchDashboardDetailsUseCase } from "../../entities/useCaseInterfaces/admin/dashboard/fetch_dashboard_details_useacse-interface";
 
@@ -24,7 +24,7 @@ export class DashboardController implements IDashboardController {
       );
       res.status(HTTP_STATUS.OK).json({
         success: true,
-        message: 'Dashboard details fetched successfully',
+        message: SUCCESS_MESSAGES.DASHBOARD_DETAILS_FETCHED,
         ...data,
       });
     } catch (error) {

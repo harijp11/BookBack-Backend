@@ -2,6 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { IGetAllPaginatedCategoryUseCase } from "../../../entities/useCaseInterfaces/admin/category/get_all_paginated_categories_usecase-interface";
 import { ICategoryRepository } from "../../../entities/repositoryInterface/common/category_repository-interface";
 import { PaginatedCategories } from "../../../entities/models/paginated_category_entity";
+import { CategoryMapper } from "../../../shared/utils/mappers/categoryMappers";
 
 @injectable()
 export class GetALLPaginatedCategories implements IGetAllPaginatedCategoryUseCase {
@@ -24,10 +25,10 @@ export class GetALLPaginatedCategories implements IGetAllPaginatedCategoryUseCas
         const skip = (validPageNumber - 1) * validPageSize;
         const limit = validPageSize;
     
-        const { categories, total, all } =
+        const { categories: rawCategories, total, all } =
           await this._categoryRepository.findPaginatedCategory(filter, skip, limit);
         const response: PaginatedCategories = {
-          categories,
+          categories:CategoryMapper(rawCategories),
           total: Math.ceil(total / validPageSize),
           all,
         };

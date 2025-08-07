@@ -5,7 +5,7 @@ import {
   ICreateNewBookUseCase,
   INewBookInput,
 } from "../../entities/useCaseInterfaces/user/book/create_new_book_usecase-interface";
-import { HTTP_STATUS } from "../../shared/constants";
+import { BOOK_ERROR_RESPONSES, BOOK_SUCCESS_RESPONSES, ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 import { ICloudinarySignatureService } from "../../entities/serviceInterfaces/cloudinary_service-interface";
 import { IGetAllPaginatedOwnerBookUseCase } from "../../entities/useCaseInterfaces/user/book/get_all_paginated_owner_books_usecase-interface";
 import { IBookModel } from "../../frameworks/database/models/book_model";
@@ -20,6 +20,7 @@ import { IRelatedBooksUseCase } from "../../entities/useCaseInterfaces/user/book
 import { IGetAllAdminPaginatedBooksUseCase } from "../../entities/useCaseInterfaces/admin/book/get_all_paginated_books_usecase-interface";
 import { CustomRequest } from "../middlewares/auth_middleware";
 import { IAddUserNotifyForBook } from "../../entities/useCaseInterfaces/user/book/add_user_notify_for_book_usecase-interface";
+import { IMapBookEntity } from "../../entities/types/IBookMapEnitity";
 
 @injectable()
 export class BookController implements IBookController {
@@ -63,16 +64,12 @@ export class BookController implements IBookController {
       const signatureData =
         this._cloudinarySignatureService.generateSignature(folder);
 
-      res.status(200).json({
+      res.status(HTTP_STATUS.OK).json({
         success: true,
         data: signatureData,
       });
     } catch (error) {
-      console.error("Error generating Cloudinary signature:", error);
-      res.status(500).json({
-        success: false,
-        message: "Failed to generate signature for Cloudinary upload",
-      });
+      handleErrorResponse(res,error)
     }
   };
 
@@ -82,7 +79,7 @@ export class BookController implements IBookController {
     await this._createNewBookUseCase.execute(data);
     res.status(HTTP_STATUS.CREATED).json({
       success: true,
-      message: "new Book created successfully",
+      message: BOOK_SUCCESS_RESPONSES.BOOK_CREATED
     });
   }
 
@@ -108,7 +105,7 @@ export class BookController implements IBookController {
       if (!ownerId) {
         res.status(400).json({
           success: false,
-          message: "Owner ID is required",
+          message: ERROR_MESSAGES.USER_ID_NOT_AVAILABLE,
         });
       }
 
@@ -121,7 +118,7 @@ export class BookController implements IBookController {
       );
 
       const { books, totalBooks, totalPages, currentPage } = result as {
-        books: IBookModel[];
+        books: IMapBookEntity[];
         totalBooks: number;
         totalPages: number;
         currentPage: number;
@@ -129,18 +126,14 @@ export class BookController implements IBookController {
 
       res.status(HTTP_STATUS.OK).json({
         success: true,
-        message: "Books fetched successfully",
+        message: BOOK_SUCCESS_RESPONSES.BOOK_FETCHED,
         books,
         totalBooks,
         totalPages,
         currentPage,
       });
     } catch (error) {
-      console.error("Error fetching books:", error);
-      res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
-        success: false,
-        message: "Internal Server Error",
-      });
+      handleErrorResponse(res,error)
     }
   }
 
@@ -152,7 +145,7 @@ export class BookController implements IBookController {
       await this._updateBookDetailsUseCase.execute(data, bookId);
       res.status(HTTP_STATUS.OK).json({
         success: true,
-        message: "Book details updated successfully",
+        message: BOOK_SUCCESS_RESPONSES.BOOK_FETCHED,
       });
     } catch (error) {
       handleErrorResponse(res, error);
@@ -166,7 +159,7 @@ export class BookController implements IBookController {
       await this._updateBookStatusUseCase.execute(bookId);
       res.status(HTTP_STATUS.OK).json({
         success: true,
-        message: "Book status updated successfully",
+        message: BOOK_SUCCESS_RESPONSES.BOOK_UPDATED,
       });
     } catch (error) {
       handleErrorResponse(res, error);
@@ -201,7 +194,7 @@ export class BookController implements IBookController {
       });
       
       if (!locationBasedFilteredBooks) {
-        throw new CustomError("No books found", 404);
+        throw new CustomError(BOOK_ERROR_RESPONSES.BOOKS_NOT_FOUND, 404);
       }
       
       const { books, totalBooks, totalPages, currentPage } = locationBasedFilteredBooks;
@@ -210,7 +203,7 @@ export class BookController implements IBookController {
       }
         res.status(200).json({
           success: true,
-          message:"Books fetched successfully",
+          message:BOOK_SUCCESS_RESPONSES.BOOK_FETCHED,
           books,
           totalPages,
           currentPage,
@@ -229,7 +222,7 @@ export class BookController implements IBookController {
 
         res.status(HTTP_STATUS.OK).json({
           success: true,
-          message: "Book details fetched successfully",
+          message: BOOK_SUCCESS_RESPONSES.BOOK_FETCHED,
           book
         })
         }catch(error){
@@ -248,7 +241,7 @@ export class BookController implements IBookController {
     const books = await this._getRelatedBooksUseCase.execute(catId,userId);
     res.status(HTTP_STATUS.OK).json({
       success: true,
-      message: "Related books fetched successfully",
+      message:BOOK_SUCCESS_RESPONSES.RELATED_BOOKS_FETCHED,
       books
     })
    }catch(error){
@@ -283,7 +276,7 @@ async getAllAdminPaginatedBooks(req: Request, res: Response):Promise<void> {
            totalPages,
            currentPage 
          } = result as {
-             books: IBookModel[];
+             books: IMapBookEntity[];
              totalBooks: number;
              totalPages: number;
              currentPage: number;
@@ -291,18 +284,14 @@ async getAllAdminPaginatedBooks(req: Request, res: Response):Promise<void> {
      
          res.status(HTTP_STATUS.OK).json({
            success: true,
-           message: "Books fetched successfully",
+           message: BOOK_SUCCESS_RESPONSES.BOOK_FETCHED,
            books,
            totalBooks,
            totalPages,
            currentPage
          });
        } catch (error) {
-         console.error("Error fetching books:", error);
-         res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
-           success: false,
-           message: "Internal Server Error",
-         });
+        handleErrorResponse(res,error)
        }
 }
  

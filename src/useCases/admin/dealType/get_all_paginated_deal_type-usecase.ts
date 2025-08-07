@@ -3,6 +3,7 @@ import { IGetAllPaginatedDealTypesUseCase } from "../../../entities/useCaseInter
 import { IDealTypeRepository } from "../../../entities/repositoryInterface/common/deal_type_repository-interface";
 
 import { PaginatedDealTypes } from "../../../entities/models/paginated_deal_type_entity";
+import { DealTypeMapper } from "../../../shared/utils/mappers/dealTypeMappers";
 
 
 @injectable()
@@ -27,7 +28,7 @@ export class GetAllPaginatedDealTypesUseCase implements IGetAllPaginatedDealType
         const {dealTypes,total,all} = 
         await this._dealTypeRepository.findPaginatedDealType(filter,skip,limit)
         const response: PaginatedDealTypes = {
-            dealTypes,
+            dealTypes:DealTypeMapper(dealTypes),
             total: Math.ceil(total / validPageSize),
             all,
           };
