@@ -4,6 +4,8 @@ import { ISaleRepository } from "../../../entities/repositoryInterface/common/sa
 import { ISaleModel } from "../../../frameworks/database/models/sale_model";
 import { CustomError } from "../../../entities/utils/custom_error";
 import { HTTP_STATUS, SALE_ERROR_RESPONSES } from "../../../shared/constants";
+import { SingleSaleMapper } from "../../../shared/utils/mappers/singleSaleMapper";
+import { SingleSaleDTO } from "../../../shared/dto/singleSaleDto";
 
 @injectable()
 export class FetchSoldBookContractDetailsUseCase implements IFetchSoldBooksContractDetailsUseCase {
@@ -12,13 +14,13 @@ export class FetchSoldBookContractDetailsUseCase implements IFetchSoldBooksContr
         private _saleRepository:ISaleRepository
     ){}
 
-    async execute(saleContractId: string): Promise<ISaleModel | null> {
+    async execute(saleContractId: string): Promise<SingleSaleDTO | null> {
         const saleContract = await this._saleRepository.findSoldBookDetails(saleContractId)
 
         if(!saleContract){
             throw new CustomError(SALE_ERROR_RESPONSES.SALE_CONTRACT_NOT_FOUND,HTTP_STATUS.NOT_FOUND)
         }
 
-        return saleContract
+        return SingleSaleMapper(saleContract)
     }
 }

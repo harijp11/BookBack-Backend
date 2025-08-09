@@ -1,7 +1,8 @@
 import { inject, injectable } from "tsyringe";
 import { IFetchAllPaginatedReturnRejectionRequestUseCase } from "../../../entities/useCaseInterfaces/admin/returnrejectionrequest/fetch_all_paginated_return_rejection_request_usecase-interface";
 import { IReturnRejectionRequestRepository } from "../../../entities/repositoryInterface/common/return_rejection_request_repository-interface";
-import { IReturnRejectionRequestModel } from "../../../frameworks/database/models/return_rejection_request_model";
+import { ReturnRejectionRequestMapper } from "../../../shared/utils/mappers/returnRejectionRequestMapper";
+import { ReturnRejectionRequestDTO } from "../../../shared/dto/returnRejectionRequestDto";
 
 @injectable()
 export class FetchAllPaginatedAdminReturnRejectionRequestUseCase implements IFetchAllPaginatedReturnRejectionRequestUseCase{
@@ -10,7 +11,7 @@ export class FetchAllPaginatedAdminReturnRejectionRequestUseCase implements IFet
         private _returnRejectionRequestRepository:IReturnRejectionRequestRepository
     ){}
 
-    async execute(page: number, limit: number,filter:Object): Promise<{ returnRejectionRequest: IReturnRejectionRequestModel[]; totalReturnRejectionRequest: number; topFiveMostComplainted: Array<{ count: number; user: { name: string; email: string; }; }>; topFiveMostComplaintedTo: Array<{ count: number; user: { name: string; email: string; }; }>; totalPages: number; currentPage: number; }> {
+    async execute(page: number, limit: number,filter:Object): Promise<{ returnRejectionRequest: ReturnRejectionRequestDTO[]; totalReturnRejectionRequest: number; topFiveMostComplainted: Array<{ count: number; user: { name: string; email: string; }; }>; topFiveMostComplaintedTo: Array<{ count: number; user: { name: string; email: string; }; }>; totalPages: number; currentPage: number; }> {
 
         const skip = (page - 1) * limit;
 
@@ -20,8 +21,12 @@ export class FetchAllPaginatedAdminReturnRejectionRequestUseCase implements IFet
             totalPages,
             currentPage} = await this._returnRejectionRequestRepository.findAllReturnRejectionRequestAnalysis(baseFilter,skip,limit)
 
+                const mappedReturnRequests = returnRejectionRequest.map(ReturnRejectionRequestMapper.toDTO);
+
         return {
-            topFiveMostComplainted,topFiveMostComplaintedTo,returnRejectionRequest, totalReturnRejectionRequest,
+            topFiveMostComplainted,topFiveMostComplaintedTo,
+            returnRejectionRequest:mappedReturnRequests,
+            totalReturnRejectionRequest,
             totalPages,
             currentPage
         }

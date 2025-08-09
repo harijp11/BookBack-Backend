@@ -4,6 +4,8 @@ import { IRentRepository } from "../../../entities/repositoryInterface/common/re
 import { IRentModel, RentModel } from "../../../frameworks/database/models/rent_model";
 import { CustomError } from "../../../entities/utils/custom_error";
 import { HTTP_STATUS, RENTAL_ERROR } from "../../../shared/constants";
+import { SingleRentDTOMapper } from "../../../shared/utils/mappers/singleRentMapper";
+import { SingleRentDTO } from "../../../shared/dto/singleRentDto";
 
 @injectable()
 export class GetRentedOutBookDetailsUseCase implements IGetRentedOutBookDetailsUseCase {
@@ -12,7 +14,7 @@ export class GetRentedOutBookDetailsUseCase implements IGetRentedOutBookDetailsU
     private _rentRepository:IRentRepository
     ){}
 
-    async execute(rentalId: string): Promise<IRentModel | null> {
+    async execute(rentalId: string): Promise<SingleRentDTO | null> {
 
         if(!rentalId){
             throw new CustomError(RENTAL_ERROR.RENTAL_ID_NOT_AVAILABLE,HTTP_STATUS.BAD_REQUEST)
@@ -24,6 +26,6 @@ export class GetRentedOutBookDetailsUseCase implements IGetRentedOutBookDetailsU
             throw new CustomError(RENTAL_ERROR.CONTRACT_NOT_FOUND,HTTP_STATUS.NOT_FOUND)
         }
 
-        return rentedContract
+        return SingleRentDTOMapper.toDTO(rentedContract);
     }
 }

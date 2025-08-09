@@ -4,6 +4,7 @@ import { ContractRequestInput } from "../../../shared/constants";
 import { ContractRequestModel, IContractRequestModel } from "../../../frameworks/database/models/contract_request-model";
 import { IContractRequestEntity } from "../../../entities/models/contract_request-entity";
 import { BaseRepository } from "../baseRepo/base_repository";
+import { IContractRequestPopulated } from "../../../entities/types/IContractRequestMapPopulated";
 
 @injectable()
 export class ContractRequestRepository extends BaseRepository<IContractRequestModel,ContractRequestInput> implements IContractRequestRepository{
@@ -16,9 +17,9 @@ export class ContractRequestRepository extends BaseRepository<IContractRequestMo
         return await ContractRequestModel.findOne({requesterId,bookId})
     }
 
-    async FindByOwnerId(ownerId: string): Promise<IContractRequestModel[] | null> {
-        const requests = await ContractRequestModel.find({ownerId}).populate("ownerId","Name").populate("requesterId","Name email").populate("bookId","name").sort({createdAt:-1})
-       return requests
+    async FindByOwnerId(ownerId: string): Promise<IContractRequestPopulated[] | null> {
+        const requests = await ContractRequestModel.find({ownerId}).populate("ownerId","Name").populate("requesterId","Name email").populate("bookId","name").sort({createdAt:-1}) as unknown as IContractRequestPopulated[]
+        return requests
     }
 
     async findById(conReqId: string): Promise<IContractRequestModel | null> {
@@ -35,11 +36,10 @@ export class ContractRequestRepository extends BaseRepository<IContractRequestMo
             ContractRequestModel.find(Filter)
               .skip(skip)
               .limit(limit)
-              .populate("ownerId","Name").populate("requesterId","Name email").populate("bookId","name").sort({createdAt:-1}),
+              .populate("ownerId","Name").populate("requesterId","Name email").populate("bookId","name").sort({createdAt:-1}) as unknown as IContractRequestPopulated[],
               ContractRequestModel.countDocuments(Filter)
             ])
         
-            
           return {
               getRequests:()=>requests,
               count

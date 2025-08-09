@@ -4,6 +4,7 @@ import { IGetAllCategoriesUseCase } from "../../../entities/useCaseInterfaces/us
 import { ICategoryEntity } from "../../../entities/models/category_entity";
 import { CustomError } from "../../../entities/utils/custom_error";
 import { CATEGORY_ERROR, HTTP_STATUS } from "../../../shared/constants";
+import { CategoryMapper } from "../../../shared/utils/mappers/categoryMappers";
 
 
 @injectable()
@@ -12,12 +13,13 @@ export class GetAllCategoriesUseCase implements IGetAllCategoriesUseCase{
         @inject("ICategoryRepository")
         private _categoryRepository:ICategoryRepository
         ){}
-        async execute(): Promise<ICategoryEntity[] | []> {
+        async execute(): Promise<Pick<ICategoryEntity, "_id" | "name" | "isActive" | "description" | "createdAt">[] | []> {
             const categories= await this._categoryRepository.getAllCategories();
 
             if(!categories){
                 throw new CustomError(CATEGORY_ERROR.CATEGORIES_NOT_AVAILABLE,HTTP_STATUS.BAD_REQUEST)
             }
-            return categories;
+           
+            return CategoryMapper(categories);
         }
 }

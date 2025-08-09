@@ -113,8 +113,8 @@ export class RentRepository extends BaseRepository<IRentModel,RentalInput> imple
         return result;
       }
 
-      async findRentedOutBookDetails(rentalId: string): Promise<IRentModel | null> {
-        return await RentModel.findOne({_id:rentalId}).populate('bookId').populate('borrowerId').populate('ownerId')
+      async findRentedOutBookDetails(rentalId: string): Promise<IRentPopulated | null> {
+        return await RentModel.findOne({_id:rentalId}).populate('bookId').populate('borrowerId').populate('ownerId') as unknown as IRentPopulated;
       }
 
       async findByIdAndUpdateStatus(rentalId: string, status: string): Promise<IRentModel | null> {

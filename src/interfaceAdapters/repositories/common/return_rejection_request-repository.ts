@@ -4,6 +4,7 @@ import { IReturnRejectionRequestcreateDTO } from "../../../entities/models/retur
 import { IReturnRejectionRequestModel, ReturnRejectionRequestModel } from "../../../frameworks/database/models/return_rejection_request_model";
 import { Schema } from "mongoose";
 import { BaseRepository } from "../baseRepo/base_repository";
+import { IReturnRejectionRequestPopulated } from "../../../entities/types/IReturnRejectionRequestPopulated";
 
 @injectable()
 export class ReturnRejectionRequestRepository extends BaseRepository<IReturnRejectionRequestModel,IReturnRejectionRequestcreateDTO> implements IReturnRejectionRequestRepository {
@@ -18,7 +19,7 @@ export class ReturnRejectionRequestRepository extends BaseRepository<IReturnReje
  
 
   async findAllReturnRejectionRequestAnalysis(baseFilter: object, skip: number, limit: number): Promise<{
-    returnRejectionRequest: IReturnRejectionRequestModel[];
+    returnRejectionRequest: IReturnRejectionRequestPopulated[];
     totalReturnRejectionRequest: number;
     topFiveMostComplainted: Array<{
       _id: Schema.Types.ObjectId;
@@ -52,7 +53,8 @@ export class ReturnRejectionRequestRepository extends BaseRepository<IReturnReje
     },
   })
   .populate('ownerId')
-  .populate('borrowerId');
+  .populate('borrowerId') as unknown as IReturnRejectionRequestPopulated[];
+  //  .lean<IReturnRejectionRequestPopulated[]>();
 
   
   // 2. Total count for pagination
@@ -118,9 +120,6 @@ export class ReturnRejectionRequestRepository extends BaseRepository<IReturnReje
   ]);
 
  
- 
- 
-
   return {
     returnRejectionRequest,
     

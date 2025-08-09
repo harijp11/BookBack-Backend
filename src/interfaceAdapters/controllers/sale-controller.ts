@@ -2,13 +2,13 @@ import { inject, injectable } from "tsyringe";
 import { ISaleController } from "../../entities/controllersInterfaces/sale_controller-interface";
 import { Request, Response } from "express";
 import { CustomRequest } from "../middlewares/auth_middleware";
-import { ISaleModel } from "../../frameworks/database/models/sale_model";
 import { HTTP_STATUS, SALE_MESSAGES } from "../../shared/constants";
 import { IFetchSoldBooksContractUseCase } from "../../entities/useCaseInterfaces/user/sales/fetch_sold_books_usecase-interface";
 import { IFetchBoughtBooksContractsUseCase } from "../../entities/useCaseInterfaces/user/sales/fetch_bought_books_usecase-interface";
 import { handleErrorResponse } from "../../shared/utils/errorHandler";
 import { IFetchAdminSoldBooksContractUseCase } from "../../entities/useCaseInterfaces/admin/sale/fetch_admin_sold_books_contract_usecase-interface";
 import { IFetchSoldBooksContractDetailsUseCase } from "../../entities/useCaseInterfaces/user/sales/fetch_sold_book_contract_details_usecase-interface";
+import { SoldBookContractDTO } from "../../shared/dto/saleDto";
 
 @injectable()
 export class SaleController implements ISaleController{
@@ -37,7 +37,7 @@ export class SaleController implements ISaleController{
         const result = await this._fetchSoldBooksContractUseCase.execute(userId,Filter,page,limit)
   
          const { saleBooksContracts, totalSoldContracts, totalPages, currentPage } = result as {
-          saleBooksContracts: ISaleModel[];
+          saleBooksContracts: SoldBookContractDTO[];
           totalSoldContracts: number;
                 totalPages: number;
                 currentPage: number;
@@ -68,7 +68,7 @@ export class SaleController implements ISaleController{
     const result = await this._fetchBoughtBooksContractUseCase.execute(userId,Filter,page,limit)
 
      const { saleBooksContracts, totalSoldContracts, totalPages, currentPage } = result as {
-      saleBooksContracts: ISaleModel[];
+      saleBooksContracts: SoldBookContractDTO[];
       totalSoldContracts: number;
             totalPages: number;
             currentPage: number;
@@ -121,7 +121,7 @@ async fetchAdminSoldBooksContract(req: Request, res: Response): Promise<void> {
      const result = await this._fetchAdminSoldBooksContractUseCase.execute(Filter,page,limit)
 
       const { saleBooksContracts, totalSoldContracts, totalPages, currentPage } = result as {
-       saleBooksContracts: ISaleModel[];
+       saleBooksContracts: SoldBookContractDTO[];
        totalSoldContracts: number;
              totalPages: number;
              currentPage: number;

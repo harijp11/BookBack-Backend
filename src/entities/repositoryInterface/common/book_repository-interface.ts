@@ -4,6 +4,7 @@ import { IBookEntity } from "../../models/book_entity";
 import { INewBookInput } from "../../useCaseInterfaces/user/book/create_new_book_usecase-interface";
 import { IBaseRepository } from "../baseRepo/base_repository-interface";
 import { IPopulatedBookModel } from "../../types/IBookMapModel";
+import { IBookPopulated } from "../../types/ISinglePopulated";
 
 export interface PaginatedBooksRepo {
   getBooks(): IPopulatedBookModel[];
@@ -42,7 +43,7 @@ export interface IBookRepository extends IBaseRepository<IBookModel,INewBookInpu
     filters?: Record<string, object>,
     sort?: Record<string, SortOrder>
   ): Promise<PaginatedBooksRepo | null>;
-  findByIdFetchWholeDetails(bookId: string): Promise<IBookModel | null>;
+  findByIdFetchWholeDetails(bookId: string): Promise<IBookPopulated | null>;
   getRelatedBooks(catId: string,ownerId?:string): Promise<IBookModel[] | []>;
   findByOwnerId(ownerId:string):Promise<IBookModel | null>
   // save(data:IBookModel):Promise<void>

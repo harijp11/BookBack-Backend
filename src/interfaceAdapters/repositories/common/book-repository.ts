@@ -6,6 +6,9 @@ import { IBookEntity } from "../../../entities/models/book_entity";
 import { PipelineStage, Types } from "mongoose";
 import { BaseRepository } from "../baseRepo/base_repository";
 import { IPopulatedBookModel } from "../../../entities/types/IBookMapModel";
+import { unknown } from "zod";
+import { SingleBookDTO } from "../../../shared/dto/singleBookDto";
+import { IBookPopulated } from "../../../entities/types/ISinglePopulated";
 
 
 @injectable()
@@ -234,8 +237,9 @@ return result;
     }
   }
 
-   async findByIdFetchWholeDetails(bookId: string): Promise<IBookModel | null> {
+   async findByIdFetchWholeDetails(bookId: string): Promise<IBookPopulated | null> {
        return await BookModel.findById(bookId).populate('categoryId', 'name').populate('ownerId', 'Name profileImage').populate('dealTypeId','name')
+       .lean<IBookPopulated>();
   }
 
   async getRelatedBooks(catId: string,ownerId?:string): Promise<IBookModel[] | []> {

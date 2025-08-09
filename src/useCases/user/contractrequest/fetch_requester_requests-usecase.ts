@@ -1,10 +1,10 @@
 import { injectable,inject } from "tsyringe";
 import { IFetchRequesterRequestsUseCase } from "../../../entities/useCaseInterfaces/user/contractrequest/fetch_requester_requests_usecase-entity";
-import { IContractRequestModel } from "../../../frameworks/database/models/contract_request-model";
 import { CustomError } from "../../../entities/utils/custom_error";
 import { IContractRequestRepository } from "../../../entities/repositoryInterface/user/contract_request_repository-interface";
 import { PaginatedContractRequest } from "../../../entities/models/paginated_contract_request-entity";
 import { CONTRACT_REQUEST_ERROR, ERROR_MESSAGES, HTTP_STATUS } from "../../../shared/constants";
+import { ContractRequestMapper } from "../../../shared/utils/mappers/contractRequestMapper";
 
 @injectable()
 export class FetchRequesterRequestsUseCase implements IFetchRequesterRequestsUseCase{
@@ -31,7 +31,7 @@ export class FetchRequesterRequestsUseCase implements IFetchRequesterRequestsUse
         const totalPages = Math.ceil(count / limit);
         
         return{ 
-            requests:requests || [],
+            requests:requests.map(ContractRequestMapper.toDTO) || [],
             totalRequests:count,
             totalPages,
             currentPage:page

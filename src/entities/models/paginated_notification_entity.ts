@@ -1,7 +1,7 @@
-import { INotificationModel } from "../../frameworks/database/models/notification_model";
+import { NotificationDTO } from "../../shared/dto/notificationDto";
 
 export interface Paginatednotifications {
-    notifications: INotificationModel[] | []
+    notifications: NotificationDTO[] | []
     totalnotifications: number;
     totalPages: number;
     currentPage: number;

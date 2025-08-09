@@ -8,7 +8,6 @@ import {
 import { BOOK_ERROR_RESPONSES, BOOK_SUCCESS_RESPONSES, ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 import { ICloudinarySignatureService } from "../../entities/serviceInterfaces/cloudinary_service-interface";
 import { IGetAllPaginatedOwnerBookUseCase } from "../../entities/useCaseInterfaces/user/book/get_all_paginated_owner_books_usecase-interface";
-import { IBookModel } from "../../frameworks/database/models/book_model";
 import { IBookEntity } from "../../entities/models/book_entity";
 import { IUpdateBookDetailsUseCase } from "../../entities/useCaseInterfaces/user/book/update_book_details_usecase-interface";
 import { IUpdateBookStatus } from "../../entities/useCaseInterfaces/user/book/update_book_status_usecase-interface";

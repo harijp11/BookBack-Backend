@@ -50,8 +50,7 @@ export class UserRepository extends BaseRepository<IUserModel> implements IUserR
     
         const transformedUsers = users.map(user => ({
             ...user,
-            id: user._id.toString(), // Add an additional 'id' field
-            // Ensure _id is preserved as an ObjectId
+            id: user._id.toString(), 
         })) as IUserEntity[];
     
         return {

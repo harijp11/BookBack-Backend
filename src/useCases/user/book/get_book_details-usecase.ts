@@ -4,6 +4,8 @@ import { IBookModel } from "../../../frameworks/database/models/book_model";
 import { CustomError } from "../../../entities/utils/custom_error";
 import { IBookRepository } from "../../../entities/repositoryInterface/common/book_repository-interface";
 import { BOOK_ERROR_RESPONSES, HTTP_STATUS } from "../../../shared/constants";
+import { BookMapper } from "../../../shared/utils/mappers/singleBookMapper";
+import { SingleBookDTO } from "../../../shared/dto/singleBookDto";
 
 
 @injectable()
@@ -13,7 +15,7 @@ export class GetUserBookDetailsUseCase implements IGetUserBookDetailsUseCase{
     private _bookRepository:IBookRepository 
   ){}
 
-  async  execute(bookId: string): Promise<IBookModel | null> {
+  async  execute(bookId: string): Promise<SingleBookDTO | null> {
           
     const book = await this._bookRepository.findByIdFetchWholeDetails(bookId);
 
@@ -25,6 +27,6 @@ export class GetUserBookDetailsUseCase implements IGetUserBookDetailsUseCase{
         throw new CustomError(BOOK_ERROR_RESPONSES.BOOK_NOT_AVAILABLE,HTTP_STATUS.BAD_REQUEST)
     }
 
-    return book
+    return book ? BookMapper.toSingleBookDTO(book) : null;
   }
 }

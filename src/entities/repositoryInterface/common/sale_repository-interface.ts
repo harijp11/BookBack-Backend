@@ -1,9 +1,10 @@
 import { ISaleModel } from "../../../frameworks/database/models/sale_model";
 import { RentalInput, SaleInput } from "../../models/contract_input_entity";
+import { ISalePopulated, } from "../../types/ISaleMapPopulated";
 import { IBaseRepository } from "../baseRepo/base_repository-interface";
 
 export interface PaginatedSoldBooksRepo {
-    getSoldBooksContracts(): ISaleModel[];
+    getSoldBooksContracts(): ISalePopulated[];
     count: number;
 }
 
@@ -24,7 +25,7 @@ export interface ISaleRepository extends IBaseRepository<ISaleModel,SaleInput> {
             limit: number,
             skip: number):Promise<PaginatedSoldBooksRepo | null>
 
-            findSoldBookDetails(saleContractId: string): Promise<ISaleModel | null>
+            findSoldBookDetails(saleContractId: string): Promise<ISalePopulated | null>
             count(filter: object): Promise<number>;
             aggregate(pipeline: any[]): Promise<any[]>;
 }

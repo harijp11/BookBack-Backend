@@ -12,6 +12,7 @@ import { CustomRequest } from "../middlewares/auth_middleware";
 import { IContractRequestModel } from "../../frameworks/database/models/contract_request-model";
 import { ICancelContractRequestUseCase } from "../../entities/useCaseInterfaces/user/contractrequest/cancel_contract_request_usecase-interface";
 import { IFetchFixDealDetailsUseCase } from "../../entities/useCaseInterfaces/user/contractrequest/fetch_fix_deal_details_usecase-interface";
+import { ContractRequestDTO } from "../../shared/dto/contractRequestDto";
 
 @injectable()
 export class ContractRequestController implements IContractRequestController {
@@ -133,7 +134,7 @@ export class ContractRequestController implements IContractRequestController {
       const result = await this._fetchRequesterRequestsUseCase.execute(userId,page,limit,Filter)
 
        const { requests, totalRequests, totalPages, currentPage } = result as {
-              requests: IContractRequestModel[];
+              requests: ContractRequestDTO[];
               totalRequests: number;
               totalPages: number;
               currentPage: number;

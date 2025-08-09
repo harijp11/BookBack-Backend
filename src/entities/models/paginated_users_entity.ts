@@ -1,6 +1,6 @@
-import { IUserEntity } from "./user_entity";
+import { UserDTO } from "../../shared/dto/users.Dto";
 
 export interface PaginatedUsers {
-	user: IUserEntity[] |  [];
+	user: UserDTO[] |  [];
 	total: number;
 }

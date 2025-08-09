@@ -4,6 +4,7 @@ import { INotificationRepository } from "../../../entities/repositoryInterface/u
 import { Paginatednotifications } from "../../../entities/models/paginated_notification_entity";
 import { CustomError } from "../../../entities/utils/custom_error";
 import { BOOK_ERROR_RESPONSES, ERROR_MESSAGES, HTTP_STATUS } from "../../../shared/constants";
+import { NotificationMapper } from "../../../shared/utils/mappers/notificationMapper";
 
 @injectable()
 export class FetchAllUserNotificationUseCase
@@ -46,7 +47,7 @@ export class FetchAllUserNotificationUseCase
     await this._notificationRepository.UpdateReadStatus(userId);
 
     return {
-      notifications: notifications || [],
+      notifications: notifications.map(NotificationMapper.toDTO) || [],
       totalnotifications: Number(count),
       totalPages,
       currentPage: page,

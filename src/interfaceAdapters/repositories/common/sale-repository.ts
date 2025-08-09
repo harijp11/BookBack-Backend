@@ -3,6 +3,7 @@ import { ISaleRepository, PaginatedSoldBooksRepo } from "../../../entities/repos
 import { SaleInput } from "../../../entities/models/contract_input_entity";
 import { ISaleModel, SaleModel } from "../../../frameworks/database/models/sale_model";
 import { BaseRepository } from "../baseRepo/base_repository";
+import { ISalePopulated } from "../../../entities/types/ISaleMapPopulated";
 
 @injectable()
 export class SaleRepository extends BaseRepository<ISaleModel,SaleInput> implements ISaleRepository{
@@ -33,7 +34,7 @@ export class SaleRepository extends BaseRepository<ISaleModel,SaleInput> impleme
         .sort({ created_at: -1 })
         .populate('buyerId') 
         .populate('ownerId')    
-        .populate('bookId'),
+        .populate('bookId') as unknown as Promise<ISalePopulated[]>,
         SaleModel.countDocuments(query)
         
       ])
@@ -67,7 +68,7 @@ export class SaleRepository extends BaseRepository<ISaleModel,SaleInput> impleme
         .sort({ created_at: -1 })
         .populate('buyerId') 
         .populate('ownerId')    
-        .populate('bookId'),
+        .populate('bookId') as unknown as Promise<ISalePopulated[]>,
         SaleModel.countDocuments(query)
       ])
   
@@ -101,7 +102,7 @@ export class SaleRepository extends BaseRepository<ISaleModel,SaleInput> impleme
         .sort({ createdAt: -1 })
         .populate('buyerId') 
         .populate('ownerId')    
-        .populate('bookId'),
+        .populate('bookId') as unknown as Promise<ISalePopulated[]>,
         SaleModel.countDocuments(query)
       ])
   
@@ -114,8 +115,8 @@ export class SaleRepository extends BaseRepository<ISaleModel,SaleInput> impleme
     }
   
 
-      async findSoldBookDetails(saleContractId: string): Promise<ISaleModel | null> {
-            return await SaleModel.findOne({_id:saleContractId}).populate('bookId').populate('buyerId').populate('ownerId')
+      async findSoldBookDetails(saleContractId: string): Promise<ISalePopulated | null> {
+            return await SaleModel.findOne({_id:saleContractId}).populate('bookId').populate('buyerId').populate('ownerId') as unknown as ISalePopulated
           }
 
 

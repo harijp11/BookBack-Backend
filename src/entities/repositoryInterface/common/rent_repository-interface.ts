@@ -32,7 +32,7 @@ export interface IRentRepository extends IBaseRepository<IRentModel,RentalInput>
     skip: number
   ): Promise<PaginatedRentedBooksRepo | null>;
 
-  findRentedOutBookDetails(rentalId: string): Promise<IRentModel | null>;
+  findRentedOutBookDetails(rentalId: string): Promise<IRentPopulated | null>;
 
   findByIdAndUpdateStatus(rentalId: string,status:string):Promise<IRentModel | null>
 

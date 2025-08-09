@@ -4,6 +4,7 @@ import { IGetAllUsersUseCase } from "../../../entities/useCaseInterfaces/admin/u
 import { IUserRepository } from "../../../entities/repositoryInterface/user/user_repository-interface";
 import { CustomError } from "../../../entities/utils/custom_error";
 import { HTTP_STATUS } from "../../../shared/constants";
+import { UserMapper } from "../../../shared/utils/mappers/userMapper";
 
 @injectable()
 export class GetAllUsersUseCase implements IGetAllUsersUseCase {
@@ -38,7 +39,7 @@ export class GetAllUsersUseCase implements IGetAllUsersUseCase {
     if (userType === "user") {
       const { user, total } = await this._userRepository.find(filter, skip, limit);
       return {
-        user,
+        user:user.map(UserMapper.toDTO),
         total: Math.ceil(total / validPageSize),
       };
     }

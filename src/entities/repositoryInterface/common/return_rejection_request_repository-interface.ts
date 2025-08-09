@@ -2,6 +2,7 @@ import { Schema } from "mongoose";
 import { IReturnRejectionRequestModel } from "../../../frameworks/database/models/return_rejection_request_model";
 import { IReturnRejectionRequestcreateDTO } from "../../models/return_rejection_request_input_data_entity";
 import { IBaseRepository } from "../baseRepo/base_repository-interface";
+import { IReturnRejectionRequestPopulated } from "../../types/IReturnRejectionRequestPopulated";
 
 export interface IReturnRejectionRequestRepository extends IBaseRepository<IReturnRejectionRequestModel,IReturnRejectionRequestcreateDTO>{
      
@@ -9,7 +10,7 @@ export interface IReturnRejectionRequestRepository extends IBaseRepository<IRetu
    
 
     findAllReturnRejectionRequestAnalysis(baseFilter:object,skip:number,limit:number):Promise<{
-        returnRejectionRequest: IReturnRejectionRequestModel[];
+        returnRejectionRequest: IReturnRejectionRequestPopulated[];
         totalReturnRejectionRequest: number;
         topFiveMostComplainted: Array<{
           _id: Schema.Types.ObjectId;

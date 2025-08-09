@@ -4,6 +4,7 @@ import { ISaleRepository } from "../../../entities/repositoryInterface/common/sa
 import { CustomError } from "../../../entities/utils/custom_error";
 import { PaginatedSoldBooksContracts } from "../../../entities/models/paginated_sale_books_contract_entity";
 import { BOOK_ERROR_RESPONSES, HTTP_STATUS } from "../../../shared/constants";
+import { SoldBookContractMapper } from "../../../shared/utils/mappers/saleMapper";
 
 @injectable()
 export class FetchAdminSoldBooksContractUseCase implements IFetchAdminSoldBooksContractUseCase{
@@ -29,7 +30,7 @@ export class FetchAdminSoldBooksContractUseCase implements IFetchAdminSoldBooksC
          const totalPages = Math.ceil(count / limit);
 
          return{ 
-            saleBooksContracts:saleBooksContract || [],
+            saleBooksContracts:saleBooksContract.map(SoldBookContractMapper.toDTO) || [],
             totalSoldContracts:count,
              totalPages,
              currentPage:page

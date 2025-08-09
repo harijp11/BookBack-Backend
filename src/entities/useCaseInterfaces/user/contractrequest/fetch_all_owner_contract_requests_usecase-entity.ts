@@ -1,5 +1,5 @@
-import { IContractRequestModel } from "../../../../frameworks/database/models/contract_request-model";
+import { ContractRequestDTO } from "../../../../shared/dto/contractRequestDto";
 
 export interface IFetchAllOwnerRequestsUseCase {
-    execute(ownerId:string):Promise<IContractRequestModel[] | null>
+    execute(ownerId:string):Promise<ContractRequestDTO[] | null | undefined>
 }
