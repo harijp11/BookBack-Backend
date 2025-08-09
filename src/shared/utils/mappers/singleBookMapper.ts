@@ -5,14 +5,14 @@ import { SingleBookDTO } from "../../dto/singleBookDto";
 export class BookMapper {
   static toSingleBookDTO(book: IBookPopulated): SingleBookDTO {
     return {
-      id: book._id.toString(),
+      _id: book._id.toString(),
       name: book.name,
       categoryId: {
-        id: book.categoryId._id.toString(),
+        _id: book.categoryId._id.toString(),
         name: book.categoryId.name
       },
       dealTypeId: {
-        id: book.dealTypeId._id.toString(),
+        _id: book.dealTypeId._id.toString(),
         name: book.dealTypeId.name
       },
       originalAmount: book.originalAmount,
@@ -21,8 +21,8 @@ export class BookMapper {
       maxRentalPeriod: book.maxRentalPeriod,
       images: book.images,
       ownerId: {
-        id: book.ownerId._id.toString(),
-        name: book.ownerId.Name ?? "",
+        _id: book.ownerId._id.toString(),
+        Name: book.ownerId.Name ?? "",
         profileImage: book.ownerId.profileImage
       },
       isActive: book.isActive,

@@ -1,13 +1,13 @@
 // src/application/dtos/book/single_book.dto.ts
 export interface SingleBookDTO {
-  id: string;
+  _id: string;
   name: string;
   categoryId: {
-    id: string;
+    _id: string;
     name: string;
   };
   dealTypeId: {
-    id: string;
+    _id: string;
     name: string;
   };
   originalAmount: number;
@@ -16,8 +16,8 @@ export interface SingleBookDTO {
   maxRentalPeriod: number;
   images: string[];
   ownerId: {
-    id: string;
-    name: string;
+    _id: string;
+    Name: string;
     profileImage?: string;
   };
   isActive: boolean;
